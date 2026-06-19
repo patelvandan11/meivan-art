@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+  reviews   Review[]
+  wishlist  WishlistItem[]
+  cart      CartItem[]
+}
+
+model Artist {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  bio         String
+  image       String
+  coverImage  String?
+  specialty   String
+  location    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products    Product[]
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  image       String
+  createdAt   DateTime  @default(now())
+
+  products    Product[]
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  description   String
+  price         Float
+  comparePrice  Float?
+  images        String[]
+  categoryId    String
+  artistId      String?
+  rating        Float    @default(0)
+  reviewCount   Int      @default(0)
+  stock         Int      @default(0)
+  featured      Boolean  @default(false)
+  bestSeller    Boolean  @default(false)
+  tags          String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  category      Category @relation(fields: [categoryId], references: [id])
+  artist        Artist?  @relation(fields: [artistId], references: [id])
+  reviews       Review[]
+  wishlist      WishlistItem[]
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  status          OrderStatus @default(PENDING)
+  total           Float
+  stripeSessionId String?
+  shippingAddress Json?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user            User        @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float
+
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
