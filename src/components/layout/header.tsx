@@ -44,7 +44,7 @@ export function Header() {
           <Link href="/" className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-terracotta" />
             <span className="font-heading text-xl font-semibold tracking-tight">
-              Artisan Haven
+              By Vandan
             </span>
           </Link>
 
