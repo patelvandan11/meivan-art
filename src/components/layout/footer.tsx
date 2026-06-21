@@ -8,17 +8,17 @@ const footerLinks = {
     { label: "Stickers", href: "/shop?category=stickers" },
     { label: "Mugs", href: "/shop?category=mugs" },
   ],
-  company: [
-    { label: "About", href: "/about" },
-    { label: "Artists", href: "/artists" },
-    { label: "Blog", href: "/blog" },
-    { label: "Contact", href: "/contact" },
-  ],
-  support: [
-    { label: "FAQ", href: "/faq" },
-    { label: "Shipping", href: "/shipping" },
-    { label: "Returns", href: "/returns" },
-  ],
+  // company: [
+  //   { label: "About", href: "/about" },
+  //   { label: "Artists", href: "/artists" },
+  //   { label: "Blog", href: "/blog" },
+  //   { label: "Contact", href: "/contact" },
+  // ],
+  // support: [
+  //   { label: "FAQ", href: "/faq" },
+  //   { label: "Shipping", href: "/shipping" },
+  //   { label: "Returns", href: "/returns" },
+  // ],
 };
 
 const socialLinks = [

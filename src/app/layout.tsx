@@ -45,8 +45,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    siteName: "Artisan Haven",
-    title: "Artisan Haven | Handcrafted Art for Beautiful Living",
+    siteName: "By Vandan",
+    title: "By Vandan | Handcrafted Art for Beautiful Living",
     description:
       "Premium handcrafted artistic products for beautiful living.",
   },
