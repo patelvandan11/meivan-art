@@ -8,17 +8,17 @@ const footerLinks = {
     { label: "Stickers", href: "/shop?category=stickers" },
     { label: "Mugs", href: "/shop?category=mugs" },
   ],
-  // company: [
-  //   { label: "About", href: "/about" },
-  //   { label: "Artists", href: "/artists" },
-  //   { label: "Blog", href: "/blog" },
-  //   { label: "Contact", href: "/contact" },
-  // ],
-  // support: [
-  //   { label: "FAQ", href: "/faq" },
-  //   { label: "Shipping", href: "/shipping" },
-  //   { label: "Returns", href: "/returns" },
-  // ],
+  company: [
+    { label: "About", href: "/artists" },
+    { label: "Artists", href: "/artists" },
+    { label: "Gallery", href: "/gallery" },
+    { label: "AI Tools", href: "/ai" },
+  ],
+  support: [
+    { label: "Track Order", href: "/checkout/success" },
+    { label: "Shipping Policy", href: "/shop" },
+    { label: "Contact: meivaninfo@gmail.com", href: "mailto:meivaninfo@gmail.com" },
+  ],
 };
 
 const socialLinks = [
@@ -64,7 +64,7 @@ export function Footer() {
             </h4>
             <ul className="mt-4 space-y-3">
               {footerLinks.shop.map((link) => (
-                <li key={link.href}>
+                <li key={`shop-${link.label}`}>
                   <Link
                     href={link.href}
                     className="text-sm opacity-70 transition-colors hover:opacity-100"
@@ -82,7 +82,7 @@ export function Footer() {
             </h4>
             <ul className="mt-4 space-y-3">
               {footerLinks.company.map((link) => (
-                <li key={link.href}>
+                <li key={`company-${link.label}`}>
                   <Link
                     href={link.href}
                     className="text-sm opacity-70 transition-colors hover:opacity-100"
@@ -100,7 +100,7 @@ export function Footer() {
             </h4>
             <ul className="mt-4 space-y-3">
               {footerLinks.support.map((link) => (
-                <li key={link.href}>
+                <li key={`support-${link.label}`}>
                   <Link
                     href={link.href}
                     className="text-sm opacity-70 transition-colors hover:opacity-100"

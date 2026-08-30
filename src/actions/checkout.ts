@@ -1,39 +1,41 @@
 "use server";
 
-import Stripe from "stripe";
-import { getAppUrl } from "@/lib/env";
+import { generatePayUHash } from "@/lib/payu";
+import { generateOrderId } from "@/lib/orders";
+import type { ShippingAddress, OrderItem } from "@/types";
 
-const stripe = process.env.STRIPE_SECRET_KEY
-  ? new Stripe(process.env.STRIPE_SECRET_KEY)
-  : null;
+export async function createPayUSession(params: {
+  items: OrderItem[];
+  address: ShippingAddress;
+  total: number;
+}) {
+  const orderId = generateOrderId();
+  const cleanFirstName = params.address.name.split(" ")[0].replace(/[^a-zA-Z0-9]/g, "") || "Customer";
+  const productInfo = params.items
+    .map((i) => i.productName)
+    .join(", ")
+    .slice(0, 100)
+    .replace(/[^a-zA-Z0-9 ,]/g, "") || "Art Products";
 
-export async function createCheckoutSession(
-  items: { name: string; price: number; quantity: number; image: string }[]
-) {
-  if (!stripe) {
-    return { success: false, message: "Stripe is not configured" };
-  }
-
-  const appUrl = getAppUrl();
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items: items.map((item) => ({
-      price_data: {
-        currency: "inr",
-        product_data: {
-          name: item.name,
-          images: [item.image],
-        },
-        unit_amount: item.price * 100,
-      },
-      quantity: item.quantity,
-    })),
-    mode: "payment",
-    success_url: `${appUrl}/checkout/success`,
-    cancel_url: `${appUrl}/cart`,
+  const payu = generatePayUHash({
+    txnid: orderId,
+    amount: params.total,
+    productinfo: productInfo,
+    firstname: cleanFirstName,
+    email: params.address.email.trim(),
+    phone: params.address.phone.replace(/[^0-9]/g, "").slice(-10),
+    udf1: orderId,
+    udf2: params.address.city || "",
+    udf3: params.address.pincode || "",
   });
 
-  return { success: true, url: session.url };
+  return {
+    success: true,
+    orderId,
+    paymentUrl: payu.paymentUrl,
+    payuData: payu.payuData,
+    hash: payu.hash,
+  };
 }
 
 export async function applyCoupon(code: string) {

@@ -21,6 +21,7 @@ import type { UserRole } from "@/types";
 const NAV: Record<UserRole, { href: string; label: string; icon: typeof Heart }[]> = {
   user: [
     { href: "/dashboard/user", label: "Overview", icon: LayoutDashboard },
+    { href: "/dashboard/user/orders", label: "My Orders & Tracking", icon: Package },
     { href: "/dashboard/user/wishlist", label: "Wishlist", icon: Heart },
     { href: "/dashboard/user/albums", label: "My Albums", icon: FolderOpen },
   ],

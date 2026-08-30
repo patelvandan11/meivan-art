@@ -21,7 +21,7 @@ export function CategoriesSection() {
             <Link
               key={category.id}
               href={`/shop?category=${category.slug}`}
-              className="group relative block overflow-hidden rounded-card"
+              className="group relative block overflow-hidden rounded-card border border-border/40 dark:border-white/10 dark:hover:border-terracotta/50 dark:hover:shadow-[0_0_30px_rgba(201,124,93,0.3)] transition-all duration-300"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
