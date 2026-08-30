@@ -111,16 +111,60 @@ export interface OrderItem {
   artistSlug?: string;
 }
 
+export interface ShippingAddress {
+  name: string;
+  email: string;
+  phone: string;
+  street: string;
+  city: string;
+  state: string;
+  pincode: string;
+  country?: string;
+  notes?: string;
+}
+
+export interface TrackingInfo {
+  courierName?: string;
+  trackingNumber?: string;
+  trackingUrl?: string;
+  shippedAt?: string;
+  estimatedDelivery?: string;
+  notes?: string;
+}
+
+export type OrderFulfillmentStatus =
+  | "pending"
+  | "paid"
+  | "packing"
+  | "shipped"
+  | "out_for_delivery"
+  | "delivered"
+  | "cancelled";
+
 export interface Order {
   id: string;
   customerName: string;
   customerEmail: string;
+  customerPhone?: string;
+  shippingAddress?: ShippingAddress;
   items: OrderItem[];
+  subtotal?: number;
+  shippingFee?: number;
+  discount?: number;
   total: number;
   cost: number;
   profit: number;
-  status: "pending" | "paid" | "shipped" | "delivered";
+  paymentMethod?: "payu" | "stripe" | "cod" | "test";
+  paymentStatus?: "pending" | "paid" | "failed";
+  paymentId?: string;
+  payuTxnId?: string;
+  payuMihpayid?: string;
+  status: OrderFulfillmentStatus;
+  tracking?: TrackingInfo;
+  googleSheetSynced?: boolean;
+  adminNotificationSent?: boolean;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface MonthlySales {

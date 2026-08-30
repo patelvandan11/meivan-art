@@ -33,7 +33,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className="relative overflow-hidden rounded-card bg-card shadow-soft">
+      <div className="relative overflow-hidden rounded-card bg-card shadow-soft border border-border/60 transition-all duration-300 dark:border-white/10 dark:bg-[#161311] dark:shadow-none dark:hover:border-terracotta/50 dark:hover:shadow-[0_0_25px_rgba(201,124,93,0.2)]">
         <Link href={`/product/${product.slug}`}>
           <div className="relative aspect-[4/5] overflow-hidden">
             <Image
