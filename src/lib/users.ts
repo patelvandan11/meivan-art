@@ -10,14 +10,15 @@ export async function ensureSeedUsers() {
   const db = await getDb();
   const users = db.collection<Omit<DbUser, "_id"> & { _id?: ObjectId }>("users");
 
-  const adminEmail = "vandan11patel@gmail.com";
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.ADMIN_NOTIFICATION_EMAIL || "vandan11patel@gmail.com";
+  const adminName = process.env.ADMIN_NAME || "Admin";
   const existingAdmin = await users.findOne({ email: adminEmail });
 
   if (!existingAdmin) {
     const adminPassword = process.env.ADMIN_PASSWORD || "Admin@123";
     await users.insertOne({
       email: adminEmail,
-      name: "Vandan Patel",
+      name: adminName,
       passwordHash: await bcrypt.hash(adminPassword, 12),
       role: "admin",
       createdAt: new Date(),
@@ -99,11 +100,11 @@ export async function saveMagicToken(email: string, token: string) {
 
 export async function consumeMagicToken(token: string) {
   const db = await getDb();
-  const record = await db.collection<{ email: string; token: string; expiresAt: Date }>(
+  const record = await db.collection<{ email: string; token: string; expiresAt: Date | string }>(
     "magic_tokens"
   ).findOne({ token });
 
-  if (!record || record.expiresAt < new Date()) {
+  if (!record || new Date(record.expiresAt) < new Date()) {
     return null;
   }
 
