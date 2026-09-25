@@ -107,7 +107,13 @@ async function resolveMongoUri(uri: string): Promise<string> {
   if (!uri.startsWith("mongodb+srv://")) {
     return uri;
   }
-  return srvToStandardUri(uri);
+  try {
+    return await srvToStandardUri(uri);
+  } catch (err: unknown) {
+    const error = err as Error;
+    console.warn("MongoDB SRV pre-resolution warning:", error.message, "- Falling back to native driver URI handler.");
+    return uri;
+  }
 }
 
 async function getResolvedUri(): Promise<string> {
@@ -118,7 +124,10 @@ async function getResolvedUri(): Promise<string> {
         "MONGODB_URI is not set. Add it to .env (copy from .env.example)"
       );
     }
-    global._mongoResolvedUri = resolveMongoUri(uri);
+    global._mongoResolvedUri = resolveMongoUri(uri).catch((err) => {
+      global._mongoResolvedUri = undefined;
+      throw err;
+    });
   }
   return global._mongoResolvedUri;
 }
@@ -129,7 +138,10 @@ function getClientPromise(): Promise<MongoClient> {
       const uri = await getResolvedUri();
       const client = new MongoClient(uri, clientOptions);
       return client.connect();
-    })();
+    })().catch((err) => {
+      global._mongoClientPromise = undefined;
+      throw err;
+    });
   }
   return global._mongoClientPromise;
 }

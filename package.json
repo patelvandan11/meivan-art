@@ -31,6 +31,7 @@
     "ai": "^4.1.45",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.11.0",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",

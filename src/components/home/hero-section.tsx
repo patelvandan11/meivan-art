@@ -40,7 +40,7 @@ export function HeroSection() {
           sizes="100vw"
         />
         {/* Day Mode Warm Soft Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#faf7f2]/75 via-[#faf7f2]/55 to-[#faf7f2]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/75 via-background/55 to-background" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-100/40 via-transparent to-transparent" />
       </div>
 
@@ -55,7 +55,7 @@ export function HeroSection() {
           sizes="100vw"
         />
         {/* Night Mode Deep Obsidian Overlay with Cosmic Ambient Glow */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0908]/90 via-[#0a0908]/75 to-[#0a0908]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/75 to-background" />
         
         {/* Luminous Ambient Glowing Light Orbs for Night Mode */}
         <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-terracotta/20 blur-[120px] pointer-events-none animate-pulse" />

@@ -8,13 +8,15 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  clerkId   String   @unique
-  email     String   @unique
-  name      String?
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  clerkId            String   @unique
+  email              String   @unique
+  name               String?
+  image              String?
+  cloudinaryPublicId String?  // Optional Cloudinary public_id for asset management
+  imageMetadata      Json?    // Optional JSON containing { url, publicId, width, height, format }
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   orders    Order[]
   reviews   Review[]
@@ -23,27 +25,31 @@ model User {
 }
 
 model Artist {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  bio         String
-  image       String
-  coverImage  String?
-  specialty   String
-  location    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  name               String
+  slug               String   @unique
+  bio                String
+  image              String
+  coverImage         String?
+  cloudinaryPublicId String?  // Cloudinary asset public_id
+  imageMetadata      Json?    // Structured Cloudinary asset metadata
+  specialty          String
+  location           String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   products    Product[]
 }
 
 model Category {
-  id          String    @id @default(cuid())
-  name        String
-  slug        String    @unique
-  description String?
-  image       String
-  createdAt   DateTime  @default(now())
+  id                 String    @id @default(cuid())
+  name               String
+  slug               String    @unique
+  description        String?
+  image              String
+  cloudinaryPublicId String?   // Cloudinary asset public_id
+  imageMetadata      Json?     // Structured Cloudinary asset metadata
+  createdAt          DateTime  @default(now())
 
   products    Product[]
 }
@@ -55,7 +61,9 @@ model Product {
   description   String
   price         Float
   comparePrice  Float?
-  images        String[]
+  images        String[] // Array of Cloudinary image URLs
+  cloudinaryIds String[] // Array of corresponding Cloudinary publicIds
+  imagesMetadata Json?   // Array of CloudinaryAssetMetadata objects
   categoryId    String
   artistId      String?
   rating        Float    @default(0)

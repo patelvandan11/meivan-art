@@ -173,3 +173,27 @@ export interface MonthlySales {
   revenue: number;
   profit: number;
 }
+
+export interface CloudinaryAssetMetadata {
+  url: string;
+  publicId: string;
+  width?: number;
+  height?: number;
+  format?: string;
+  resourceType?: "image" | "video" | "raw";
+  bytes?: number;
+  createdAt?: string;
+}
+
+export interface UploadResult {
+  success: boolean;
+  url: string;
+  publicId: string;
+  width?: number;
+  height?: number;
+  format?: string;
+  resourceType?: string;
+  bytes?: number;
+  error?: string;
+}
+
