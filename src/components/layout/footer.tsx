@@ -9,8 +9,7 @@ const footerLinks = {
     { label: "Mugs", href: "/shop?category=mugs" },
   ],
   company: [
-    { label: "About", href: "/artists" },
-    { label: "Artists", href: "/artists" },
+    { label: "About Us", href: "/shop" },
     { label: "Gallery", href: "/gallery" },
     { label: "AI Tools", href: "/ai" },
   ],

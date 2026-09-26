@@ -29,6 +29,7 @@ export function ShopContent() {
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+  const [productList, setProductList] = useState<Product[]>([]);
 
   useEffect(() => {
     setCategory(searchParams.get("category") || "");
@@ -36,12 +37,61 @@ export function ShopContent() {
   }, [searchParams]);
 
   useEffect(() => {
+    let isMounted = true;
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted && data.success && data.products) {
+          setProductList(data.products);
+        }
+      })
+      .catch((err) => console.error("Error loading products:", err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => setLoading(false), 400);
     return () => clearTimeout(timer);
   }, [category, search, sort]);
 
-  const allProducts = filterProducts({ category: category || undefined, search, sort });
+  const sourceProducts = productList.length > 0 ? productList : filterProducts({});
+  let allProducts = sourceProducts;
+
+  if (category) {
+    allProducts = allProducts.filter((p) => p.categorySlug === category);
+  }
+
+  if (search) {
+    const q = search.toLowerCase();
+    allProducts = allProducts.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q) ||
+        p.tags?.some((t) => t.toLowerCase().includes(q))
+    );
+  }
+
+  switch (sort) {
+    case "price-asc":
+      allProducts.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      allProducts.sort((a, b) => b.price - a.price);
+      break;
+    case "rating":
+      allProducts.sort((a, b) => b.rating - a.rating);
+      break;
+    case "newest":
+      allProducts.reverse();
+      break;
+    default:
+      allProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+  }
+
   const visibleProducts = allProducts.slice(0, visibleCount);
   const hasMore = visibleCount < allProducts.length;
 

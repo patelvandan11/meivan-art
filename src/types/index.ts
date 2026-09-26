@@ -86,7 +86,7 @@ export interface GiftFinderAnswers {
   budget: 500 | 1000 | 2000 | 5000;
 }
 
-export type UserRole = "user" | "artist" | "admin";
+export type UserRole = "user" | "admin" | "artist";
 
 export interface AuthUser {
   id: string;

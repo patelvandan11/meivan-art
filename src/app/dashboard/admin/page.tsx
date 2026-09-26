@@ -35,12 +35,19 @@ export default function AdminDashboardPage() {
   return (
     <DashboardShell allowedRole="admin">
       <div className="space-y-8">
-        <div>
-          <h1 className="font-heading text-3xl font-semibold">Admin Overview</h1>
-          <p className="mt-1 text-muted-foreground">
-            Buying, selling activity, profits, and fulfillment summary for{" "}
-            <span className="font-semibold text-foreground">vandan11patel@gmail.com</span>
-          </p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="font-heading text-3xl font-semibold">Admin Overview</h1>
+            <p className="mt-1 text-muted-foreground">
+              Store management, product additions, profit analytics, and order fulfillment summary.
+            </p>
+          </div>
+          <Link
+            href="/dashboard/admin/products"
+            className="inline-flex items-center gap-2 rounded-lg bg-terracotta px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-transform hover:scale-[1.02] active:scale-[0.98] self-start sm:self-auto"
+          >
+            ➕ Add New Product
+          </Link>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

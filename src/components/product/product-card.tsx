@@ -112,9 +112,6 @@ export function ProductCard({ product, className }: ProductCardProps) {
               {product.name}
             </h3>
           </Link>
-          {product.artist && (
-            <p className="mt-1 text-xs text-muted-foreground">by {product.artist}</p>
-          )}
           <div className="mt-2 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="font-medium">{formatPrice(product.price)}</span>

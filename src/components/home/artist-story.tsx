@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Leaf, Heart, Users, Sparkles } from "lucide-react";
+import { Leaf, Heart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const values = [
   { icon: Heart, label: "Handmade Quality" },
   { icon: Leaf, label: "Sustainable Materials" },
-  { icon: Users, label: "Independent Artists" },
+  { icon: Sparkles, label: "Curated Artworks" },
   { icon: Sparkles, label: "Thoughtful Design" },
 ];
 
@@ -18,7 +18,7 @@ export function ArtistStorySection() {
           <div className="relative aspect-[4/5] overflow-hidden rounded-card shadow-soft-lg">
             <Image
               src="https://images.unsplash.com/photo-1455393573742-b8f9b43e46cd?w=640&q=75"
-              alt="Artist studio"
+              alt="Art studio"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -51,9 +51,9 @@ export function ArtistStorySection() {
           </p>
 
           <div className="mt-10 grid grid-cols-2 gap-4">
-            {values.map((value) => (
+            {values.map((value, idx) => (
               <div
-                key={value.label}
+                key={`${value.label}-${idx}`}
                 className="flex items-center gap-3 rounded-card bg-secondary/60 p-4"
               >
                 <value.icon className="h-5 w-5 text-terracotta" />
@@ -62,8 +62,8 @@ export function ArtistStorySection() {
             ))}
           </div>
 
-          <Link href="/artists" className="mt-8 inline-block">
-            <Button className="gap-2">Meet Our Artists</Button>
+          <Link href="/shop" className="mt-8 inline-block">
+            <Button className="gap-2">Explore Collection</Button>
           </Link>
         </div>
       </div>

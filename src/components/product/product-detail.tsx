@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { Heart, Minus, Plus, ShoppingBag, Star, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -93,14 +92,6 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
           <h1 className="mt-2 font-heading text-3xl font-semibold md:text-4xl">
             {product.name}
           </h1>
-          {product.artist && (
-            <Link
-              href={`/artists/${product.artistSlug}`}
-              className="mt-2 inline-block text-sm text-terracotta hover:underline"
-            >
-              by {product.artist}
-            </Link>
-          )}
 
           <div className="mt-4 flex items-center gap-3">
             <div className="flex items-center gap-1">

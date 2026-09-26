@@ -152,7 +152,12 @@ export function LoginForm() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Password</label>
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium">Password</label>
+                <Link href="/forgot-password" className="text-xs text-terracotta hover:underline font-medium">
+                  Forgot Password?
+                </Link>
+              </div>
               <Input
                 type="password"
                 value={password}

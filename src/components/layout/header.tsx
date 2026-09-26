@@ -22,7 +22,6 @@ import { LayoutDashboard, User } from "lucide-react";
 
 const navLinks = [
   { href: "/shop", label: "Shop" },
-  { href: "/artists", label: "Artists" },
   { href: "/gallery", label: "Gallery" },
   { href: "/ai", label: "AI Tools" },
 ];

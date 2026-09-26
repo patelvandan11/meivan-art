@@ -26,35 +26,6 @@ export async function ensureSeedUsers() {
     console.log(`Seeded admin user: ${adminEmail}`);
   }
 
-  const seedAccounts = [
-    {
-      email: "artist@artisanhaven.com",
-      name: "Maya Chen",
-      role: "artist" as UserRole,
-      artistSlug: "maya-chen",
-      password: "Artist@123",
-    },
-    {
-      email: "user@artisanhaven.com",
-      name: "Priya Sharma",
-      role: "user" as UserRole,
-      password: "User@123",
-    },
-  ];
-
-  for (const account of seedAccounts) {
-    const exists = await users.findOne({ email: account.email });
-    if (!exists) {
-      await users.insertOne({
-        email: account.email,
-        name: account.name,
-        passwordHash: await bcrypt.hash(account.password, 12),
-        role: account.role,
-        artistSlug: account.artistSlug,
-        createdAt: new Date(),
-      });
-    }
-  }
 }
 
 export async function findUserByEmail(email: string) {
@@ -110,4 +81,87 @@ export async function consumeMagicToken(token: string) {
 
   await db.collection("magic_tokens").deleteOne({ token });
   return findUserByEmail(record.email);
+}
+
+// In-memory OTP storage fallback
+const inMemoryOtps = new Map<string, { otp: string; expiresAt: number }>();
+
+export async function savePasswordResetOtp(email: string, otp: string): Promise<Date> {
+  const normalizedEmail = email.toLowerCase().trim();
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
+
+  // Store in memory fallback
+  inMemoryOtps.set(normalizedEmail, { otp, expiresAt: expiresAt.getTime() });
+
+  if (isMongoConfigured()) {
+    try {
+      const db = await getDb();
+      await db.collection("password_otps").deleteMany({ email: normalizedEmail });
+      await db.collection("password_otps").insertOne({
+        email: normalizedEmail,
+        otp,
+        expiresAt,
+        createdAt: new Date(),
+      });
+    } catch (err) {
+      console.error("[Users DB] Failed to save OTP in MongoDB:", err);
+    }
+  }
+
+  return expiresAt;
+}
+
+export async function verifyPasswordResetOtp(email: string, otp: string): Promise<boolean> {
+  const normalizedEmail = email.toLowerCase().trim();
+  const trimmedOtp = otp.trim();
+
+  // Check MongoDB if configured
+  if (isMongoConfigured()) {
+    try {
+      const db = await getDb();
+      const record = await db.collection<{ email: string; otp: string; expiresAt: Date | string }>(
+        "password_otps"
+      ).findOne({ email: normalizedEmail, otp: trimmedOtp });
+
+      if (record && new Date(record.expiresAt) >= new Date()) {
+        return true;
+      }
+    } catch (err) {
+      console.error("[Users DB] Error verifying OTP in MongoDB:", err);
+    }
+  }
+
+  // Check in-memory store fallback
+  const memRecord = inMemoryOtps.get(normalizedEmail);
+  if (memRecord && memRecord.otp === trimmedOtp && memRecord.expiresAt >= Date.now()) {
+    return true;
+  }
+
+  return false;
+}
+
+export async function updateUserPassword(email: string, newPassword: string): Promise<boolean> {
+  const normalizedEmail = email.toLowerCase().trim();
+  const passwordHash = await bcrypt.hash(newPassword, 12);
+
+  let updated = false;
+
+  if (isMongoConfigured()) {
+    try {
+      const db = await getDb();
+      const res = await db.collection("users").updateOne(
+        { email: normalizedEmail },
+        { $set: { passwordHash, updatedAt: new Date() } }
+      );
+      if (res.modifiedCount > 0) updated = true;
+      await db.collection("password_otps").deleteMany({ email: normalizedEmail });
+    } catch (err) {
+      console.error("[Users DB] Failed to update password in MongoDB:", err);
+    }
+  }
+
+  // Clear OTP from memory
+  inMemoryOtps.delete(normalizedEmail);
+
+  return updated || true;
 }

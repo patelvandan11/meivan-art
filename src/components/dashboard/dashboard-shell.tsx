@@ -26,12 +26,12 @@ const NAV: Record<UserRole, { href: string; label: string; icon: typeof Heart }[
     { href: "/dashboard/user/albums", label: "My Albums", icon: FolderOpen },
   ],
   artist: [
-    { href: "/dashboard/artist", label: "Overview", icon: LayoutDashboard },
-    { href: "/dashboard/artist/products", label: "My Products", icon: Palette },
-    { href: "/dashboard/artist/sales", label: "Sales", icon: BarChart3 },
+    { href: "/dashboard/user", label: "Overview", icon: LayoutDashboard },
+    { href: "/dashboard/user/orders", label: "My Orders & Tracking", icon: Package },
   ],
   admin: [
     { href: "/dashboard/admin", label: "Overview", icon: LayoutDashboard },
+    { href: "/dashboard/admin/products", label: "Products Management", icon: Palette },
     { href: "/dashboard/admin/orders", label: "Orders", icon: Package },
     { href: "/dashboard/admin/analytics", label: "Analytics", icon: BarChart3 },
   ],

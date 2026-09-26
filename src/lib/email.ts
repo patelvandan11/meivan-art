@@ -60,6 +60,60 @@ export async function sendMagicLinkEmail(email: string, magicLink: string) {
   }
 }
 
+export async function sendPasswordResetOtpEmail(email: string, otp: string) {
+  const transporter = getTransporter();
+
+  const htmlContent = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 32px; background-color: #fdfbf7; border: 1px solid #e8dfd8; border-radius: 16px; color: #2d2621;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h1 style="color: #c97c5d; margin: 0; font-size: 26px; font-weight: 700;">Meivan Art</h1>
+        <p style="color: #8c7a6e; font-size: 14px; margin-top: 4px;">Password Reset Verification</p>
+      </div>
+
+      <div style="background-color: #ffffff; border: 1px solid #efe6de; border-radius: 12px; padding: 24px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+        <p style="color: #5c4d42; font-size: 15px; margin-top: 0; margin-bottom: 16px;">
+          Your 6-digit One-Time Password (OTP) code to reset your account password is:
+        </p>
+
+        <div style="background: #faf4ef; border: 2px dashed #c97c5d; border-radius: 10px; padding: 16px; margin: 16px 0; display: inline-block;">
+          <span style="font-family: 'Courier New', Courier, monospace; font-size: 34px; font-weight: 800; letter-spacing: 8px; color: #c97c5d;">
+            ${otp}
+          </span>
+        </div>
+
+        <p style="color: #88786c; font-size: 13px; margin-bottom: 0;">
+          ⏰ This OTP is valid for <strong>10 minutes</strong>. Do not share this code with anyone.
+        </p>
+      </div>
+
+      <p style="margin-top: 24px; font-size: 12px; color: #a09084; text-align: center;">
+        If you did not request a password reset, please ignore this email or contact support.
+      </p>
+    </div>
+  `;
+
+  if (!transporter) {
+    console.log("\n=================== PASSWORD RESET OTP (DEV MODE) ===================");
+    console.log(`To Email: ${email}`);
+    console.log(`OTP Code: ${otp}`);
+    console.log("=====================================================================\n");
+    return { sent: false, devOtp: otp };
+  }
+
+  try {
+    await transporter.sendMail({
+      from: DEFAULT_FROM,
+      to: email,
+      subject: `🔑 ${otp} is your Meivan Art password reset OTP code`,
+      html: htmlContent,
+    });
+    return { sent: true };
+  } catch (error) {
+    console.error("Failed to send password reset OTP email:", error);
+    return { sent: false, error, devOtp: otp };
+  }
+}
+
 /**
  * Send instant order notification email to meivaninfo@gmail.com for packing and shipping
  */

@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     const token = randomBytes(32).toString("hex");
     await saveMagicToken(normalized, token);
 
-    const appUrl = getAppUrl();
+    const appUrl = getAppUrl(request);
     const magicLink = `${appUrl}/api/auth/verify?token=${token}`;
 
     const result = await sendMagicLinkEmail(normalized, magicLink);
@@ -46,8 +46,7 @@ export async function POST(request: Request) {
       success: true,
       message: result.sent
         ? "Magic link sent! Check your email."
-        : "SMTP not configured — check server console for the magic link.",
-      devLink: result.devLink,
+        : "Magic link generated — check server console.",
     });
   } catch (error) {
     console.error("Magic link error:", error);

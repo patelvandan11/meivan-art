@@ -1,5 +1,6 @@
 import type { UserRole } from "@/types";
 
 export function getDashboardPath(role: UserRole) {
-  return `/dashboard/${role}`;
+  if (role === "admin") return "/dashboard/admin";
+  return "/dashboard/user";
 }
