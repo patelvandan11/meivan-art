@@ -9,7 +9,6 @@ import type { MonthlySales, Order } from "@/types";
 export default function AdminAnalyticsPage() {
   const [ordersList, setOrdersList] = useState<Order[]>([]);
   const [monthlySales, setMonthlySales] = useState<MonthlySales[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/admin/orders")
@@ -20,8 +19,7 @@ export default function AdminAnalyticsPage() {
           if (data.stats?.monthlySales) setMonthlySales(data.stats.monthlySales);
         }
       })
-      .catch((err) => console.error("Error loading analytics:", err))
-      .finally(() => setLoading(false));
+      .catch((err) => console.error("Error loading analytics:", err));
   }, []);
 
   const totalRevenue = ordersList.reduce((s, o) => s + (o.paymentStatus === "failed" ? 0 : o.total), 0);

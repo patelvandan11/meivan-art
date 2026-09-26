@@ -76,7 +76,7 @@ export default function CheckoutPage() {
         }
         setShippingDays(result.estimatedDays);
       } catch {
-        setShippingFee(subtotal >= 2000 ? 0 : 99);
+        setShippingFee(subtotal >= 2000 ? 0 : 0);
       }
     }
   }
