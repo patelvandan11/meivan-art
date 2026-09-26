@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Heart, Minus, Plus, ShoppingBag, Star, Truck } from "lucide-react";
@@ -15,6 +15,7 @@ import {
 } from "@/lib/data/products";
 import { formatPrice, cn } from "@/lib/utils";
 import { AIRecommendations } from "@/components/ai/ai-recommendations";
+import type { Product } from "@/types";
 
 const reviews = [
   {
@@ -40,14 +41,45 @@ interface ProductPageClientProps {
 }
 
 export function ProductPageClient({ slug }: ProductPageClientProps) {
-  const product = getProductBySlug(slug);
+  const initialProduct = getProductBySlug(slug);
+  const [product, setProduct] = useState<Product | undefined>(initialProduct);
+  const [loading, setLoading] = useState(!initialProduct);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const addToCart = useCartStore((s) => s.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
   const hydrated = useStoreHydrated();
 
-  if (!product) return null;
+  useEffect(() => {
+    if (!product) {
+      fetch("/api/products")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.products) {
+            const found = data.products.find((p: Product) => p.slug === slug || p.id === slug);
+            if (found) setProduct(found);
+          }
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [slug, product]);
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 py-24 text-center text-muted-foreground">
+        Loading product details...
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 py-24 text-center">
+        <h2 className="font-heading text-2xl font-semibold">Product Not Found</h2>
+        <p className="mt-2 text-muted-foreground">The requested product does not exist or has been removed.</p>
+      </div>
+    );
+  }
 
   const related = getRelatedProducts(product);
   const wishlisted = hydrated && isInWishlist(product.id);
