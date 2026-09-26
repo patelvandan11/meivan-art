@@ -1,14 +1,35 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { SimpleBarChart } from "@/components/dashboard/stat-card";
-import { monthlySales, orders } from "@/lib/data/orders";
 import { formatPrice } from "@/lib/utils";
+import type { MonthlySales, Order } from "@/types";
 
 export default function AdminAnalyticsPage() {
-  const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
-  const totalProfit = orders.reduce((s, o) => s + o.profit, 0);
+  const [ordersList, setOrdersList] = useState<Order[]>([]);
+  const [monthlySales, setMonthlySales] = useState<MonthlySales[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/orders")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          if (data.orders) setOrdersList(data.orders);
+          if (data.stats?.monthlySales) setMonthlySales(data.stats.monthlySales);
+        }
+      })
+      .catch((err) => console.error("Error loading analytics:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const totalRevenue = ordersList.reduce((s, o) => s + (o.paymentStatus === "failed" ? 0 : o.total), 0);
+  const totalProfit = ordersList.reduce((s, o) => s + (o.paymentStatus === "failed" ? 0 : o.profit), 0);
   const margin = totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : 0;
+  const validOrderCount = ordersList.filter((o) => o.paymentStatus !== "failed").length;
+  const avgOrderValue = validOrderCount > 0 ? Math.round(totalRevenue / validOrderCount) : 0;
+  const ordersThisMonth = monthlySales.length > 0 ? monthlySales[monthlySales.length - 1].orders : 0;
 
   return (
     <DashboardShell allowedRole="admin">
@@ -26,13 +47,13 @@ export default function AdminAnalyticsPage() {
           <div className="rounded-card border border-border bg-card p-6">
             <p className="text-sm text-muted-foreground">Avg Order Value</p>
             <p className="mt-2 font-heading text-3xl font-semibold">
-              {formatPrice(Math.round(totalRevenue / orders.length))}
+              {formatPrice(avgOrderValue)}
             </p>
           </div>
           <div className="rounded-card border border-border bg-card p-6">
             <p className="text-sm text-muted-foreground">Orders This Month</p>
             <p className="mt-2 font-heading text-3xl font-semibold">
-              {monthlySales[monthlySales.length - 1].orders}
+              {ordersThisMonth}
             </p>
           </div>
         </div>
@@ -40,9 +61,13 @@ export default function AdminAnalyticsPage() {
         <div className="rounded-card border border-border bg-card p-6 shadow-soft">
           <h2 className="font-heading text-xl font-semibold">Orders per Month</h2>
           <div className="mt-6">
-            <SimpleBarChart
-              data={monthlySales.map((m) => ({ label: m.month, value: m.orders }))}
-            />
+            {monthlySales.length > 0 ? (
+              <SimpleBarChart
+                data={monthlySales.map((m) => ({ label: m.month, value: m.orders }))}
+              />
+            ) : (
+              <p className="text-xs text-muted-foreground py-8 text-center">No orders recorded yet.</p>
+            )}
           </div>
         </div>
 
@@ -51,17 +76,25 @@ export default function AdminAnalyticsPage() {
           <div className="mt-6 grid gap-8 lg:grid-cols-2">
             <div>
               <p className="mb-4 text-sm text-muted-foreground">Revenue</p>
-              <SimpleBarChart
-                data={monthlySales.map((m) => ({ label: m.month, value: m.revenue }))}
-                valuePrefix="₹"
-              />
+              {monthlySales.length > 0 ? (
+                <SimpleBarChart
+                  data={monthlySales.map((m) => ({ label: m.month, value: m.revenue }))}
+                  valuePrefix="₹"
+                />
+              ) : (
+                <p className="text-xs text-muted-foreground py-8 text-center">No revenue recorded yet.</p>
+              )}
             </div>
             <div>
               <p className="mb-4 text-sm text-muted-foreground">Profit</p>
-              <SimpleBarChart
-                data={monthlySales.map((m) => ({ label: m.month, value: m.profit }))}
-                valuePrefix="₹"
-              />
+              {monthlySales.length > 0 ? (
+                <SimpleBarChart
+                  data={monthlySales.map((m) => ({ label: m.month, value: m.profit }))}
+                  valuePrefix="₹"
+                />
+              ) : (
+                <p className="text-xs text-muted-foreground py-8 text-center">No profit recorded yet.</p>
+              )}
             </div>
           </div>
         </div>

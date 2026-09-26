@@ -5,13 +5,18 @@ import Link from "next/link";
 import { Package, IndianRupee, TrendingUp, Clock } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { StatCard, StatCardMoney, SimpleBarChart } from "@/components/dashboard/stat-card";
-import { getAdminStats, orders as mockOrders, monthlySales } from "@/lib/data/orders";
 import { formatPrice } from "@/lib/utils";
-import type { Order } from "@/types";
+import type { MonthlySales, Order } from "@/types";
 
 export default function AdminDashboardPage() {
-  const [ordersList, setOrdersList] = useState<Order[]>(mockOrders);
-  const [stats, setStats] = useState(getAdminStats());
+  const [ordersList, setOrdersList] = useState<Order[]>([]);
+  const [stats, setStats] = useState({
+    totalOrders: 0,
+    totalRevenue: 0,
+    totalProfit: 0,
+    pendingOrders: 0,
+  });
+  const [monthlySalesList, setMonthlySalesList] = useState<MonthlySales[]>([]);
 
   useEffect(() => {
     fetch("/api/admin/orders")
@@ -21,11 +26,14 @@ export default function AdminDashboardPage() {
           if (data.orders) setOrdersList(data.orders);
           if (data.stats) {
             setStats({
-              totalOrders: data.stats.totalOrders,
-              totalRevenue: data.stats.totalRevenue,
-              totalProfit: data.stats.totalProfit,
-              pendingOrders: data.stats.pendingOrders + data.stats.packingOrders,
+              totalOrders: data.stats.totalOrders || 0,
+              totalRevenue: data.stats.totalRevenue || 0,
+              totalProfit: data.stats.totalProfit || 0,
+              pendingOrders: (data.stats.pendingOrders || 0) + (data.stats.packingOrders || 0),
             });
+            if (data.stats.monthlySales) {
+              setMonthlySalesList(data.stats.monthlySales);
+            }
           }
         }
       })
@@ -60,23 +68,31 @@ export default function AdminDashboardPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-card border border-border bg-card p-6 shadow-soft">
             <h2 className="font-heading text-xl font-semibold">Monthly Revenue</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Last 6 months</p>
+            <p className="mt-1 text-sm text-muted-foreground">Recent months</p>
             <div className="mt-6">
-              <SimpleBarChart
-                data={monthlySales.map((m) => ({ label: m.month, value: m.revenue }))}
-                valuePrefix="₹"
-              />
+              {monthlySalesList.length > 0 ? (
+                <SimpleBarChart
+                  data={monthlySalesList.map((m) => ({ label: m.month, value: m.revenue }))}
+                  valuePrefix="₹"
+                />
+              ) : (
+                <p className="text-xs text-muted-foreground py-8 text-center">No monthly sales recorded yet.</p>
+              )}
             </div>
           </div>
 
           <div className="rounded-card border border-border bg-card p-6 shadow-soft">
             <h2 className="font-heading text-xl font-semibold">Monthly Profit</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Last 6 months</p>
+            <p className="mt-1 text-sm text-muted-foreground">Recent months</p>
             <div className="mt-6">
-              <SimpleBarChart
-                data={monthlySales.map((m) => ({ label: m.month, value: m.profit }))}
-                valuePrefix="₹"
-              />
+              {monthlySalesList.length > 0 ? (
+                <SimpleBarChart
+                  data={monthlySalesList.map((m) => ({ label: m.month, value: m.profit }))}
+                  valuePrefix="₹"
+                />
+              ) : (
+                <p className="text-xs text-muted-foreground py-8 text-center">No monthly profit recorded yet.</p>
+              )}
             </div>
           </div>
         </div>
@@ -104,41 +120,49 @@ export default function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {ordersList.slice(0, 6).map((order) => (
-                  <tr key={order.id} className="border-b border-border/50 hover:bg-secondary/20">
-                    <td className="p-4 font-medium font-mono text-terracotta">{order.id}</td>
-                    <td className="p-4">
-                      <p className="font-medium text-foreground">{order.customerName}</p>
-                      <p className="text-xs text-muted-foreground">{order.customerEmail}</p>
-                    </td>
-                    <td className="p-4 font-semibold">{formatPrice(order.total)}</td>
-                    <td className="p-4">
-                      <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-semibold uppercase">
-                        {order.paymentMethod || "PayU"}
-                      </span>
-                    </td>
-                    <td className="p-4 capitalize">
-                      <span
-                        className={`rounded-full px-2.5 py-0.5 text-xs ${
-                          order.status === "delivered"
-                            ? "bg-sage/20 text-sage font-medium"
-                            : order.status === "shipped"
-                            ? "bg-blue-100 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300"
-                            : "bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 font-medium"
-                        }`}
-                      >
-                        {order.status.replace("_", " ")}
-                      </span>
-                    </td>
-                    <td className="p-4 text-xs">
-                      {order.tracking?.courierName ? (
-                        <span>{order.tracking.courierName} ({order.tracking.trackingNumber})</span>
-                      ) : (
-                        <span className="text-muted-foreground">Pending Dispatch</span>
-                      )}
+                {ordersList.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="p-8 text-center text-muted-foreground">
+                      No orders placed yet.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  ordersList.slice(0, 6).map((order) => (
+                    <tr key={order.id} className="border-b border-border/50 hover:bg-secondary/20">
+                      <td className="p-4 font-medium font-mono text-terracotta">{order.id}</td>
+                      <td className="p-4">
+                        <p className="font-medium text-foreground">{order.customerName}</p>
+                        <p className="text-xs text-muted-foreground">{order.customerEmail}</p>
+                      </td>
+                      <td className="p-4 font-semibold">{formatPrice(order.total)}</td>
+                      <td className="p-4">
+                        <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-semibold uppercase">
+                          {order.paymentMethod || "PayU"}
+                        </span>
+                      </td>
+                      <td className="p-4 capitalize">
+                        <span
+                          className={`rounded-full px-2.5 py-0.5 text-xs ${
+                            order.status === "delivered"
+                              ? "bg-sage/20 text-sage font-medium"
+                              : order.status === "shipped"
+                              ? "bg-blue-100 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300"
+                              : "bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 font-medium"
+                          }`}
+                        >
+                          {order.status.replace("_", " ")}
+                        </span>
+                      </td>
+                      <td className="p-4 text-xs">
+                        {order.tracking?.courierName ? (
+                          <span>{order.tracking.courierName} ({order.tracking.trackingNumber})</span>
+                        ) : (
+                          <span className="text-muted-foreground">Pending Dispatch</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

@@ -16,15 +16,8 @@ export async function getAllProductsFromStore(): Promise<Product[]> {
         .sort({ createdAt: -1 })
         .toArray()) as unknown as Product[];
 
-      if (dbProducts && dbProducts.length > 0) {
-        const dbIds = new Set(dbProducts.map((p) => p.id));
-        const merged = [...dbProducts];
-        for (const initP of initialProducts) {
-          if (!dbIds.has(initP.id)) {
-            merged.push(initP);
-          }
-        }
-        dynamicProducts = merged.filter(
+      if (dbProducts) {
+        dynamicProducts = dbProducts.filter(
           (p) => !deletedProductIds.has(p.id) && !deletedProductIds.has(p.slug)
         );
         return dynamicProducts;

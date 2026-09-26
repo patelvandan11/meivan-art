@@ -1,11 +1,32 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product/product-card";
 import { Button } from "@/components/ui/button";
-import { getFeaturedProducts } from "@/lib/data/products";
+import type { Product } from "@/types";
 
 export function FeaturedProductsSection() {
-  const products = getFeaturedProducts();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.products) {
+          const featured = data.products.filter((p: Product) => p.featured);
+          setProducts(featured.length > 0 ? featured : data.products.slice(0, 4));
+        }
+      })
+      .catch((err) => console.error("Error loading featured products:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (!loading && products.length === 0) {
+    return null;
+  }
 
   return (
     <section className="section-alt py-24 px-4 sm:px-6 lg:px-8">
@@ -27,11 +48,17 @@ export function FeaturedProductsSection() {
           </Link>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="mt-12 text-center text-muted-foreground py-12">
+            Loading collection...
+          </div>
+        ) : (
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

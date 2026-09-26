@@ -1,9 +1,8 @@
 import { getDb, isMongoConfigured } from "@/lib/mongodb";
-import { orders as mockOrders } from "@/lib/data/orders";
-import type { Order, OrderFulfillmentStatus, TrackingInfo } from "@/types";
+import type { Order, OrderFulfillmentStatus, TrackingInfo, MonthlySales } from "@/types";
 
-// In-memory cache to retain newly placed orders even if MongoDB isn't reachable
-const inMemoryOrders: Order[] = [...mockOrders];
+// In-memory cache for newly placed orders if MongoDB isn't reachable
+const inMemoryOrders: Order[] = [];
 
 /**
  * Generate a unique sequential/timestamp order ID like ORD-2026-XXXX
@@ -287,6 +286,23 @@ export async function getAdminOrderStats() {
   const shippedOrders = all.filter((o) => o.status === "shipped" || o.status === "out_for_delivery").length;
   const deliveredOrders = all.filter((o) => o.status === "delivered").length;
 
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthlyMap: Record<string, MonthlySales> = {};
+
+  for (const o of all) {
+    if (o.paymentStatus === "failed") continue;
+    const date = new Date(o.createdAt);
+    const monthKey = isNaN(date.getTime()) ? "Current" : monthNames[date.getMonth()];
+    if (!monthlyMap[monthKey]) {
+      monthlyMap[monthKey] = { month: monthKey, orders: 0, revenue: 0, profit: 0 };
+    }
+    monthlyMap[monthKey].orders += 1;
+    monthlyMap[monthKey].revenue += o.total;
+    monthlyMap[monthKey].profit += o.profit;
+  }
+
+  const monthlySales: MonthlySales[] = Object.values(monthlyMap);
+
   return {
     totalOrders,
     totalRevenue,
@@ -295,5 +311,6 @@ export async function getAdminOrderStats() {
     packingOrders,
     shippedOrders,
     deliveredOrders,
+    monthlySales,
   };
 }

@@ -17,24 +17,14 @@ import { formatPrice, cn } from "@/lib/utils";
 import { AIRecommendations } from "@/components/ai/ai-recommendations";
 import type { Product } from "@/types";
 
-const reviews = [
-  {
-    id: "r1",
-    userName: "Sarah M.",
-    userImage: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&q=80",
-    rating: 5,
-    comment: "Absolutely stunning quality. The colors are even more vibrant in person.",
-    date: "2 weeks ago",
-  },
-  {
-    id: "r2",
-    userName: "James L.",
-    userImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
-    rating: 5,
-    comment: "Fast shipping and beautiful packaging. Will definitely order again.",
-    date: "1 month ago",
-  },
-];
+const reviews: Array<{
+  id: string;
+  userName: string;
+  userImage: string;
+  rating: number;
+  comment: string;
+  date: string;
+}> = [];
 
 interface ProductPageClientProps {
   slug: string;
