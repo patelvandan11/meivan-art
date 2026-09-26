@@ -9,9 +9,9 @@ export interface PayUConfig {
 }
 
 export function getPayUConfig(): PayUConfig {
-  const merchantKey = process.env.PAYU_MERCHANT_KEY || "gtKFFx"; // Default PayU test key
-  const merchantSalt = process.env.PAYU_MERCHANT_SALT || "eCwWELxi"; // Default PayU test salt
-  const mode = (process.env.PAYU_MODE === "live" ? "live" : "test") as "test" | "live";
+  const merchantKey = process.env.PAYU_MERCHANT_KEY || process.env.PAYU_KEY || "gtKFFx";
+  const merchantSalt = process.env.PAYU_MERCHANT_SALT || process.env.PAYU_SALT || "4R38IvwiV57FwVpsgOvTXBdLE4tHUXFW";
+  const mode = ((process.env.PAYU_MODE || process.env.PAYU_ENV) === "live" ? "live" : "test") as "test" | "live";
   
   const paymentUrl =
     mode === "live"
