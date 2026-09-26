@@ -1,7 +1,7 @@
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import { getProductBySlug, products } from "@/lib/data/products";
+import { getProductBySlugFromStore } from "@/lib/products-store";
+import { products } from "@/lib/data/products";
 import { ProductPageClient } from "@/components/product/product-detail";
+import type { Metadata } from "next";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -15,11 +15,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
-  if (!product) return { title: "Product Not Found" };
+  const product = await getProductBySlugFromStore(slug);
+  if (!product) return { title: "Artisan Haven Product" };
 
   return {
-    title: product.name,
+    title: `${product.name} | Artisan Haven`,
     description: product.description,
     openGraph: {
       images: [product.images[0]],
@@ -29,8 +29,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
-  if (!product) notFound();
-
   return <ProductPageClient slug={slug} />;
 }

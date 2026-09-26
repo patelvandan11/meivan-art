@@ -4,6 +4,7 @@ import type { Product } from "@/types";
 
 // In-memory store for products (persisted dynamically in memory and MongoDB)
 let dynamicProducts: Product[] = [...initialProducts];
+const deletedProductIds = new Set<string>();
 
 export async function getAllProductsFromStore(): Promise<Product[]> {
   if (isMongoConfigured()) {
@@ -23,19 +24,69 @@ export async function getAllProductsFromStore(): Promise<Product[]> {
             merged.push(initP);
           }
         }
-        dynamicProducts = merged;
-        return merged;
+        dynamicProducts = merged.filter(
+          (p) => !deletedProductIds.has(p.id) && !deletedProductIds.has(p.slug)
+        );
+        return dynamicProducts;
       }
     } catch (err) {
       console.error("[Products DB] Error reading from MongoDB:", err);
     }
   }
 
+  dynamicProducts = dynamicProducts.filter(
+    (p) => !deletedProductIds.has(p.id) && !deletedProductIds.has(p.slug)
+  );
   return dynamicProducts;
 }
 
 export function getMemoryProducts(): Product[] {
-  return dynamicProducts;
+  return dynamicProducts.filter(
+    (p) => !deletedProductIds.has(p.id) && !deletedProductIds.has(p.slug)
+  );
+}
+
+export async function getProductBySlugFromStore(slug: string): Promise<Product | undefined> {
+  const normalizedSlug = slug.toLowerCase().trim();
+  
+  if (deletedProductIds.has(normalizedSlug) || deletedProductIds.has(slug)) {
+    return undefined;
+  }
+
+  // 1. Search memory
+  const memoryMatch = dynamicProducts.find(
+    (p) =>
+      !deletedProductIds.has(p.id) &&
+      !deletedProductIds.has(p.slug) &&
+      (p.slug.toLowerCase() === normalizedSlug || p.id.toLowerCase() === normalizedSlug)
+  );
+  if (memoryMatch) return memoryMatch;
+
+  // 2. Query MongoDB if configured
+  if (isMongoConfigured()) {
+    try {
+      const db = await getDb();
+      const doc = (await db.collection("products").findOne({
+        $or: [
+          { slug: normalizedSlug },
+          { id: normalizedSlug },
+          { slug: slug },
+          { id: slug },
+        ],
+      })) as unknown as Product | null;
+
+      if (doc && !deletedProductIds.has(doc.id) && !deletedProductIds.has(doc.slug)) {
+        if (!dynamicProducts.some((p) => p.id === doc.id)) {
+          dynamicProducts.unshift(doc);
+        }
+        return doc;
+      }
+    } catch (err) {
+      console.error("[Products DB] Error querying product by slug from MongoDB:", err);
+    }
+  }
+
+  return undefined;
 }
 
 export async function addProductToStore(productData: Omit<Product, "id" | "rating" | "reviewCount"> & { id?: string }): Promise<Product> {
@@ -51,6 +102,9 @@ export async function addProductToStore(productData: Omit<Product, "id" | "ratin
     trending: productData.trending ?? false,
     tags: productData.tags || [productData.categorySlug],
   };
+
+  deletedProductIds.delete(id);
+  deletedProductIds.delete(newProduct.slug);
 
   // 1. Unshift into memory
   const existingIdx = dynamicProducts.findIndex((p) => p.id === id || p.slug === newProduct.slug);
@@ -86,7 +140,7 @@ export async function addProductToStore(productData: Omit<Product, "id" | "ratin
 }
 
 export async function updateProductInStore(id: string, updateData: Partial<Product>): Promise<Product | null> {
-  const idx = dynamicProducts.findIndex((p) => p.id === id);
+  const idx = dynamicProducts.findIndex((p) => p.id === id || p.slug === id);
   if (idx === -1) return null;
 
   const updatedProduct = {
@@ -97,7 +151,7 @@ export async function updateProductInStore(id: string, updateData: Partial<Produ
 
   dynamicProducts[idx] = updatedProduct;
 
-  const initIdx = initialProducts.findIndex((p) => p.id === id);
+  const initIdx = initialProducts.findIndex((p) => p.id === id || p.slug === id);
   if (initIdx >= 0) {
     initialProducts[initIdx] = updatedProduct;
   }
@@ -105,7 +159,10 @@ export async function updateProductInStore(id: string, updateData: Partial<Produ
   if (isMongoConfigured()) {
     try {
       const db = await getDb();
-      await db.collection("products").updateOne({ id }, { $set: updatedProduct });
+      await db.collection("products").updateOne(
+        { $or: [{ id }, { slug: id }] },
+        { $set: updatedProduct }
+      );
     } catch (err) {
       console.error("[Products DB] Failed to update product in MongoDB:", err);
     }
@@ -114,21 +171,51 @@ export async function updateProductInStore(id: string, updateData: Partial<Produ
   return updatedProduct;
 }
 
-export async function deleteProductFromStore(id: string): Promise<boolean> {
-  const idx = dynamicProducts.findIndex((p) => p.id === id);
-  if (idx === -1) return false;
+export async function deleteProductFromStore(idOrSlug: string): Promise<boolean> {
+  const target = idOrSlug.trim();
+  const targetLower = target.toLowerCase();
 
-  dynamicProducts.splice(idx, 1);
+  // Mark as deleted in global exclusion set
+  deletedProductIds.add(target);
+  deletedProductIds.add(targetLower);
 
-  const initIdx = initialProducts.findIndex((p) => p.id === id);
-  if (initIdx >= 0) {
-    initialProducts.splice(initIdx, 1);
+  // Find product to remove by ID or slug
+  const matchedProduct = dynamicProducts.find(
+    (p) => p.id.toLowerCase() === targetLower || p.slug.toLowerCase() === targetLower
+  );
+
+  if (matchedProduct) {
+    deletedProductIds.add(matchedProduct.id);
+    deletedProductIds.add(matchedProduct.slug);
   }
 
+  // Remove from dynamicProducts
+  dynamicProducts = dynamicProducts.filter(
+    (p) => p.id.toLowerCase() !== targetLower && p.slug.toLowerCase() !== targetLower
+  );
+
+  // Remove from initialProducts
+  for (let i = initialProducts.length - 1; i >= 0; i--) {
+    if (
+      initialProducts[i].id.toLowerCase() === targetLower ||
+      initialProducts[i].slug.toLowerCase() === targetLower
+    ) {
+      initialProducts.splice(i, 1);
+    }
+  }
+
+  // Completely delete from MongoDB database
   if (isMongoConfigured()) {
     try {
       const db = await getDb();
-      await db.collection("products").deleteOne({ id });
+      await db.collection("products").deleteMany({
+        $or: [
+          { id: target },
+          { slug: target },
+          { id: targetLower },
+          { slug: targetLower },
+        ],
+      });
     } catch (err) {
       console.error("[Products DB] Failed to delete product from MongoDB:", err);
     }

@@ -430,7 +430,8 @@ export const galleryImages: GalleryImage[] = [
 ];
 
 export function getProductBySlug(slug: string): Product | undefined {
-  return products.find((p) => p.slug === slug);
+  const norm = slug.toLowerCase().trim();
+  return products.find((p) => p.slug.toLowerCase() === norm || p.id.toLowerCase() === norm);
 }
 
 export function getProductsByCategory(categorySlug: string): Product[] {
