@@ -99,8 +99,11 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
   if (isMongoConfigured()) {
     try {
       const db = await getDb();
-      const doc = await db.collection<Order>("orders").findOne({ id: orderId });
-      if (doc) return doc;
+      const doc = await db.collection("orders").findOne({ id: orderId });
+      if (doc) {
+        delete (doc as Record<string, unknown>)._id;
+        return doc as unknown as Order;
+      }
     } catch (err) {
       console.error("[Orders DB] Error getting order by ID:", err);
     }
@@ -117,7 +120,7 @@ export async function getAllOrders(params?: {
   status?: string;
   search?: string;
 }): Promise<Order[]> {
-  let list: Order[] = [];
+  const orderMap = new Map<string, Order>();
 
   if (isMongoConfigured()) {
     try {
@@ -138,38 +141,50 @@ export async function getAllOrders(params?: {
       }
 
       const docs = await db
-        .collection<Order>("orders")
+        .collection("orders")
         .find(query)
         .sort({ createdAt: -1 })
         .toArray();
 
-      if (docs && docs.length > 0) {
-        list = docs;
+      if (docs) {
+        for (const doc of docs) {
+          delete (doc as Record<string, unknown>)._id;
+          if (doc.id) {
+            orderMap.set(doc.id as string, doc as unknown as Order);
+          }
+        }
       }
     } catch (err) {
-      console.error("[Orders DB] Error querying orders from MongoDB, falling back to memory:", err);
+      console.error("[Orders DB] Error querying orders from MongoDB:", err);
     }
   }
 
-  if (list.length === 0) {
-    list = [...inMemoryOrders];
-    if (params?.status && params.status !== "all") {
-      list = list.filter((o) => o.status === params.status);
-    }
-    if (params?.search) {
-      const q = params.search.toLowerCase();
-      list = list.filter(
-        (o) =>
-          o.id.toLowerCase().includes(q) ||
-          o.customerName.toLowerCase().includes(q) ||
-          o.customerEmail.toLowerCase().includes(q) ||
-          (o.customerPhone && o.customerPhone.includes(q)) ||
-          (o.tracking?.trackingNumber && o.tracking.trackingNumber.toLowerCase().includes(q))
-      );
+  // Combine with in-memory order cache
+  for (const o of inMemoryOrders) {
+    if (!orderMap.has(o.id)) {
+      orderMap.set(o.id, o);
     }
   }
 
-  return list;
+  let list = Array.from(orderMap.values());
+
+  if (params?.status && params.status !== "all") {
+    list = list.filter((o) => o.status === params.status);
+  }
+
+  if (params?.search) {
+    const q = params.search.toLowerCase();
+    list = list.filter(
+      (o) =>
+        o.id.toLowerCase().includes(q) ||
+        o.customerName.toLowerCase().includes(q) ||
+        o.customerEmail.toLowerCase().includes(q) ||
+        (o.customerPhone && o.customerPhone.includes(q)) ||
+        (o.tracking?.trackingNumber && o.tracking.trackingNumber.toLowerCase().includes(q))
+    );
+  }
+
+  return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
 /**

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Plus, Search, Trash2, Edit2, CheckCircle2, AlertCircle, Sparkles } from "lucide-react";
+import { Plus, Search, Trash2, Edit2, CheckCircle2, AlertCircle, Sparkles, Layers, ArrowUp, ArrowDown, Image as ImageIcon } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,7 @@ export default function AdminProductsPage() {
   const [price, setPrice] = useState("");
   const [comparePrice, setComparePrice] = useState("");
   const [categorySlug, setCategorySlug] = useState("paintings");
-  const [imageUrl, setImageUrl] = useState("");
+  const [images, setImages] = useState<string[]>([""]);
   const [stock, setStock] = useState("20");
   const [featured, setFeatured] = useState(false);
   const [bestSeller, setBestSeller] = useState(false);
@@ -61,7 +61,7 @@ export default function AdminProductsPage() {
     setPrice("");
     setComparePrice("");
     setCategorySlug("paintings");
-    setImageUrl("");
+    setImages([""]);
     setStock("20");
     setFeatured(false);
     setBestSeller(false);
@@ -77,7 +77,7 @@ export default function AdminProductsPage() {
     setPrice(String(product.price));
     setComparePrice(product.comparePrice ? String(product.comparePrice) : "");
     setCategorySlug(product.categorySlug || "paintings");
-    setImageUrl(product.images[0] || "");
+    setImages(product.images && product.images.length > 0 ? [...product.images] : [""]);
     setStock(String(product.stock || 10));
     setFeatured(Boolean(product.featured));
     setBestSeller(Boolean(product.bestSeller));
@@ -96,13 +96,19 @@ export default function AdminProductsPage() {
       .map((t) => t.trim().toLowerCase())
       .filter(Boolean);
 
+    const cleanedImages = images.map((img) => img.trim()).filter(Boolean);
+    const finalImages =
+      cleanedImages.length > 0
+        ? cleanedImages
+        : ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80"];
+
     const payload = {
       name,
       description,
       price: Number(price),
       comparePrice: comparePrice ? Number(comparePrice) : undefined,
       categorySlug,
-      images: imageUrl ? [imageUrl] : ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80"],
+      images: finalImages,
       stock: Number(stock) || 10,
       featured,
       bestSeller,
@@ -267,7 +273,15 @@ export default function AdminProductsPage() {
                           </div>
                           <div>
                             <p className="font-medium text-foreground">{product.name}</p>
-                            <p className="text-xs text-muted-foreground line-clamp-1 max-w-xs">{product.description}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="text-xs text-muted-foreground line-clamp-1 max-w-[200px]">{product.description}</p>
+                              {product.images && product.images.length > 1 && (
+                                <span className="inline-flex items-center gap-1 rounded-md bg-terracotta/10 px-1.5 py-0.5 text-[10px] font-semibold text-terracotta border border-terracotta/20 shrink-0">
+                                  <Layers className="h-3 w-3" />
+                                  {product.images.length} idea slides
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -428,21 +442,126 @@ export default function AdminProductsPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Product Image</label>
-                  <ImageUpload
-                    folder="products"
-                    defaultValue={imageUrl}
-                    onUpload={(result) => setImageUrl(result.url)}
-                    onRemove={() => setImageUrl("")}
-                  />
-                  <div className="mt-2">
-                    <p className="text-xs text-muted-foreground mb-1">Or paste image URL directly:</p>
-                    <Input
-                      value={imageUrl}
-                      onChange={(e) => setImageUrl(e.target.value)}
-                      placeholder="https://images.unsplash.com/..."
-                    />
+                {/* Multi-Image Upload & Idea Management */}
+                <div className="space-y-3 rounded-xl border border-border bg-secondary/10 p-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-border pb-3">
+                    <div>
+                      <label className="block text-sm font-semibold flex items-center gap-2">
+                        <ImageIcon className="h-4 w-4 text-terracotta" />
+                        Product Images & Decor Ideas *
+                      </label>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Add multiple images (e.g. main artwork + different frame styles or room decor ideas for slideshow).
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setImages((prev) => [...prev, ""])}
+                      className="gap-1.5 text-xs shrink-0 self-start sm:self-auto"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                      Add Idea Image
+                    </Button>
+                  </div>
+
+                  <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1">
+                    {images.map((url, idx) => (
+                      <div
+                        key={idx}
+                        className="rounded-lg border border-border/80 bg-card p-3.5 shadow-xs space-y-3 relative transition-all"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold text-terracotta flex items-center gap-1.5">
+                            <Sparkles className="h-3.5 w-3.5" />
+                            {idx === 0
+                              ? "Main Cover Photo"
+                              : `Idea / Style View #${idx} (Slideshow)`}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            {idx > 0 && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-xs px-2"
+                                title="Move up"
+                                onClick={() => {
+                                  const updated = [...images];
+                                  const temp = updated[idx];
+                                  updated[idx] = updated[idx - 1];
+                                  updated[idx - 1] = temp;
+                                  setImages(updated);
+                                }}
+                              >
+                                <ArrowUp className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
+                            {idx < images.length - 1 && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-xs px-2"
+                                title="Move down"
+                                onClick={() => {
+                                  const updated = [...images];
+                                  const temp = updated[idx];
+                                  updated[idx] = updated[idx + 1];
+                                  updated[idx + 1] = temp;
+                                  setImages(updated);
+                                }}
+                              >
+                                <ArrowDown className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
+                            {images.length > 1 && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
+                                title="Remove Image"
+                                onClick={() => setImages(images.filter((_, i) => i !== idx))}
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+
+                        <ImageUpload
+                          folder="products"
+                          defaultValue={url}
+                          onUpload={(result) => {
+                            const updated = [...images];
+                            updated[idx] = result.url;
+                            setImages(updated);
+                          }}
+                          onRemove={() => {
+                            const updated = [...images];
+                            updated[idx] = "";
+                            setImages(updated);
+                          }}
+                          label=""
+                        />
+
+                        <div className="space-y-1">
+                          <p className="text-[11px] font-medium text-muted-foreground">Or direct image URL:</p>
+                          <Input
+                            value={url}
+                            onChange={(e) => {
+                              const updated = [...images];
+                              updated[idx] = e.target.value;
+                              setImages(updated);
+                            }}
+                            placeholder="https://images.unsplash.com/..."
+                            className="text-xs h-8"
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 

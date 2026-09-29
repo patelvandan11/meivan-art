@@ -20,14 +20,14 @@ export default function GalleryPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="text-center">
-        <p className="font-accent text-lg italic text-muted-foreground">
-          Community Inspiration
+        <p className="font-accent text-lg italic text-terracotta">
+          Visual Storytelling & Room Decor Inspiration
         </p>
         <h1 className="mt-2 font-heading text-4xl font-semibold md:text-5xl">
-          Gallery
+          Meivan Art Gallery
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-          See how our community styles their spaces with Artisan Haven products.
+          Discover how art lovers style their spaces with original handmade paintings, sunset canvas art, and astronomy decor from Meivan Art.
         </p>
       </div>
 

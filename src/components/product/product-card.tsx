@@ -19,10 +19,18 @@ interface ProductCardProps {
 
 export function ProductCard({ product, className }: ProductCardProps) {
   const [hovered, setHovered] = useState(false);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const hydrated = useStoreHydrated();
   const addToCart = useCartStore((s) => s.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
   const wishlisted = hydrated && isInWishlist(product.id);
+
+  const imagesList =
+    product.images && product.images.length > 0
+      ? product.images
+      : ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80"];
+
+  const activeSrc = imagesList[currentImgIndex] || imagesList[0];
 
   return (
     <div
@@ -31,30 +39,48 @@ export function ProductCard({ product, className }: ProductCardProps) {
         className
       )}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={() => {
+        setHovered(false);
+        setCurrentImgIndex(0);
+      }}
     >
       <div className="relative overflow-hidden rounded-card bg-card shadow-soft border border-border/60 transition-all duration-300 dark:border-white/10 dark:bg-[#161311] dark:shadow-none dark:hover:border-terracotta/50 dark:hover:shadow-[0_0_25px_rgba(201,124,93,0.2)]">
         <Link href={`/product/${product.slug}`}>
           <div className="relative aspect-[4/5] overflow-hidden">
             <Image
-              src={product.images[0]}
+              src={activeSrc}
               alt={product.name}
               fill
               className={cn(
-                "object-cover transition-transform duration-700",
-                hovered && "scale-110"
+                "object-cover transition-all duration-500",
+                hovered && "scale-105"
               )}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               loading="lazy"
             />
-            {product.images[1] && hovered && (
-              <Image
-                src={product.images[1]}
-                alt={`${product.name} alternate view`}
-                fill
-                className="object-cover transition-opacity duration-500"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              />
+            {imagesList.length > 1 && hovered && (
+              <div
+                className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1 rounded-full bg-black/60 backdrop-blur-xs px-2 py-1 transition-opacity duration-200"
+                onClick={(e) => e.preventDefault()}
+              >
+                {imagesList.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setCurrentImgIndex(idx);
+                    }}
+                    onMouseEnter={() => setCurrentImgIndex(idx)}
+                    className={cn(
+                      "h-1.5 rounded-full transition-all duration-200",
+                      currentImgIndex === idx ? "w-4 bg-terracotta" : "w-1.5 bg-white/70 hover:bg-white"
+                    )}
+                    aria-label={`View idea slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
             )}
             {product.trending && (
               <Badge variant="trending" className="absolute top-3 left-3">

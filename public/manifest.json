@@ -1,7 +1,7 @@
 {
-  "name": "By Vandan",
-  "short_name": "By Vandan",
-  "description": "Handcrafted art for beautiful living",
+  "name": "Meivan Art — Art That Tells a Story",
+  "short_name": "Meivan Art",
+  "description": "A digital art store where customers can discover and purchase handmade paintings and original artwork, with a focus on nature, sunsets, astronomy, emotions, and creative visual storytelling.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#faf7f2",

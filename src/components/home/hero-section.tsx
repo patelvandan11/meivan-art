@@ -127,27 +127,27 @@ export function HeroSection() {
         >
           {/* Day Mode Text */}
           <span className="block dark:hidden text-foreground">
-            Handcrafted Art for{" "}
+            Art That Tells{" "}
             <span className="bg-gradient-to-r from-terracotta via-[#964B00] to-terracotta bg-clip-text text-transparent">
-              Beautiful Living
+              a Story.
             </span>
           </span>
 
           {/* Night Mode Text */}
           <span className="hidden dark:block text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
-            Handcrafted Art for{" "}
+            Art That Tells{" "}
             <span className="bg-gradient-to-r from-amber-200 via-orange-400 to-rose-400 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(201,124,93,0.5)]">
-              Beautiful Living
+              a Story.
             </span>
           </span>
         </h1>
 
         {/* Hero Description */}
         <p
-          className="animate-fade-in-up mt-6 max-w-2xl text-base sm:text-lg md:text-xl text-muted-foreground"
+          className="animate-fade-in-up mt-6 max-w-2xl text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed"
           style={{ animationDelay: "0.55s" }}
         >
-          Discover original paintings, handcrafted journals, custom stickers, ceramic mugs, and curated gifts designed to bring warmth and authentic creativity to your space.
+          Handmade Art. Unique Stories. A digital art store where customers can discover and purchase original paintings and canvas artwork focused on nature, sunsets, astronomy, emotions, and creative visual storytelling.
         </p>
 
         {/* Hero CTAs */}

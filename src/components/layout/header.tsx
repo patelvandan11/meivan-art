@@ -31,8 +31,13 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
   const hydrated = useStoreHydrated();
-  const cartCount = useCartStore((s) => s.getItemCount());
-  const wishlistCount = useWishlistStore((s) => s.items.length);
+  const cartItems = useCartStore((s) => s.items);
+  const wishlistItems = useWishlistStore((s) => s.items);
+
+  const cartCount = hydrated
+    ? cartItems.reduce((sum, i) => sum + (Number(i.quantity) || 0), 0)
+    : 0;
+  const wishlistCount = hydrated ? wishlistItems.length : 0;
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
 
@@ -40,11 +45,16 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="glass border-b">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-terracotta" />
-            <span className="font-heading text-xl font-semibold tracking-tight">
-              By Vandan
-            </span>
+          <Link href="/" className="flex items-center gap-2 group">
+            <Sparkles className="h-5 w-5 text-terracotta transition-transform group-hover:rotate-12" />
+            <div className="flex flex-col">
+              <span className="font-heading text-xl font-bold tracking-tight leading-none text-foreground">
+                Meivan Art
+              </span>
+              <span className="text-[9px] font-medium tracking-wide text-muted-foreground uppercase hidden sm:block">
+                Art That Tells a Story
+              </span>
+            </div>
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex">

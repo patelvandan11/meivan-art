@@ -25,32 +25,110 @@ const cormorant = Cormorant_Garamond({
   preload: false,
 });
 
+const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://meivan-art.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(appUrl),
   title: {
-    default: "By Vandan | Handcrafted Art for Beautiful Living",
-    template: "%s | By Vandan",
+    default: "🎨 Meivan Art — Art That Tells a Story | Original Handmade Paintings",
+    template: "%s | Meivan Art",
   },
   description:
-    "Discover paintings, journals, stickers, home decor, and gifts crafted to inspire creativity and comfort. Premium handcrafted artistic products.",
+    "A digital art store where customers can discover and purchase handmade paintings and original artwork, with a focus on nature, sunsets, astronomy, emotions, and creative visual storytelling. Handmade Art. Unique Stories.",
   keywords: [
-    "handcrafted art",
-    "paintings",
-    "journals",
-    "stickers",
-    "home decor",
-    "artisan",
-    "gifts",
+    "Meivan Art",
+    "handmade paintings",
+    "original artwork",
+    "sunset paintings",
+    "astronomy art",
+    "nature canvas art",
+    "emotional visual storytelling",
+    "buy paintings online",
+    "handcrafted art store",
+    "art that tells a story",
   ],
-  authors: [{ name: "Vandan" }],
+  authors: [{ name: "Meivan Art", url: appUrl }],
+  creator: "Meivan Art",
+  publisher: "Meivan Art",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
-    locale: "en_IN",
-    siteName: "By Vandan",
-    title: "By Vandan | Handcrafted Art for Beautiful Living",
+    locale: "en_US",
+    url: appUrl,
+    siteName: "Meivan Art",
+    title: "Meivan Art — Art That Tells a Story",
     description:
-      "Premium handcrafted artistic products for beautiful living.",
+      "A digital art store where customers can discover and purchase handmade paintings and original artwork, focusing on nature, sunsets, astronomy, emotions, and creative visual storytelling.",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80",
+        width: 1200,
+        height: 630,
+        alt: "Meivan Art — Original Handmade Paintings & Fine Art",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Meivan Art — Art That Tells a Story",
+    description:
+      "Handmade Art. Unique Stories. Discover original paintings, sunset art, and astronomy canvas prints.",
+    images: ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80"],
   },
   manifest: "/manifest.json",
+  alternates: {
+    canonical: "./",
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${appUrl}/#organization`,
+      name: "Meivan Art",
+      url: appUrl,
+      logo: `${appUrl}/images/categories/logo.png`,
+      description:
+        "A digital art store where customers can discover and purchase handmade paintings and original artwork, with a focus on nature, sunsets, astronomy, emotions, and creative visual storytelling.",
+      slogan: "Art That Tells a Story. Handmade Art. Unique Stories.",
+      email: "meivaninfo@gmail.com",
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${appUrl}/#website`,
+      url: appUrl,
+      name: "Meivan Art",
+      description: "Art That Tells a Story. Handmade Art. Unique Stories.",
+      publisher: { "@id": `${appUrl}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${appUrl}/shop?search={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@type": "OnlineStore",
+      "@id": `${appUrl}/#store`,
+      name: "Meivan Art",
+      url: appUrl,
+      description:
+        "A digital art store where customers can discover and purchase handmade paintings and original artwork.",
+      priceRange: "₹₹",
+      image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -60,6 +138,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${playfair.variable} ${inter.variable} ${cormorant.variable} antialiased`}
       >
@@ -68,7 +152,7 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-          storageKey="artisan-haven-theme"
+          storageKey="meivan-art-theme"
         >
           <AuthProvider>
             <SiteShell>{children}</SiteShell>

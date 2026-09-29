@@ -32,10 +32,12 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <h3 className="font-heading text-2xl font-semibold">Artisan Haven</h3>
-            <p className="mt-4 max-w-sm font-accent text-lg italic opacity-70">
-              Handcrafted art for beautiful living. Celebrating creativity, craftsmanship,
-              and mindful living.
+            <h3 className="font-heading text-2xl font-bold tracking-tight">Meivan Art</h3>
+            <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-terracotta">
+              Art That Tells a Story.
+            </p>
+            <p className="mt-3 max-w-sm text-sm text-muted-foreground leading-relaxed">
+              A digital art store where customers can discover and purchase handmade paintings and original artwork, with a focus on nature, sunsets, astronomy, emotions, and creative visual storytelling.
             </p>
             <div className="mt-6 flex gap-4">
               {socialLinks.map((social) => (
@@ -59,7 +61,7 @@ export function Footer() {
 
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider opacity-50">
-              Shop
+              Shop Collections
             </h4>
             <ul className="mt-4 space-y-3">
               {footerLinks.shop.map((link) => (
@@ -77,7 +79,7 @@ export function Footer() {
 
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider opacity-50">
-              Company
+              Explore
             </h4>
             <ul className="mt-4 space-y-3">
               {footerLinks.company.map((link) => (
@@ -95,7 +97,7 @@ export function Footer() {
 
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider opacity-50">
-              Support
+              Customer Support
             </h4>
             <ul className="mt-4 space-y-3">
               {footerLinks.support.map((link) => (
@@ -114,7 +116,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-current/10 pt-8 sm:flex-row">
           <p className="text-sm opacity-50">
-            &copy; 2026 Artisan Haven. Crafted with passion by Vandan.
+            &copy; {new Date().getFullYear()} Meivan Art. All rights reserved. Art That Tells a Story.
           </p>
           <div className="flex gap-6 text-sm opacity-50">
             <Link href="/privacy" className="hover:opacity-100">
