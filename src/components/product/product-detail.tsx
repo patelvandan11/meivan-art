@@ -263,35 +263,87 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
             {product.description}
           </p>
 
+          {/* Stock Status Badge */}
+          <div className="mt-4 flex items-center gap-2">
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border",
+                (product.stock ?? 10) > 5
+                  ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400"
+                  : (product.stock ?? 10) > 0
+                  ? "bg-amber-500/10 text-amber-600 border-amber-500/20 dark:text-amber-400"
+                  : "bg-red-500/10 text-red-600 border-red-500/20 dark:text-red-400"
+              )}
+            >
+              <span
+                className={cn(
+                  "h-2 w-2 rounded-full",
+                  (product.stock ?? 10) > 5
+                    ? "bg-emerald-500"
+                    : (product.stock ?? 10) > 0
+                    ? "bg-amber-500"
+                    : "bg-red-500"
+                )}
+              />
+              {(product.stock ?? 10) === 1
+                ? "Only 1 left in stock!"
+                : (product.stock ?? 10) > 1 && (product.stock ?? 10) <= 5
+                ? `Only ${product.stock} left in stock!`
+                : (product.stock ?? 10) > 5
+                ? `In Stock (${product.stock} available)`
+                : "Out of Stock"}
+            </span>
+          </div>
+
           <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
             <Truck className="h-4 w-4" />
             Free shipping on orders over ₹2,000
           </div>
 
           <div className="mt-8 flex items-center gap-4">
-            <div className="flex items-center rounded-full border border-border">
+            {/* Quantity Selector - Enforces stock limit e.g. stock=1 allows max 1 */}
+            <div
+              className={cn(
+                "flex items-center rounded-full border border-border",
+                (product.stock ?? 10) <= 0 && "opacity-40 pointer-events-none"
+              )}
+            >
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-3 py-2"
+                disabled={quantity <= 1 || (product.stock ?? 10) <= 0}
+                className="px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
                 aria-label="Decrease quantity"
               >
                 <Minus className="h-4 w-4" />
               </button>
-              <span className="w-8 text-center text-sm font-medium">{quantity}</span>
+              <span className="w-8 text-center text-sm font-medium">
+                {(product.stock ?? 10) <= 0 ? 0 : quantity}
+              </span>
               <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="px-3 py-2"
+                onClick={() =>
+                  setQuantity(Math.min(product.stock ?? 10, quantity + 1))
+                }
+                disabled={
+                  quantity >= (product.stock ?? 10) || (product.stock ?? 10) <= 0
+                }
+                className="px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
                 aria-label="Increase quantity"
+                title={
+                  quantity >= (product.stock ?? 10)
+                    ? `Maximum available stock is ${product.stock}`
+                    : "Increase quantity"
+                }
               >
                 <Plus className="h-4 w-4" />
               </button>
             </div>
             <Button
               className="flex-1 gap-2"
+              disabled={(product.stock ?? 10) <= 0}
               onClick={() => addToCart(product, quantity)}
             >
               <ShoppingBag className="h-4 w-4" />
-              Add to Cart
+              {(product.stock ?? 10) <= 0 ? "Out of Stock" : "Add to Cart"}
             </Button>
             <Button
               variant="outline"

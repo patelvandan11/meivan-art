@@ -113,22 +113,40 @@ export default function CartPage() {
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
-                <div className="flex items-center rounded-full border border-border w-fit">
-                  <button
-                    onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                    className="px-2 py-1"
-                    aria-label="Decrease"
-                  >
-                    <Minus className="h-3 w-3" />
-                  </button>
-                  <span className="w-8 text-center text-sm">{item.quantity}</span>
-                  <button
-                    onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                    className="px-2 py-1"
-                    aria-label="Increase"
-                  >
-                    <Plus className="h-3 w-3" />
-                  </button>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center rounded-full border border-border w-fit">
+                    <button
+                      onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                      className="px-2 py-1 hover:bg-secondary rounded-l-full transition-colors"
+                      aria-label="Decrease"
+                    >
+                      <Minus className="h-3 w-3" />
+                    </button>
+                    <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                    <button
+                      onClick={() =>
+                        updateQuantity(
+                          item.product.id,
+                          Math.min(item.product.stock ?? 99, item.quantity + 1)
+                        )
+                      }
+                      disabled={item.quantity >= (item.product.stock ?? 99)}
+                      className="px-2 py-1 hover:bg-secondary rounded-r-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                      aria-label="Increase"
+                      title={
+                        item.quantity >= (item.product.stock ?? 99)
+                          ? `Maximum stock limit is ${item.product.stock}`
+                          : "Increase quantity"
+                      }
+                    >
+                      <Plus className="h-3 w-3" />
+                    </button>
+                  </div>
+                  {item.quantity >= (item.product.stock ?? 99) && (
+                    <span className="text-[11px] font-medium text-amber-600 dark:text-amber-400">
+                      Max stock ({item.product.stock ?? 1})
+                    </span>
+                  )}
                 </div>
               </div>
             </motion.div>

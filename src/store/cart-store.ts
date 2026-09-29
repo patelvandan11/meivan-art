@@ -18,21 +18,26 @@ export const useCartStore = create<CartStore>()(
       items: [],
       addItem: (product, quantity = 1) => {
         if (!product || !product.id) return;
+        const maxStock = product.stock !== undefined ? Math.max(0, Number(product.stock)) : 99;
+        if (maxStock <= 0) return;
+
         const qty = Math.max(1, Number(quantity) || 1);
         set((state) => {
           const existing = state.items.find(
             (i) => i.product.id === product.id || (i.product.slug && i.product.slug === product.slug)
           );
           if (existing) {
+            const newQty = Math.min(maxStock, existing.quantity + qty);
             return {
               items: state.items.map((i) =>
                 i.product.id === product.id || (i.product.slug && i.product.slug === product.slug)
-                  ? { ...i, quantity: i.quantity + qty }
+                  ? { ...i, quantity: newQty }
                   : i
               ),
             };
           }
-          return { items: [...state.items, { product, quantity: qty }] };
+          const initialQty = Math.min(maxStock, qty);
+          return { items: [...state.items, { product, quantity: initialQty }] };
         });
       },
       removeItem: (productId) => {
@@ -49,11 +54,13 @@ export const useCartStore = create<CartStore>()(
           return;
         }
         set((state) => ({
-          items: state.items.map((i) =>
-            i.product.id === productId || i.product.slug === productId
-              ? { ...i, quantity: qty }
-              : i
-          ),
+          items: state.items.map((i) => {
+            if (i.product.id === productId || i.product.slug === productId) {
+              const maxStock = i.product.stock !== undefined ? Math.max(1, Number(i.product.stock)) : 99;
+              return { ...i, quantity: Math.min(maxStock, qty) };
+            }
+            return i;
+          }),
         }));
       },
       clearCart: () => set({ items: [] }),
