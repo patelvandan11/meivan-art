@@ -66,17 +66,14 @@ export default function CheckoutPage() {
   // Handle Pincode change & calculate shipping
   async function handlePincodeChange(pincode: string) {
     setAddress((prev) => ({ ...prev, pincode }));
+    setShippingFee(0);
     if (pincode.length === 6) {
       try {
         const result = await calculateShipping(pincode);
-        if (subtotal >= result.freeShippingThreshold) {
-          setShippingFee(0);
-        } else {
-          setShippingFee(result.rate);
-        }
+        setShippingFee(0);
         setShippingDays(result.estimatedDays);
       } catch {
-        setShippingFee(subtotal >= 2000 ? 0 : 0);
+        setShippingFee(0);
       }
     }
   }

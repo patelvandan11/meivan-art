@@ -37,7 +37,7 @@ export default function AdminProductsPage() {
   const [isDigital, setIsDigital] = useState(false);
   const [storagePath, setStoragePath] = useState("");
   const [pdfUploading, setPdfUploading] = useState(false);
-  const [supabaseFiles, setSupabaseFiles] = useState<{ name: string; path: string }[]>([]);
+  const [supabaseFiles, setSupabaseFiles] = useState<{ name: string; path: string; size?: number }[]>([]);
 
   const fetchSupabaseFiles = async () => {
     try {
@@ -677,7 +677,7 @@ export default function AdminProductsPage() {
                             <option value="">-- Choose file from bucket --</option>
                             {supabaseFiles.map((file) => (
                               <option key={file.path} value={file.path}>
-                                📄 {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                                📄 {file.name} {file.size ? `(${((file.size || 0) / 1024 / 1024).toFixed(2)} MB)` : ""}
                               </option>
                             ))}
                           </select>

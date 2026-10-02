@@ -54,17 +54,13 @@ export async function applyCoupon(code: string) {
 }
 
 export async function calculateShipping(pincode: string) {
-  const baseRate = 99;
-  const freeShippingThreshold = 2000;
-
-  // Simplified shipping calculator
   const isMetro = ["110", "400", "560", "600", "700"].some((p) =>
     pincode.startsWith(p)
   );
 
   return {
-    rate: isMetro ? baseRate : baseRate + 50,
-    estimatedDays: isMetro ? "3-5" : "5-8",
-    freeShippingThreshold,
+    rate: 0,
+    estimatedDays: isMetro ? "2-3" : "3-5",
+    freeShippingThreshold: 0,
   };
 }

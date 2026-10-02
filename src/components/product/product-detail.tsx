@@ -297,7 +297,7 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
 
           <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
             <Truck className="h-4 w-4" />
-            Free shipping on orders over ₹2,000
+            Free Shipping on All Orders (₹0 Fee)
           </div>
 
           <div className="mt-8 flex items-center gap-4">
