@@ -167,23 +167,36 @@ export function ShopContent() {
                 All Products
               </button>
             </li>
-            {categories.map((cat) => (
-              <li key={cat.slug}>
-                <button
-                  onClick={() => {
-                    setCategory(cat.slug);
-                    setVisibleCount(ITEMS_PER_PAGE);
-                  }}
-                  className={`text-sm transition-colors ${
-                    category === cat.slug
-                      ? "font-medium text-terracotta"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {cat.name}
-                </button>
-              </li>
-            ))}
+            {categories.map((cat) => {
+              const count = productList.filter(
+                (p) =>
+                  p.categorySlug?.toLowerCase() === cat.slug.toLowerCase() ||
+                  p.category?.toLowerCase() === cat.name.toLowerCase()
+              ).length;
+
+              return (
+                <li key={cat.slug}>
+                  <button
+                    onClick={() => {
+                      setCategory(cat.slug);
+                      setVisibleCount(ITEMS_PER_PAGE);
+                    }}
+                    className={`text-sm transition-colors flex items-center justify-between w-full ${
+                      category === cat.slug
+                        ? "font-medium text-terracotta"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <span>{cat.name}</span>
+                    {count > 0 && (
+                      <span className="text-xs rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
+                        {count}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </aside>
 
