@@ -17,6 +17,9 @@ export interface Product {
   bestSeller?: boolean;
   trending?: boolean;
   tags: string[];
+  isDigital?: boolean;
+  storagePath?: string;
+  storage_path?: string;
 }
 
 export interface Category {
@@ -109,6 +112,9 @@ export interface OrderItem {
   quantity: number;
   price: number;
   artistSlug?: string;
+  isDigital?: boolean;
+  storagePath?: string;
+  storage_path?: string;
 }
 
 export interface ShippingAddress {

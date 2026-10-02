@@ -94,6 +94,9 @@ export async function addProductToStore(productData: Omit<Product, "id" | "ratin
     bestSeller: productData.bestSeller ?? false,
     trending: productData.trending ?? false,
     tags: productData.tags || [productData.categorySlug],
+    isDigital: productData.isDigital ?? false,
+    storagePath: productData.storagePath || productData.storage_path || undefined,
+    storage_path: productData.storage_path || productData.storagePath || undefined,
   };
 
   deletedProductIds.delete(id);

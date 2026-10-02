@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import type { Order } from "@/types";
+import { DigitalDownloadButton } from "@/components/digital/DigitalDownloadButton";
 
 export default function OrderTrackingPage({
   params,
@@ -180,6 +181,22 @@ export default function OrderTrackingPage({
             ))}
           </div>
         </div>
+
+        {/* Digital Downloads Section */}
+        {order && (
+          <div className="mt-8 space-y-4">
+            {order.items.map((item) => (
+              <DigitalDownloadButton
+                key={item.productId}
+                orderId={order.id}
+                productId={item.productId}
+                productName={item.productName}
+                storagePath={item.storagePath || item.storage_path}
+                isPaid={order.paymentStatus === "paid" || order.status === "paid" || order.status === "delivered" || order.status === "shipped" || order.status === "packing"}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Delivery Address & Item Summary */}
         <div className="mt-10 grid gap-6 sm:grid-cols-2 border-t border-border pt-6">

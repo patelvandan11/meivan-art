@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth-store";
 import type { Order } from "@/types";
+import { DigitalDownloadButton } from "@/components/digital/DigitalDownloadButton";
 
 export default function UserOrdersPage() {
   const { user } = useAuthStore();
@@ -93,6 +94,20 @@ export default function UserOrdersPage() {
                       </span>
                       <span className="font-medium text-foreground">{formatPrice(item.price * item.quantity)}</span>
                     </div>
+                  ))}
+                </div>
+
+                {/* Digital Downloads */}
+                <div className="mt-3 space-y-2">
+                  {order.items.map((item) => (
+                    <DigitalDownloadButton
+                      key={item.productId}
+                      orderId={order.id}
+                      productId={item.productId}
+                      productName={item.productName}
+                      storagePath={item.storagePath || item.storage_path}
+                      isPaid={order.paymentStatus === "paid" || order.status === "paid" || order.status === "delivered" || order.status === "shipped" || order.status === "packing"}
+                    />
                   ))}
                 </div>
 

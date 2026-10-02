@@ -62,7 +62,17 @@ export function ShopContent() {
   let allProducts = sourceProducts;
 
   if (category) {
-    allProducts = allProducts.filter((p) => p.categorySlug === category);
+    const catLower = category.toLowerCase();
+    allProducts = allProducts.filter((p) => {
+      if (catLower === "digital") {
+        return p.isDigital || p.categorySlug?.toLowerCase() === "digital" || p.category?.toLowerCase().includes("digital");
+      }
+      return (
+        p.categorySlug?.toLowerCase() === catLower ||
+        p.category?.toLowerCase() === catLower ||
+        p.category?.toLowerCase().replace(/\s+/g, "-") === catLower
+      );
+    });
   }
 
   if (search) {
@@ -168,11 +178,15 @@ export function ShopContent() {
               </button>
             </li>
             {categories.map((cat) => {
-              const count = productList.filter(
-                (p) =>
+              const count = productList.filter((p) => {
+                if (cat.slug === "digital") {
+                  return p.isDigital || p.categorySlug?.toLowerCase() === "digital" || p.category?.toLowerCase().includes("digital");
+                }
+                return (
                   p.categorySlug?.toLowerCase() === cat.slug.toLowerCase() ||
                   p.category?.toLowerCase() === cat.name.toLowerCase()
-              ).length;
+                );
+              }).length;
 
               return (
                 <li key={cat.slug}>

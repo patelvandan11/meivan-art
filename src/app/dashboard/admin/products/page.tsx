@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Plus, Search, Trash2, Edit2, CheckCircle2, AlertCircle, Sparkles, Layers, ArrowUp, ArrowDown, Image as ImageIcon } from "lucide-react";
+import { Plus, Search, Trash2, Edit2, CheckCircle2, AlertCircle, Sparkles, Layers, ArrowUp, ArrowDown, Image as ImageIcon, FileText, Upload } from "lucide-react";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +34,22 @@ export default function AdminProductsPage() {
   const [featured, setFeatured] = useState(false);
   const [bestSeller, setBestSeller] = useState(false);
   const [tags, setTags] = useState("");
+  const [isDigital, setIsDigital] = useState(false);
+  const [storagePath, setStoragePath] = useState("");
+  const [pdfUploading, setPdfUploading] = useState(false);
+  const [supabaseFiles, setSupabaseFiles] = useState<{ name: string; path: string }[]>([]);
+
+  const fetchSupabaseFiles = async () => {
+    try {
+      const res = await fetch("/api/admin/digital/files");
+      const data = await res.json();
+      if (data.success && Array.isArray(data.files)) {
+        setSupabaseFiles(data.files);
+      }
+    } catch (err) {
+      console.error("Error fetching Supabase files:", err);
+    }
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -60,13 +76,16 @@ export default function AdminProductsPage() {
     setDescription("");
     setPrice("");
     setComparePrice("");
-    setCategorySlug("paintings");
+    setCategorySlug("digital");
     setImages([""]);
-    setStock("20");
+    setStock("999");
     setFeatured(false);
     setBestSeller(false);
-    setTags("");
+    setTags("digital, pdf");
+    setIsDigital(true);
+    setStoragePath("animal-coloring-book-by-meivan-art.pdf.pdf");
     setFeedback(null);
+    fetchSupabaseFiles();
     setIsModalOpen(true);
   };
 
@@ -82,8 +101,44 @@ export default function AdminProductsPage() {
     setFeatured(Boolean(product.featured));
     setBestSeller(Boolean(product.bestSeller));
     setTags(product.tags ? product.tags.join(", ") : "");
+    setIsDigital(Boolean(product.isDigital || product.storagePath || product.storage_path));
+    setStoragePath(product.storagePath || product.storage_path || "");
     setFeedback(null);
+    fetchSupabaseFiles();
     setIsModalOpen(true);
+  };
+
+  const handlePdfUpload = async (file: File) => {
+    setPdfUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      if (storagePath) {
+        formData.append("storagePath", storagePath);
+      }
+
+      const res = await fetch("/api/admin/digital/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to upload PDF file");
+      }
+
+      setStoragePath(data.storagePath);
+      setIsDigital(true);
+      setFeedback({
+        type: "success",
+        message: `PDF uploaded successfully to Supabase! Storage Path: ${data.storagePath}`,
+      });
+    } catch (err: unknown) {
+      const error = err as Error;
+      setFeedback({ type: "error", message: error.message || "PDF upload failed" });
+    } finally {
+      setPdfUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -100,7 +155,7 @@ export default function AdminProductsPage() {
     const finalImages =
       cleanedImages.length > 0
         ? cleanedImages
-        : ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80"];
+        : ["https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80"];
 
     const payload = {
       name,
@@ -113,6 +168,9 @@ export default function AdminProductsPage() {
       featured,
       bestSeller,
       tags: tagArray,
+      isDigital: isDigital || Boolean(storagePath),
+      storagePath: storagePath.trim() || undefined,
+      storage_path: storagePath.trim() || undefined,
     };
 
     try {
@@ -319,6 +377,11 @@ export default function AdminProductsPage() {
                               Best Seller
                             </span>
                           )}
+                          {(product.isDigital || product.storagePath || product.storage_path) && (
+                            <span className="rounded bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 flex items-center gap-1">
+                              <FileText className="h-3 w-3" /> Digital PDF
+                            </span>
+                          )}
                         </div>
                       </td>
                       <td className="p-4 text-right">
@@ -382,13 +445,22 @@ export default function AdminProductsPage() {
                     <label className="block text-sm font-medium mb-1">Category *</label>
                     <select
                       value={categorySlug}
-                      onChange={(e) => setCategorySlug(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setCategorySlug(val);
+                        if (val === "digital") {
+                          setIsDigital(true);
+                          if (!storagePath) {
+                            setStoragePath("animal-coloring-book-by-meivan-art.pdf.pdf");
+                          }
+                        }
+                      }}
                       className="w-full rounded-lg border border-border bg-background p-2.5 text-sm font-medium outline-none focus:ring-2 focus:ring-terracotta/30"
                       required
                     >
                       {categories.map((c) => (
                         <option key={c.id} value={c.slug}>
-                          {c.name}
+                          {c.slug === "digital" ? "⚡ Digital Downloads (PDF Storage)" : c.name}
                         </option>
                       ))}
                     </select>
@@ -572,6 +644,91 @@ export default function AdminProductsPage() {
                     onChange={(e) => setTags(e.target.value)}
                     placeholder="handmade, ceramic, mug, gift"
                   />
+                </div>
+
+                {/* Supabase Digital PDF Settings */}
+                <div className="rounded-xl border border-blue-200 bg-blue-50/50 dark:border-blue-900/50 dark:bg-blue-950/30 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-blue-900 dark:text-blue-300">
+                      <input
+                        type="checkbox"
+                        checked={isDigital}
+                        onChange={(e) => setIsDigital(e.target.checked)}
+                        className="rounded border-blue-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <FileText className="h-4 w-4" />
+                      Digital PDF Product (Supabase Storage)
+                    </label>
+                  </div>
+
+                  {isDigital && (
+                    <div className="space-y-3 border-t border-blue-200 dark:border-blue-900/50 pt-3">
+                      {/* Dropdown to pick existing file from Supabase Storage */}
+                      {supabaseFiles.length > 0 && (
+                        <div>
+                          <label className="block text-xs font-semibold text-blue-900 dark:text-blue-300 mb-1">
+                            Select Existing File from Supabase Bucket:
+                          </label>
+                          <select
+                            value={storagePath}
+                            onChange={(e) => setStoragePath(e.target.value)}
+                            className="w-full rounded-lg border border-border bg-background p-2 text-xs font-mono outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="">-- Choose file from bucket --</option>
+                            {supabaseFiles.map((file) => (
+                              <option key={file.path} value={file.path}>
+                                📄 {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+                      <div>
+                        <label className="block text-xs font-medium text-muted-foreground mb-1">
+                          Supabase Storage Path (e.g. <code className="font-mono font-bold text-foreground">animal-coloring-book-by-meivan-art.pdf.pdf</code>)
+                        </label>
+                        <Input
+                          value={storagePath}
+                          onChange={(e) => setStoragePath(e.target.value)}
+                          placeholder="animal-coloring-book-by-meivan-art.pdf.pdf"
+                          className="bg-background text-sm font-mono"
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between gap-3 bg-card p-3 rounded-lg border border-border">
+                        <div className="text-xs">
+                          <p className="font-medium text-foreground">Upload PDF File to Supabase</p>
+                          <p className="text-muted-foreground text-[11px]">Directly uploads to <code className="font-mono">digital-pdfs</code> bucket</p>
+                        </div>
+                        <label className="cursor-pointer">
+                          <input
+                            type="file"
+                            accept="application/pdf"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handlePdfUpload(file);
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={pdfUploading}
+                            className="gap-1.5 text-xs bg-blue-600 text-white hover:bg-blue-700 hover:text-white border-none"
+                            onClick={(e) => {
+                              const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                              if (input) input.click();
+                            }}
+                          >
+                            <Upload className="h-3.5 w-3.5" />
+                            {pdfUploading ? "Uploading to Supabase..." : "Select & Upload PDF"}
+                          </Button>
+                        </label>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-wrap gap-6 pt-2">

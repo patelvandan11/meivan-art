@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import type { Order } from "@/types";
+import { DigitalDownloadButton } from "@/components/digital/DigitalDownloadButton";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -169,6 +170,22 @@ function SuccessContent() {
           </div>
         )}
       </div>
+
+      {/* Digital Downloads Section */}
+      {order && (
+        <div className="mt-8 space-y-4">
+          {order.items.map((item) => (
+            <DigitalDownloadButton
+              key={item.productId}
+              orderId={order.id}
+              productId={item.productId}
+              productName={item.productName}
+              storagePath={item.storagePath || item.storage_path}
+              isPaid={order.paymentStatus === "paid" || order.status === "paid" || order.status === "delivered" || order.status === "shipped" || order.status === "packing"}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Order Itemized Summary */}
       {order && (

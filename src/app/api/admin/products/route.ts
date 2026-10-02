@@ -26,7 +26,21 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, description, price, comparePrice, categorySlug, images, stock, featured, bestSeller, tags } = body;
+    const {
+      name,
+      description,
+      price,
+      comparePrice,
+      categorySlug,
+      images,
+      stock,
+      featured,
+      bestSeller,
+      tags,
+      isDigital,
+      storagePath,
+      storage_path,
+    } = body;
 
     if (!name || !description || price === undefined || !categorySlug) {
       return NextResponse.json({ success: false, error: "Missing required product fields (name, description, price, category)" }, { status: 400 });
@@ -43,6 +57,8 @@ export async function POST(req: Request) {
       .replace(/\s+/g, "-");
     const slug = `${baseSlug}-${Date.now().toString().slice(-4)}`;
 
+    const finalStoragePath = storagePath || storage_path || undefined;
+
     const newProduct = await addProductToStore({
       name,
       slug,
@@ -56,6 +72,9 @@ export async function POST(req: Request) {
       featured: Boolean(featured),
       bestSeller: Boolean(bestSeller),
       tags: Array.isArray(tags) ? tags : [categorySlug],
+      isDigital: Boolean(isDigital || finalStoragePath),
+      storagePath: finalStoragePath,
+      storage_path: finalStoragePath,
     });
 
     return NextResponse.json({ success: true, product: newProduct });
@@ -77,6 +96,15 @@ export async function PUT(req: Request) {
 
     if (!id) {
       return NextResponse.json({ success: false, error: "Product ID is required for editing" }, { status: 400 });
+    }
+
+    if (updateData.storagePath || updateData.storage_path) {
+      const path = updateData.storagePath || updateData.storage_path;
+      updateData.storagePath = path;
+      updateData.storage_path = path;
+      if (updateData.isDigital === undefined) {
+        updateData.isDigital = true;
+      }
     }
 
     const updated = await updateProductInStore(id, updateData);
