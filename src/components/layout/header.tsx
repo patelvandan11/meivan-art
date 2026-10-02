@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
@@ -9,7 +10,6 @@ import {
   Search,
   Menu,
   X,
-  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -45,8 +45,15 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="glass border-b">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2 group">
-            <Sparkles className="h-5 w-5 text-terracotta transition-transform group-hover:rotate-12" />
+          <Link href="/" className="flex items-center gap-3 group">
+            <Image
+              src="/logo.png"
+              alt="Meivan Art Logo"
+              width={36}
+              height={36}
+              className="h-9 w-9 object-contain transition-transform group-hover:scale-105"
+              priority
+            />
             <div className="flex flex-col">
               <span className="font-heading text-xl font-bold tracking-tight leading-none text-foreground">
                 Meivan Art

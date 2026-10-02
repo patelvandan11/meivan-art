@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Instagram, Facebook } from "lucide-react";
 
 const footerLinks = {
@@ -32,8 +33,17 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <h3 className="font-heading text-2xl font-bold tracking-tight">Meivan Art</h3>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-terracotta">
+            <Link href="/" className="inline-flex items-center gap-3 group mb-2">
+              <Image
+                src="/logo.png"
+                alt="Meivan Art Logo"
+                width={40}
+                height={40}
+                className="h-10 w-10 object-contain transition-transform group-hover:scale-105"
+              />
+              <h3 className="font-heading text-2xl font-bold tracking-tight">Meivan Art</h3>
+            </Link>
+            <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-terracotta">
               Art That Tells a Story.
             </p>
             <p className="mt-3 max-w-sm text-sm text-muted-foreground leading-relaxed">

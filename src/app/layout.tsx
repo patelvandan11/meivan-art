@@ -85,6 +85,13 @@ export const metadata: Metadata = {
       "Handmade Art. Unique Stories. Discover original paintings, sunset art, and astronomy canvas prints.",
     images: ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80"],
   },
+  icons: {
+    icon: [
+      { url: "/logo.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: "/apple-icon.png",
+  },
   manifest: "/manifest.json",
   alternates: {
     canonical: "./",
@@ -99,7 +106,7 @@ const jsonLd = {
       "@id": `${appUrl}/#organization`,
       name: "Meivan Art",
       url: appUrl,
-      logo: `${appUrl}/images/categories/logo.png`,
+      logo: `${appUrl}/logo.png`,
       description:
         "A digital art store where customers can discover and purchase handmade paintings and original artwork, with a focus on nature, sunsets, astronomy, emotions, and creative visual storytelling.",
       slogan: "Art That Tells a Story. Handmade Art. Unique Stories.",
