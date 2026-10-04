@@ -22,7 +22,7 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { label: "Instagram", href: "https://instagram.com", icon: Instagram },
+  { label: "Instagram", href: "https://www.instagram.com/meivanart", icon: Instagram },
   { label: "Pinterest", href: "https://pinterest.com", icon: null },
   { label: "Facebook", href: "https://facebook.com", icon: Facebook },
 ];

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { Heart, Minus, Plus, ShoppingBag, Star, Truck, ChevronLeft, ChevronRight, Play, Pause, Sparkles, Layers } from "lucide-react";
+import { Heart, Minus, Plus, ShoppingBag, Star, Truck, ChevronLeft, ChevronRight, Play, Pause, Sparkles, Layers, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product/product-card";
 import { useCartStore } from "@/store/cart-store";
@@ -263,99 +263,149 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
             {product.description}
           </p>
 
-          {/* Stock Status Badge */}
-          <div className="mt-4 flex items-center gap-2">
-            <span
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border",
-                (product.stock ?? 10) > 5
-                  ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400"
-                  : (product.stock ?? 10) > 0
-                  ? "bg-amber-500/10 text-amber-600 border-amber-500/20 dark:text-amber-400"
-                  : "bg-red-500/10 text-red-600 border-red-500/20 dark:text-red-400"
-              )}
-            >
-              <span
-                className={cn(
-                  "h-2 w-2 rounded-full",
-                  (product.stock ?? 10) > 5
-                    ? "bg-emerald-500"
-                    : (product.stock ?? 10) > 0
-                    ? "bg-amber-500"
-                    : "bg-red-500"
-                )}
-              />
-              {(product.stock ?? 10) === 1
-                ? "Only 1 left in stock!"
-                : (product.stock ?? 10) > 1 && (product.stock ?? 10) <= 5
-                ? `Only ${product.stock} left in stock!`
-                : (product.stock ?? 10) > 5
-                ? `In Stock (${product.stock} available)`
-                : "Out of Stock"}
-            </span>
-          </div>
+          {/* Stock / Digital Status Badge */}
+          {(() => {
+            const isDigitalProduct =
+              product.categorySlug === "digital" ||
+              Boolean(product.isDigital) ||
+              Boolean(product.storagePath) ||
+              Boolean(product.storage_path);
+            const digitalRedirectUrl = product.storagePath || product.storage_path || "";
 
-          <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
-            <Truck className="h-4 w-4" />
-            Free Shipping on All Orders (₹0 Fee)
-          </div>
+            return (
+              <>
+                <div className="mt-4 flex items-center gap-2">
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border",
+                      isDigitalProduct
+                        ? "bg-blue-500/10 text-blue-600 border-blue-500/20 dark:text-blue-400"
+                        : (product.stock ?? 10) > 5
+                        ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400"
+                        : (product.stock ?? 10) > 0
+                        ? "bg-amber-500/10 text-amber-600 border-amber-500/20 dark:text-amber-400"
+                        : "bg-red-500/10 text-red-600 border-red-500/20 dark:text-red-400"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "h-2 w-2 rounded-full",
+                        isDigitalProduct
+                          ? "bg-blue-500"
+                          : (product.stock ?? 10) > 5
+                          ? "bg-emerald-500"
+                          : (product.stock ?? 10) > 0
+                          ? "bg-amber-500"
+                          : "bg-red-500"
+                      )}
+                    />
+                    {isDigitalProduct
+                      ? "⚡ Instant Digital Download"
+                      : (product.stock ?? 10) === 1
+                      ? "Only 1 left in stock!"
+                      : (product.stock ?? 10) > 1 && (product.stock ?? 10) <= 5
+                      ? `Only ${product.stock} left in stock!`
+                      : (product.stock ?? 10) > 5
+                      ? `In Stock (${product.stock} available)`
+                      : "Out of Stock"}
+                  </span>
+                </div>
 
-          <div className="mt-8 flex items-center gap-4">
-            {/* Quantity Selector - Enforces stock limit e.g. stock=1 allows max 1 */}
-            <div
-              className={cn(
-                "flex items-center rounded-full border border-border",
-                (product.stock ?? 10) <= 0 && "opacity-40 pointer-events-none"
-              )}
-            >
-              <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                disabled={quantity <= 1 || (product.stock ?? 10) <= 0}
-                className="px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
-                aria-label="Decrease quantity"
-              >
-                <Minus className="h-4 w-4" />
-              </button>
-              <span className="w-8 text-center text-sm font-medium">
-                {(product.stock ?? 10) <= 0 ? 0 : quantity}
-              </span>
-              <button
-                onClick={() =>
-                  setQuantity(Math.min(product.stock ?? 10, quantity + 1))
-                }
-                disabled={
-                  quantity >= (product.stock ?? 10) || (product.stock ?? 10) <= 0
-                }
-                className="px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
-                aria-label="Increase quantity"
-                title={
-                  quantity >= (product.stock ?? 10)
-                    ? `Maximum available stock is ${product.stock}`
-                    : "Increase quantity"
-                }
-              >
-                <Plus className="h-4 w-4" />
-              </button>
-            </div>
-            <Button
-              className="flex-1 gap-2"
-              disabled={(product.stock ?? 10) <= 0}
-              onClick={() => addToCart(product, quantity)}
-            >
-              <ShoppingBag className="h-4 w-4" />
-              {(product.stock ?? 10) <= 0 ? "Out of Stock" : "Add to Cart"}
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => toggleItem(product)}
-              aria-label="Toggle wishlist"
-            >
-              <Heart
-                className={cn("h-5 w-5", wishlisted && "fill-terracotta text-terracotta")}
-              />
-            </Button>
-          </div>
+                <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
+                  {isDigitalProduct ? (
+                    <>
+                      <Sparkles className="h-4 w-4 text-terracotta" />
+                      Instant Access & Direct Link (No Physical Delivery Required)
+                    </>
+                  ) : (
+                    <>
+                      <Truck className="h-4 w-4" />
+                      Free Shipping on All Orders (₹0 Fee)
+                    </>
+                  )}
+                </div>
+
+                <div className="mt-8 flex items-center gap-4">
+                  {isDigitalProduct ? (
+                    <Button
+                      className="flex-1 gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 text-base shadow-soft"
+                      onClick={() => {
+                        if (digitalRedirectUrl) {
+                          const target = digitalRedirectUrl.startsWith("http")
+                            ? digitalRedirectUrl
+                            : `https://${digitalRedirectUrl}`;
+                          window.open(target, "_blank", "noopener,noreferrer");
+                        } else {
+                          alert("No digital download link specified for this product.");
+                        }
+                      }}
+                    >
+                      <ExternalLink className="h-5 w-5" />
+                      Access / Download Digital Product
+                    </Button>
+                  ) : (
+                    <>
+                      {/* Quantity Selector - Enforces stock limit e.g. stock=1 allows max 1 */}
+                      <div
+                        className={cn(
+                          "flex items-center rounded-full border border-border",
+                          (product.stock ?? 10) <= 0 && "opacity-40 pointer-events-none"
+                        )}
+                      >
+                        <button
+                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                          disabled={quantity <= 1 || (product.stock ?? 10) <= 0}
+                          className="px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
+                          aria-label="Decrease quantity"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <span className="w-8 text-center text-sm font-medium">
+                          {(product.stock ?? 10) <= 0 ? 0 : quantity}
+                        </span>
+                        <button
+                          onClick={() =>
+                            setQuantity(Math.min(product.stock ?? 10, quantity + 1))
+                          }
+                          disabled={
+                            quantity >= (product.stock ?? 10) || (product.stock ?? 10) <= 0
+                          }
+                          className="px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
+                          aria-label="Increase quantity"
+                          title={
+                            quantity >= (product.stock ?? 10)
+                              ? `Maximum available stock is ${product.stock}`
+                              : "Increase quantity"
+                          }
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <Button
+                        className="flex-1 gap-2"
+                        disabled={(product.stock ?? 10) <= 0}
+                        onClick={() => addToCart(product, quantity)}
+                      >
+                        <ShoppingBag className="h-4 w-4" />
+                        {(product.stock ?? 10) <= 0 ? "Out of Stock" : "Add to Cart"}
+                      </Button>
+                    </>
+                  )}
+
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => toggleItem(product)}
+                    aria-label="Toggle wishlist"
+                  >
+                    <Heart
+                      className={cn("h-5 w-5", wishlisted && "fill-terracotta text-terracotta")}
+                    />
+                  </Button>
+                </div>
+              </>
+            );
+          })()}
         </motion.div>
       </div>
 

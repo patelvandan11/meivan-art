@@ -43,6 +43,15 @@ export async function generateSignedPdfUrl(
   storagePath: string,
   expiresInSeconds: number = 300
 ): Promise<{ signedUrl: string | null; error?: string }> {
+  if (!storagePath) {
+    return { signedUrl: null, error: "No storage path or URL provided." };
+  }
+
+  // If storagePath is a direct HTTP/HTTPS URL, return it immediately
+  if (storagePath.trim().startsWith("http://") || storagePath.trim().startsWith("https://")) {
+    return { signedUrl: storagePath.trim() };
+  }
+
   const supabase = getSupabaseAdmin();
 
   if (!supabase) {

@@ -75,31 +75,7 @@ export const categories: Category[] = [
   },
 ];
 
-export const products: Product[] = [
-  {
-    id: "book_001",
-    name: "Animal Coloring Book",
-    slug: "animal-coloring-book",
-    description: "A beautifully illustrated 50-page printable animal coloring book for relaxation, mindfulness, and creative expression. High-resolution PDF format ready for instant download.",
-    price: 299,
-    comparePrice: 499,
-    images: [
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
-      "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80"
-    ],
-    category: "Digital Downloads",
-    categorySlug: "digital",
-    rating: 5.0,
-    reviewCount: 12,
-    stock: 999,
-    featured: true,
-    bestSeller: true,
-    tags: ["coloring", "digital", "pdf", "book", "art"],
-    isDigital: true,
-    storagePath: "animal-coloring-book-by-meivan-art.pdf.pdf",
-    storage_path: "animal-coloring-book-by-meivan-art.pdf.pdf"
-  }
-];
+export const products: Product[] = [];
 
 export const artists: Artist[] = [];
 

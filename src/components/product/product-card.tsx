@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Eye, ShoppingBag, Star } from "lucide-react";
+import { Heart, Eye, ShoppingBag, Star, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/store/cart-store";
@@ -29,6 +29,13 @@ export function ProductCard({ product, className }: ProductCardProps) {
     product.images && product.images.length > 0
       ? product.images
       : ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80"];
+
+  const isDigitalCard =
+    product.categorySlug === "digital" ||
+    Boolean(product.isDigital) ||
+    Boolean(product.storagePath) ||
+    Boolean(product.storage_path);
+  const digitalUrlCard = product.storagePath || product.storage_path || "";
 
   const activeSrc = imagesList[currentImgIndex] || imagesList[0];
 
@@ -82,7 +89,12 @@ export function ProductCard({ product, className }: ProductCardProps) {
                 ))}
               </div>
             )}
-            {product.trending && (
+            {isDigitalCard && (
+              <Badge className="absolute top-3 left-3 bg-blue-600 text-white font-semibold shadow-xs">
+                ⚡ Digital Download
+              </Badge>
+            )}
+            {!isDigitalCard && product.trending && (
               <Badge variant="trending" className="absolute top-3 left-3">
                 Trending
               </Badge>
@@ -122,14 +134,35 @@ export function ProductCard({ product, className }: ProductCardProps) {
               <Eye className="h-4 w-4" />
             </Button>
           </Link>
-          <Button
-            size="icon"
-            className="h-9 w-9 rounded-full shadow-soft"
-            onClick={() => addToCart(product)}
-            aria-label="Add to cart"
-          >
-            <ShoppingBag className="h-4 w-4" />
-          </Button>
+          {isDigitalCard ? (
+            <Button
+              size="icon"
+              className="h-9 w-9 rounded-full shadow-soft bg-blue-600 hover:bg-blue-700 text-white"
+              onClick={() => {
+                if (digitalUrlCard) {
+                  const target = digitalUrlCard.startsWith("http")
+                    ? digitalUrlCard
+                    : `https://${digitalUrlCard}`;
+                  window.open(target, "_blank", "noopener,noreferrer");
+                } else {
+                  window.location.href = `/product/${product.slug}`;
+                }
+              }}
+              aria-label="Access Digital Link"
+              title="Access Digital Link"
+            >
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              size="icon"
+              className="h-9 w-9 rounded-full shadow-soft"
+              onClick={() => addToCart(product)}
+              aria-label="Add to cart"
+            >
+              <ShoppingBag className="h-4 w-4" />
+            </Button>
+          )}
         </div>
 
         <div className="p-4">

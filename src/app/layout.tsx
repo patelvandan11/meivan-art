@@ -111,6 +111,7 @@ const jsonLd = {
         "A digital art store where customers can discover and purchase handmade paintings and original artwork, with a focus on nature, sunsets, astronomy, emotions, and creative visual storytelling.",
       slogan: "Art That Tells a Story. Handmade Art. Unique Stories.",
       email: "meivaninfo@gmail.com",
+      sameAs: ["https://www.instagram.com/meivanart"],
     },
     {
       "@type": "WebSite",

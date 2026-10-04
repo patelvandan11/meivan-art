@@ -24,6 +24,12 @@ export function DigitalDownloadButton({
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
 
+  if (!storagePath) {
+    return null;
+  }
+
+  const isExternalUrl = storagePath.startsWith("http://") || storagePath.startsWith("https://");
+
   const handleGenerateDownload = async () => {
     setLoading(true);
     setError(null);
@@ -38,7 +44,7 @@ export function DigitalDownloadButton({
       const data = await res.json();
 
       if (!res.ok || !data.success || !data.downloadUrl) {
-        throw new Error(data.error || "Unable to generate download link.");
+        throw new Error(data.error || "Unable to access digital product link.");
       }
 
       setDownloadUrl(data.downloadUrl);
@@ -47,16 +53,10 @@ export function DigitalDownloadButton({
         setExpiresAt(date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       }
 
-      // Trigger automatic file download in browser
-      const link = document.createElement("a");
-      link.href = data.downloadUrl;
-      link.download = `${productName.toLowerCase().replace(/[^a-z0-9]/g, "-")}.pdf`;
-      link.target = "_blank";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Directly open/redirect to the digital product URL page in a new tab
+      window.open(data.downloadUrl, "_blank", "noopener,noreferrer");
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to download PDF";
+      const msg = err instanceof Error ? err.message : "Failed to access digital product";
       setError(msg);
     } finally {
       setLoading(false);
@@ -72,14 +72,12 @@ export function DigitalDownloadButton({
           </div>
           <div>
             <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/60 px-2 py-0.5 rounded-full mb-1">
-              Digital PDF Included
+              Digital Product Included
             </span>
             <h4 className="text-sm font-bold text-foreground">{productName}</h4>
-            {storagePath && (
-              <p className="text-[11px] font-mono text-muted-foreground mt-0.5 truncate max-w-[240px]">
-                {storagePath}
-              </p>
-            )}
+            <p className="text-[11px] font-mono text-muted-foreground mt-0.5 truncate max-w-[280px]">
+              {storagePath}
+            </p>
           </div>
         </div>
 
@@ -93,12 +91,12 @@ export function DigitalDownloadButton({
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Generating Signed Link...
+                Opening Link...
               </>
             ) : (
               <>
                 <Download className="h-4 w-4" />
-                Download PDF
+                {isExternalUrl ? "Access Digital Link" : "Download PDF"}
               </>
             )}
           </Button>
@@ -116,11 +114,19 @@ export function DigitalDownloadButton({
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-emerald-100 p-2.5 text-xs text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
           <div className="flex items-center gap-1.5 font-medium">
             <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-            <span>Download initiated! Signed URL generated securely via Supabase.</span>
+            <span>Redirected to digital product page!</span>
+            <a
+              href={downloadUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline font-bold hover:text-emerald-950"
+            >
+              Click here if tab didn&apos;t open automatically
+            </a>
           </div>
           {expiresAt && (
             <span className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400">
-              (Link valid for 5 mins, until {expiresAt})
+              (Link valid until {expiresAt})
             </span>
           )}
         </div>
