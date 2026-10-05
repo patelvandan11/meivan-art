@@ -20,6 +20,8 @@ export interface Product {
   isDigital?: boolean;
   storagePath?: string;
   storage_path?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Category {

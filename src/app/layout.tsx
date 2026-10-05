@@ -96,6 +96,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "./",
   },
+  other: {
+    "p:domain_verify": "fee14a4b3a5e7d65723af11993b51441",
+  },
 };
 
 const jsonLd = {
@@ -147,6 +150,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="p:domain_verify" content="fee14a4b3a5e7d65723af11993b51441" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

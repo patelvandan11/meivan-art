@@ -13,11 +13,13 @@ const footerLinks = {
     { label: "About Us", href: "/shop" },
     { label: "Gallery", href: "/gallery" },
     { label: "AI Tools", href: "/ai" },
+    { label: "Site Map & Directory", href: "/site-map" },
   ],
   support: [
     { label: "Track Order", href: "/checkout/success" },
     { label: "Shipping Policy", href: "/shop" },
     { label: "Contact: meivaninfo@gmail.com", href: "mailto:meivaninfo@gmail.com" },
+    { label: "XML Sitemap", href: "/sitemap.xml" },
   ],
 };
 
