@@ -25,8 +25,8 @@ const footerLinks = {
 
 const socialLinks = [
   { label: "Instagram", href: "https://www.instagram.com/meivanart", icon: Instagram },
-  { label: "Pinterest", href: "https://pinterest.com", icon: null },
-  { label: "Facebook", href: "https://facebook.com", icon: Facebook },
+  { label: "Pinterest", href: "https://pinterest.com/meivanart/", icon: null },
+  // { label: "Facebook", href: "https://facebook.com", icon: Facebook },
 ];
 
 export function Footer() {
