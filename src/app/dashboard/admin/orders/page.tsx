@@ -218,7 +218,7 @@ export default function AdminOrdersPage() {
         <body>
           <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #c97c5d; padding-bottom: 12px;">
             <div>
-              <h1>Meivan Art</h1>
+              <h1>Vandan Artwork</h1>
               <p style="margin: 4px 0;">Official Order Packing Slip</p>
             </div>
             <div style="text-align: right;">
@@ -266,7 +266,7 @@ export default function AdminOrdersPage() {
           </table>
 
           <div style="margin-top: 32px; border-top: 1px dashed #ccc; padding-top: 16px; font-size: 12px; text-align: center; color: #777;">
-            Packed with authentic craft by Meivan Art • Contact: meivaninfo@gmail.com
+            Packed with authentic craft by Vandan Artwork • Contact: vandanartwork@gmail.com
           </div>
         </body>
       </html>
@@ -290,7 +290,7 @@ export default function AdminOrdersPage() {
             <h1 className="font-heading text-3xl font-bold">Admin Order & Shipping Hub</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Track packing, assign couriers & AWB numbers, sync to Google Sheets, and alert{" "}
-              <span className="font-medium text-foreground">meivaninfo@gmail.com</span>
+              <span className="font-medium text-foreground">vandanartwork@gmail.com</span>
             </p>
           </div>
 
@@ -718,7 +718,7 @@ export default function AdminOrdersPage() {
                     Internal Packing Notes
                   </label>
                   <Input
-                    placeholder="e.g. Packed in Bubble wrap Box #3 by Meivan Art team"
+                    placeholder="e.g. Packed in Bubble wrap Box #3 by Vandan Artwork team"
                     value={modalNotes}
                     onChange={(e) => setModalNotes(e.target.value)}
                     className="text-xs"

@@ -9,7 +9,7 @@ This website is pre-configured to automatically push all orders directly into yo
 Follow these simple steps to connect your Google Sheet:
 
 ### Step 1: Create a Google Sheet
-1. Open [Google Sheets](https://sheets.new) and create a new spreadsheet named **"Meivan Art Orders"**.
+1. Open [Google Sheets](https://sheets.new) and create a new spreadsheet named **"Vandan Artwork Orders"**.
 2. In the first row (Row 1), add these column headers:
 
 | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T |
@@ -93,7 +93,7 @@ function doPost(e) {
 1. Click the blue **Deploy** button (top right) → **New deployment**.
 2. Select type: **Web app** (click the gear icon ⚙️ if not visible).
 3. Set the following settings:
-   - **Description**: Meivan Art Order Webhook
+   - **Description**: Vandan Artwork Order Webhook
    - **Execute as**: **Me** (`your-email@gmail.com`)
    - **Who has access**: **Anyone**
 4. Click **Deploy**, click **Authorize Access**, and choose your Google Account (click *Advanced* → *Go to script (unsafe)* if prompted).

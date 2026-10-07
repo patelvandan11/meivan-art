@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Instagram, Facebook } from "lucide-react";
+import { Instagram, Youtube } from "lucide-react";
 
 const footerLinks = {
   shop: [
@@ -18,15 +18,15 @@ const footerLinks = {
   support: [
     { label: "Track Order", href: "/checkout/success" },
     { label: "Shipping Policy", href: "/shop" },
-    { label: "Contact: meivaninfo@gmail.com", href: "mailto:meivaninfo@gmail.com" },
+    { label: "Contact: vandanartwork@gmail.com", href: "mailto:vandanartwork@gmail.com" },
     { label: "XML Sitemap", href: "/sitemap.xml" },
   ],
 };
 
 const socialLinks = [
-  { label: "Instagram", href: "https://www.instagram.com/meivanart", icon: Instagram },
-  { label: "Pinterest", href: "https://pinterest.com/meivanart/", icon: null },
-  // { label: "Facebook", href: "https://facebook.com", icon: Facebook },
+  { label: "Instagram", href: "https://www.instagram.com/vandanartwork", icon: Instagram },
+  { label: "Pinterest", href: "https://www.pinterest.com/vandanartwork", icon: null },
+  { label: "YouTube", href: "https://www.youtube.com/@vandanartwork", icon: Youtube },
 ];
 
 export function Footer() {
@@ -38,12 +38,12 @@ export function Footer() {
             <Link href="/" className="inline-flex items-center gap-3 group mb-2">
               <Image
                 src="/logo.png"
-                alt="Meivan Art Logo"
+                alt="Vandan Artwork Logo"
                 width={40}
                 height={40}
                 className="h-10 w-10 object-contain transition-transform group-hover:scale-105"
               />
-              <h3 className="font-heading text-2xl font-bold tracking-tight">Meivan Art</h3>
+              <h3 className="font-heading text-2xl font-bold tracking-tight">Vandan Artwork</h3>
             </Link>
             <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-terracotta">
               Art That Tells a Story.
@@ -128,7 +128,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-current/10 pt-8 sm:flex-row">
           <p className="text-sm opacity-50">
-            &copy; {new Date().getFullYear()} Meivan Art. All rights reserved. Art That Tells a Story.
+            &copy; {new Date().getFullYear()} Vandan Artwork. All rights reserved. Art That Tells a Story.
           </p>
           <div className="flex gap-6 text-sm opacity-50">
             <Link href="/privacy" className="hover:opacity-100">

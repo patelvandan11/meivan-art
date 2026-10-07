@@ -5,9 +5,9 @@ import { ShopContent } from "./shop-content";
 export const metadata: Metadata = {
   title: "Handmade Paintings & Canvas Art Store",
   description:
-    "Explore Meivan Art's full collection of original handmade paintings, sunset landscapes, astronomy art, and visual storytelling canvas prints. Handmade Art. Unique Stories.",
+    "Explore Vandan Artwork's full collection of original handmade paintings, sunset landscapes, astronomy art, and visual storytelling canvas prints. Handmade Art. Unique Stories.",
   keywords: [
-    "Meivan Art shop",
+    "Vandan Artwork shop",
     "buy paintings online",
     "handmade canvas artwork",
     "sunset paintings",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function ShopPage() {
   return (
-    <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Loading Meivan Art collection...</div>}>
+    <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Loading Vandan Artwork collection...</div>}>
       <ShopContent />
     </Suspense>
   );

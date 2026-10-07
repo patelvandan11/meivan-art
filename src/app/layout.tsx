@@ -25,18 +25,18 @@ const cormorant = Cormorant_Garamond({
   preload: false,
 });
 
-const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://meivan-art.vercel.app";
+const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vandanartwork.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
   title: {
-    default: "🎨 Meivan Art — Art That Tells a Story | Original Handmade Paintings",
-    template: "%s | Meivan Art",
+    default: "🎨 Vandan Artwork — Art That Tells a Story | Original Handmade Paintings",
+    template: "%s | Vandan Artwork",
   },
   description:
     "A digital art store where customers can discover and purchase handmade paintings and original artwork, with a focus on nature, sunsets, astronomy, emotions, and creative visual storytelling. Handmade Art. Unique Stories.",
   keywords: [
-    "Meivan Art",
+    "Vandan Artwork",
     "handmade paintings",
     "original artwork",
     "sunset paintings",
@@ -47,9 +47,9 @@ export const metadata: Metadata = {
     "handcrafted art store",
     "art that tells a story",
   ],
-  authors: [{ name: "Meivan Art", url: appUrl }],
-  creator: "Meivan Art",
-  publisher: "Meivan Art",
+  authors: [{ name: "Vandan Artwork", url: appUrl }],
+  creator: "Vandan Artwork",
+  publisher: "Vandan Artwork",
   robots: {
     index: true,
     follow: true,
@@ -65,8 +65,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: appUrl,
-    siteName: "Meivan Art",
-    title: "Meivan Art — Art That Tells a Story",
+    siteName: "Vandan Artwork",
+    title: "Vandan Artwork — Art That Tells a Story",
     description:
       "A digital art store where customers can discover and purchase handmade paintings and original artwork, focusing on nature, sunsets, astronomy, emotions, and creative visual storytelling.",
     images: [
@@ -74,13 +74,13 @@ export const metadata: Metadata = {
         url: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80",
         width: 1200,
         height: 630,
-        alt: "Meivan Art — Original Handmade Paintings & Fine Art",
+        alt: "Vandan Artwork — Original Handmade Paintings & Fine Art",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Meivan Art — Art That Tells a Story",
+    title: "Vandan Artwork — Art That Tells a Story",
     description:
       "Handmade Art. Unique Stories. Discover original paintings, sunset art, and astronomy canvas prints.",
     images: ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80"],
@@ -107,20 +107,24 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${appUrl}/#organization`,
-      name: "Meivan Art",
+      name: "Vandan Artwork",
       url: appUrl,
       logo: `${appUrl}/logo.png`,
       description:
         "A digital art store where customers can discover and purchase handmade paintings and original artwork, with a focus on nature, sunsets, astronomy, emotions, and creative visual storytelling.",
       slogan: "Art That Tells a Story. Handmade Art. Unique Stories.",
-      email: "meivaninfo@gmail.com",
-      sameAs: ["https://www.instagram.com/meivanart"],
+      email: "vandanartwork@gmail.com",
+      sameAs: [
+        "https://www.instagram.com/vandanartwork",
+        "https://www.pinterest.com/vandanartwork",
+        "https://www.youtube.com/@vandanartwork",
+      ],
     },
     {
       "@type": "WebSite",
       "@id": `${appUrl}/#website`,
       url: appUrl,
-      name: "Meivan Art",
+      name: "Vandan Artwork",
       description: "Art That Tells a Story. Handmade Art. Unique Stories.",
       publisher: { "@id": `${appUrl}/#organization` },
       potentialAction: {
@@ -132,7 +136,7 @@ const jsonLd = {
     {
       "@type": "OnlineStore",
       "@id": `${appUrl}/#store`,
-      name: "Meivan Art",
+      name: "Vandan Artwork",
       url: appUrl,
       description:
         "A digital art store where customers can discover and purchase handmade paintings and original artwork.",
@@ -164,7 +168,7 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-          storageKey="meivan-art-theme"
+          storageKey="vandan-artwork-theme"
         >
           <AuthProvider>
             <SiteShell>{children}</SiteShell>

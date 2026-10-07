@@ -24,10 +24,10 @@ export default function GalleryPage() {
           Visual Storytelling & Room Decor Inspiration
         </p>
         <h1 className="mt-2 font-heading text-4xl font-semibold md:text-5xl">
-          Meivan Art Gallery
+          Vandan Artwork Gallery
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-          Discover how art lovers style their spaces with original handmade paintings, sunset canvas art, and astronomy decor from Meivan Art.
+          Discover how art lovers style their spaces with original handmade paintings, sunset canvas art, and astronomy decor from Vandan Artwork.
         </p>
       </div>
 

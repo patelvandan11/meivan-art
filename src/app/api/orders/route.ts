@@ -75,7 +75,7 @@ export async function POST(req: Request) {
       console.error("[Google Sheet Sync Error]:", sheetErr);
     }
 
-    // 3. Send Packing & Shipping Alert to meivaninfo@gmail.com
+    // 3. Send Packing & Shipping Alert to vandanartwork@gmail.com
     try {
       await sendAdminOrderNotification(order);
     } catch (mailErr) {

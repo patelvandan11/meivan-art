@@ -12,14 +12,14 @@ import {
   User 
 } from "lucide-react";
 
-const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://meivan-art.vercel.app";
+const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vandanartwork.vercel.app";
 
 export const metadata: Metadata = {
-  title: "Sitemap & Art Directory — Meivan Art",
+  title: "Sitemap & Art Directory — Vandan Artwork",
   description:
-    "Explore the complete website directory for Meivan Art. Discover handmade canvas paintings, artisan ceramic mugs, custom stickers, aesthetic home decor, handbound journals, digital art, and AI room visualizer.",
+    "Explore the complete website directory for Vandan Artwork. Discover handmade canvas paintings, artisan ceramic mugs, custom stickers, aesthetic home decor, handbound journals, digital art, and AI room visualizer.",
   keywords: [
-    "Meivan Art sitemap",
+    "Vandan Artwork sitemap",
     "handmade paintings directory",
     "buy art online category list",
     "artisan ceramic mugs",
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
     canonical: `${appUrl}/site-map`,
   },
   openGraph: {
-    title: "Sitemap & Art Directory — Meivan Art",
-    description: "Complete navigation index of Meivan Art store collections, artists, products, and AI visualizer tools.",
+    title: "Sitemap & Art Directory — Vandan Artwork",
+    description: "Complete navigation index of Vandan Artwork store collections, artists, products, and AI visualizer tools.",
     url: `${appUrl}/site-map`,
   },
 };
@@ -76,10 +76,10 @@ export default async function SiteMapPage() {
               SEO Website Navigation & Directory
             </p>
             <h1 className="mt-1 font-heading text-3xl font-bold tracking-tight md:text-5xl">
-              Meivan Art Sitemap
+              Vandan Artwork Sitemap
             </h1>
             <p className="mt-3 max-w-3xl text-base text-muted-foreground leading-relaxed">
-              Welcome to the complete index of <span className="font-medium text-foreground">Meivan Art</span>. Browse our curated collections of original handmade paintings, artisan ceramics, custom sticker packs, handbound journals, canvas tote bags, digital art, and AI room visualizers.
+              Welcome to the complete index of <span className="font-medium text-foreground">Vandan Artwork</span>. Browse our curated collections of original handmade paintings, artisan ceramics, custom sticker packs, handbound journals, canvas tote bags, digital art, and AI room visualizers.
             </p>
           </div>
           <a
@@ -285,7 +285,7 @@ export default async function SiteMapPage() {
       {/* Footer SEO Keywords Bar */}
       <div className="mt-16 rounded-card border border-border/60 bg-secondary/30 p-6 text-center">
         <h3 className="font-heading text-lg font-bold text-foreground">
-          SEO Keyword Index for Meivan Art
+          SEO Keyword Index for Vandan Artwork
         </h3>
         <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
           Original Handmade Canvas Art • Aesthetic Sunset Paintings • Artisan Ceramic Coffee Mugs • Handbound Journals & Stationaries • Custom Stickers & Laptop Decals • Canvas Tote Bags • Digital Art Downloads • Personalised Gift Boxes • AI Interior Decor Preview Engine • Independent Artist Store

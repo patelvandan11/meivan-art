@@ -76,7 +76,7 @@ export async function POST(req: Request) {
             console.error("[Google Sheet Sync Error on PayU Response]:", sheetErr);
           }
 
-          // 3. Send Notification Email to meivaninfo@gmail.com for packing and shipping
+          // 3. Send Notification Email to vandanartwork@gmail.com for packing and shipping
           try {
             const mailRes = await sendAdminOrderNotification(updatedOrder);
             if (mailRes.sent) {

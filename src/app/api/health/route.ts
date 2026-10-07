@@ -19,9 +19,9 @@ export async function GET() {
   return NextResponse.json(
     {
       status: healthy ? "ok" : "degraded",
-      service: "Meivan Art E-Commerce Platform",
+      service: "Vandan Artwork E-Commerce Platform",
       adminEmail: "vandan11patel@gmail.com",
-      orderNotificationEmail: "meivaninfo@gmail.com",
+      orderNotificationEmail: "vandanartwork@gmail.com",
       checks,
       timestamp: new Date().toISOString(),
     },

@@ -21,8 +21,8 @@ function getTransporter() {
   });
 }
 
-const DEFAULT_FROM = process.env.SMTP_FROM || "Meivan Art <meivaninfo@gmail.com>";
-const ADMIN_NOTIFICATION_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || "meivaninfo@gmail.com";
+const DEFAULT_FROM = process.env.SMTP_FROM || "Vandan Artwork <vandanartwork@gmail.com>";
+const ADMIN_NOTIFICATION_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || "vandanartwork@gmail.com";
 
 export async function sendMagicLinkEmail(email: string, magicLink: string) {
   const transporter = getTransporter();
@@ -39,14 +39,14 @@ export async function sendMagicLinkEmail(email: string, magicLink: string) {
     await transporter.sendMail({
       from: DEFAULT_FROM,
       to: email,
-      subject: "Your Meivan Art sign-in link",
+      subject: "Your Vandan Artwork sign-in link",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 540px; margin: 0 auto; padding: 32px; background-color: #fdfbf7; border: 1px solid #e8dfd8; border-radius: 12px;">
-          <h2 style="color: #3d3028; margin-top: 0;">Sign in to Meivan Art</h2>
+          <h2 style="color: #3d3028; margin-top: 0;">Sign in to Vandan Artwork</h2>
           <p style="color: #5c4d42; font-size: 15px; line-height: 1.5;">Click the button below to sign in to your account. This link expires in 15 minutes.</p>
           <div style="margin: 24px 0;">
             <a href="${magicLink}" style="display: inline-block; padding: 12px 28px; background: #c97c5d; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 15px;">
-              Sign In to Meivan Art
+              Sign In to Vandan Artwork
             </a>
           </div>
           <p style="margin-top: 24px; font-size: 12px; color: #888;">If you didn't request this sign-in link, you can safely ignore this email.</p>
@@ -66,7 +66,7 @@ export async function sendPasswordResetOtpEmail(email: string, otp: string) {
   const htmlContent = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 32px; background-color: #fdfbf7; border: 1px solid #e8dfd8; border-radius: 16px; color: #2d2621;">
       <div style="text-align: center; margin-bottom: 24px;">
-        <h1 style="color: #c97c5d; margin: 0; font-size: 26px; font-weight: 700;">Meivan Art</h1>
+        <h1 style="color: #c97c5d; margin: 0; font-size: 26px; font-weight: 700;">Vandan Artwork</h1>
         <p style="color: #8c7a6e; font-size: 14px; margin-top: 4px;">Password Reset Verification</p>
       </div>
 
@@ -104,7 +104,7 @@ export async function sendPasswordResetOtpEmail(email: string, otp: string) {
     await transporter.sendMail({
       from: DEFAULT_FROM,
       to: email,
-      subject: `🔑 ${otp} is your Meivan Art password reset OTP code`,
+      subject: `🔑 ${otp} is your Vandan Artwork password reset OTP code`,
       html: htmlContent,
     });
     return { sent: true };
@@ -115,7 +115,7 @@ export async function sendPasswordResetOtpEmail(email: string, otp: string) {
 }
 
 /**
- * Send instant order notification email to meivaninfo@gmail.com for packing and shipping
+ * Send instant order notification email to vandanartwork@gmail.com for packing and shipping
  */
 export async function sendAdminOrderNotification(order: Order) {
   const transporter = getTransporter();
@@ -196,7 +196,7 @@ export async function sendAdminOrderNotification(order: Order) {
       </div>
 
       <p style="font-size: 12px; color: #999; text-align: center; margin-top: 24px; border-top: 1px solid #eee; padding-top: 16px;">
-        Meivan Art Automated Order Notification System • Sent to ${ADMIN_NOTIFICATION_EMAIL}
+        Vandan Artwork Automated Order Notification System • Sent to ${ADMIN_NOTIFICATION_EMAIL}
       </p>
     </div>
   `;
@@ -252,7 +252,7 @@ export async function sendCustomerOrderConfirmation(order: Order) {
   const emailHtml = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background-color: #ffffff; border: 1px solid #e8dfd8; border-radius: 12px; color: #2d2621;">
       <div style="text-align: center; margin-bottom: 24px;">
-        <h1 style="color: #c97c5d; margin: 0; font-size: 26px; font-weight: 700;">Meivan Art</h1>
+        <h1 style="color: #c97c5d; margin: 0; font-size: 26px; font-weight: 700;">Vandan Artwork</h1>
         <p style="color: #8c7a6e; font-size: 14px; margin-top: 4px;">Thank you for supporting authentic art!</p>
       </div>
 
@@ -304,7 +304,7 @@ export async function sendCustomerOrderConfirmation(order: Order) {
     await transporter.sendMail({
       from: DEFAULT_FROM,
       to: customerEmail,
-      subject: `Order Confirmation #${order.id} - Meivan Art`,
+      subject: `Order Confirmation #${order.id} - Vandan Artwork`,
       html: emailHtml,
     });
     return { sent: true };
@@ -330,7 +330,7 @@ export async function sendCustomerShippingUpdate(order: Order, tracking: Trackin
   const emailHtml = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background-color: #ffffff; border: 1px solid #e8dfd8; border-radius: 12px; color: #2d2621;">
       <div style="text-align: center; margin-bottom: 24px;">
-        <h1 style="color: #c97c5d; margin: 0; font-size: 26px; font-weight: 700;">Meivan Art</h1>
+        <h1 style="color: #c97c5d; margin: 0; font-size: 26px; font-weight: 700;">Vandan Artwork</h1>
       </div>
 
       <div style="background-color: #effbf4; border: 1px solid #bbf0d0; border-radius: 8px; padding: 18px; margin-bottom: 20px; text-align: center;">
@@ -352,7 +352,7 @@ export async function sendCustomerShippingUpdate(order: Order, tracking: Trackin
       </div>
 
       <p style="font-size: 12px; color: #888; text-align: center; margin-top: 24px;">
-        Need help with your shipment? Contact us at <a href="mailto:meivaninfo@gmail.com" style="color: #c97c5d;">meivaninfo@gmail.com</a>
+        Need help with your shipment? Contact us at <a href="mailto:vandanartwork@gmail.com" style="color: #c97c5d;">vandanartwork@gmail.com</a>
       </p>
     </div>
   `;
@@ -368,7 +368,7 @@ export async function sendCustomerShippingUpdate(order: Order, tracking: Trackin
     await transporter.sendMail({
       from: DEFAULT_FROM,
       to: customerEmail,
-      subject: `🚚 Shipped! Your Meivan Art Order #${order.id} is on its way`,
+      subject: `🚚 Shipped! Your Vandan Artwork Order #${order.id} is on its way`,
       html: emailHtml,
     });
     return { sent: true };

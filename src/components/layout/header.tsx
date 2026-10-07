@@ -48,7 +48,7 @@ export function Header() {
           <Link href="/" className="flex items-center gap-3 group">
             <Image
               src="/logo.png"
-              alt="Meivan Art Logo"
+              alt="Vandan Artwork Logo"
               width={36}
               height={36}
               className="h-9 w-9 object-contain transition-transform group-hover:scale-105"
@@ -56,7 +56,7 @@ export function Header() {
             />
             <div className="flex flex-col">
               <span className="font-heading text-xl font-bold tracking-tight leading-none text-foreground">
-                Meivan Art
+                Vandan Artwork
               </span>
               <span className="text-[9px] font-medium tracking-wide text-muted-foreground uppercase hidden sm:block">
                 Art That Tells a Story

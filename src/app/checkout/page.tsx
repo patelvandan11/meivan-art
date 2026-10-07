@@ -503,7 +503,7 @@ export default function CheckoutPage() {
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-4 w-4 text-terracotta shrink-0" />
-                <span>Instant order notification sent to <strong>meivaninfo@gmail.com</strong> for packing</span>
+                <span>Instant order notification sent to <strong>vandanartwork@gmail.com</strong> for packing</span>
               </div>
             </div>
           </div>

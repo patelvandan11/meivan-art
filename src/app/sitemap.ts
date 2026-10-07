@@ -3,7 +3,7 @@ import { getAllProductsFromStore } from "@/lib/products-store";
 import { categories, artists } from "@/lib/data/products";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://meivan-art.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vandanartwork.vercel.app";
   const now = new Date();
 
   // 1. Core High-Priority Pages

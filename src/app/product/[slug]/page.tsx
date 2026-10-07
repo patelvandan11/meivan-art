@@ -16,12 +16,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlugFromStore(slug);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://meivan-art.vercel.app";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vandanartwork.vercel.app";
 
   if (!product) {
     return {
-      title: "Handmade Artwork | Meivan Art",
-      description: "Original handmade painting and fine artwork from Meivan Art.",
+      title: "Handmade Artwork | Vandan Artwork",
+      description: "Original handmade painting and fine artwork from Vandan Artwork.",
     };
   }
 
@@ -32,29 +32,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${product.name} — Original Painting & Canvas Art`,
-    description: `${product.description} Buy "${product.name}" online at Meivan Art. Art That Tells a Story.`,
+    description: `${product.description} Buy "${product.name}" online at Vandan Artwork. Art That Tells a Story.`,
     keywords: [
       product.name,
       product.category,
       "handmade painting",
       "original artwork",
-      "Meivan Art",
+      "Vandan Artwork",
       "buy art online",
       ...(product.tags || []),
     ],
     openGraph: {
-      title: `${product.name} | Meivan Art`,
+      title: `${product.name} | Vandan Artwork`,
       description: product.description,
       url: `${appUrl}/product/${product.slug}`,
-      siteName: "Meivan Art",
+      siteName: "Vandan Artwork",
       images: images.map((img) => ({
         url: img,
-        alt: `${product.name} — Meivan Art`,
+        alt: `${product.name} — Vandan Artwork`,
       })),
     },
     twitter: {
       card: "summary_large_image",
-      title: `${product.name} | Meivan Art`,
+      title: `${product.name} | Vandan Artwork`,
       description: product.description,
       images: [images[0]],
     },
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = await getProductBySlugFromStore(slug);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://meivan-art.vercel.app";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vandanartwork.vercel.app";
 
   const productJsonLd = product
     ? {
@@ -79,7 +79,7 @@ export default async function ProductPage({ params }: Props) {
         sku: product.id,
         brand: {
           "@type": "Brand",
-          name: "Meivan Art",
+          name: "Vandan Artwork",
         },
         offers: {
           "@type": "Offer",
@@ -92,7 +92,7 @@ export default async function ProductPage({ params }: Props) {
               : "https://schema.org/OutOfStock",
           seller: {
             "@type": "Organization",
-            name: "Meivan Art",
+            name: "Vandan Artwork",
           },
         },
       }

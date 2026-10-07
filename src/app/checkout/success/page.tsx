@@ -107,7 +107,7 @@ function SuccessContent() {
         <div className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-terracotta/10 p-3 text-xs font-medium text-terracotta">
           <Mail className="h-4 w-4" />
           <span>
-            Notification sent to <strong>meivaninfo@gmail.com</strong> for packing & dispatch
+            Notification sent to <strong>vandanartwork@gmail.com</strong> for packing & dispatch
           </span>
         </div>
       </div>
