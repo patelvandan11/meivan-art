@@ -94,7 +94,22 @@ export function ProductCard({ product, className }: ProductCardProps) {
                 ⚡ Digital Download
               </Badge>
             )}
-            {!isDigitalCard && product.trending && (
+            {!isDigitalCard && product.productType === "plant" && (
+              <Badge className="absolute top-3 left-3 bg-emerald-700 text-white font-semibold shadow-xs flex items-center gap-1">
+                <span>🌿</span> Live Plant
+              </Badge>
+            )}
+            {!isDigitalCard && product.productType === "bundle" && (
+              <Badge className="absolute top-3 left-3 bg-purple-700 text-white font-semibold shadow-xs flex items-center gap-1">
+                <span>🎁</span> Art + Plant Duo
+              </Badge>
+            )}
+            {!isDigitalCard && product.productType === "planter" && (
+              <Badge className="absolute top-3 left-3 bg-amber-700 text-white font-semibold shadow-xs flex items-center gap-1">
+                <span>🏺</span> Artisan Pot
+              </Badge>
+            )}
+            {!isDigitalCard && !product.productType && product.trending && (
               <Badge variant="trending" className="absolute top-3 left-3">
                 Trending
               </Badge>
@@ -116,19 +131,19 @@ export function ProductCard({ product, className }: ProductCardProps) {
           <Button
             size="icon"
             variant="secondary"
-            className="h-9 w-9 rounded-full shadow-soft"
+            className="h-9 w-9 rounded-full shadow-soft hover:scale-110 active:scale-95 transition-transform"
             onClick={() => toggleItem(product)}
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
           >
             <Heart
-              className={cn("h-4 w-4", wishlisted && "fill-terracotta text-terracotta")}
+              className={cn("h-4 w-4 transition-colors", wishlisted && "fill-terracotta text-terracotta")}
             />
           </Button>
           <Link href={`/product/${product.slug}`}>
             <Button
               size="icon"
               variant="secondary"
-              className="h-9 w-9 rounded-full shadow-soft"
+              className="h-9 w-9 rounded-full shadow-soft hover:scale-110 active:scale-95 transition-transform"
               aria-label="Quick view"
             >
               <Eye className="h-4 w-4" />
@@ -137,7 +152,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
           {isDigitalCard ? (
             <Button
               size="icon"
-              className="h-9 w-9 rounded-full shadow-soft bg-blue-600 hover:bg-blue-700 text-white"
+              className="h-9 w-9 rounded-full shadow-soft bg-blue-600 hover:bg-blue-700 text-white hover:scale-110 active:scale-95 transition-transform"
               onClick={() => {
                 if (digitalUrlCard) {
                   const target = digitalUrlCard.startsWith("http")
@@ -156,7 +171,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
           ) : (
             <Button
               size="icon"
-              className="h-9 w-9 rounded-full shadow-soft"
+              className="h-9 w-9 rounded-full shadow-soft bg-terracotta hover:bg-terracotta/90 text-white hover:scale-110 active:scale-95 transition-transform"
               onClick={() => addToCart(product)}
               aria-label="Add to cart"
             >
@@ -166,8 +181,29 @@ export function ProductCard({ product, className }: ProductCardProps) {
         </div>
 
         <div className="p-4">
+          {/* Quick Plant Care or Art Spec Pill */}
+          {product.plantCare && (
+            <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-400">
+              <span className="rounded-md bg-emerald-100/80 dark:bg-emerald-950/50 px-1.5 py-0.5">
+                ☀️ {product.plantCare.light?.split(" ")[0]} Light
+              </span>
+              {product.plantCare.airPurifying && (
+                <span className="rounded-md bg-emerald-100/80 dark:bg-emerald-950/50 px-1.5 py-0.5">
+                  ✨ Air Purifying
+                </span>
+              )}
+            </div>
+          )}
+          {!product.plantCare && product.categorySlug === "paintings" && (
+            <div className="mb-1.5 text-[11px] font-medium text-terracotta">
+              <span className="rounded-md bg-amber-100/80 dark:bg-amber-950/50 px-1.5 py-0.5">
+                🎨 Original Stretched Canvas
+              </span>
+            </div>
+          )}
+
           <Link href={`/product/${product.slug}`}>
-            <h3 className="font-heading text-base font-medium leading-tight transition-colors hover:text-terracotta">
+            <h3 className="font-heading text-base font-medium leading-tight transition-colors hover:text-terracotta line-clamp-1">
               {product.name}
             </h3>
           </Link>

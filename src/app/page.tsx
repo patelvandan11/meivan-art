@@ -2,6 +2,9 @@ import dynamic from "next/dynamic";
 import { HeroSection } from "@/components/home/hero-section";
 import { CategoriesSection } from "@/components/home/categories-section";
 import { FeaturedProductsSection } from "@/components/home/featured-products";
+import { PlantArtMatchmaker } from "@/components/home/plant-art-matchmaker";
+import { WhyArtAndPlantsSection } from "@/components/home/why-art-and-plants";
+import { FaqSection } from "@/components/home/faq-section";
 import { SectionSkeleton } from "@/components/ui/section-skeleton";
 
 const ArtistStorySection = dynamic(
@@ -25,7 +28,7 @@ const CustomerGallerySection = dynamic(
     import("@/components/home/customer-gallery").then((m) => ({
       default: m.CustomerGallerySection,
     })),
-  { loading: () => <SectionSkeleton className="h-[800px]" /> }
+  { loading: () => <SectionSkeleton className="h-[600px]" /> }
 );
 
 const TestimonialsSection = dynamic(
@@ -49,11 +52,14 @@ export default function HomePage() {
     <>
       <HeroSection />
       <CategoriesSection />
+      <PlantArtMatchmaker />
       <FeaturedProductsSection />
+      <WhyArtAndPlantsSection />
       <ArtistStorySection />
       <BestSellersSection />
       <CustomerGallerySection />
       <TestimonialsSection />
+      <FaqSection />
       <NewsletterSection />
     </>
   );

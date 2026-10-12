@@ -40,10 +40,10 @@ export function NewsletterSection() {
           <div className="relative z-10">
             <Mail className="mx-auto h-8 w-8 text-terracotta" />
             <h2 className="mt-4 font-heading text-3xl font-semibold md:text-4xl">
-              Get 10% Off Your First Order
+              Get 10% Off Your First Plant or Painting Order
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Join our community of art lovers and be the first to discover new collections.
+              Join our botanical art community and be the first to receive rare plant drop notifications, artist stories, and studio print releases.
             </p>
 
             <form onSubmit={handleSubmit} className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row">
@@ -65,7 +65,7 @@ export function NewsletterSection() {
             </form>
 
             {status === "success" && (
-              <p className="mt-3 text-sm text-sage">Welcome to Artisan Haven!</p>
+              <p className="mt-3 text-sm text-sage">Welcome to Vandan Art & Plants!</p>
             )}
             {status === "error" && (
               <p className="mt-3 text-sm text-red-300">Something went wrong. Please try again.</p>

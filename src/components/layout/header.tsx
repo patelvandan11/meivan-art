@@ -21,9 +21,12 @@ import { cn } from "@/lib/utils";
 import { LayoutDashboard, User } from "lucide-react";
 
 const navLinks = [
-  { href: "/shop", label: "Shop" },
+  { href: "/plants", label: "🌿 Plants" },
+  { href: "/art", label: "🎨 Art" },
+  { href: "/planters", label: "🏺 Planters" },
+  { href: "/bundles", label: "🎁 Bundles" },
+  { href: "/shop", label: "Shop All" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/ai", label: "AI Tools" },
 ];
 
 export function Header() {
@@ -43,36 +46,61 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
+      {/* Animated Fun Announcement Bar */}
+      <div className="bg-gradient-to-r from-terracotta via-amber-700/90 to-sage text-white text-[11px] sm:text-xs font-medium py-1.5 px-4 overflow-hidden shadow-inner flex items-center justify-center">
+        <div className="animate-marquee whitespace-nowrap flex items-center gap-8">
+          <span>🌿 Fresh Indoor Plants & Original Paintings</span>
+          <span className="opacity-60">•</span>
+          <span>🚚 Safe Eco-Friendly Plant Delivery Across India</span>
+          <span className="opacity-60">•</span>
+          <span>🎨 100% Original Handmade Canvases</span>
+          <span className="opacity-60">•</span>
+          <span>🏺 Hand-Painted Terracotta & Ceramic Pots</span>
+          <span className="opacity-60">•</span>
+          <span>✨ Art That Tells a Story • Plants That Breathe Life</span>
+          <span className="opacity-60">•</span>
+          <span>🌿 Fresh Indoor Plants & Original Paintings</span>
+          <span className="opacity-60">•</span>
+          <span>🚚 Safe Eco-Friendly Plant Delivery Across India</span>
+          <span className="opacity-60">•</span>
+          <span>🎨 100% Original Handmade Canvases</span>
+          <span className="opacity-60">•</span>
+          <span>🏺 Hand-Painted Terracotta & Ceramic Pots</span>
+          <span className="opacity-60">•</span>
+          <span>✨ Art That Tells a Story • Plants That Breathe Life</span>
+        </div>
+      </div>
+
       <div className="glass border-b">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-3 group">
             <Image
               src="/logo.png"
-              alt="Vandan Artwork Logo"
-              width={36}
-              height={36}
-              className="h-9 w-9 object-contain transition-transform group-hover:scale-105"
+              alt="Vandan Art & Plants Logo"
+              width={38}
+              height={38}
+              className="h-9 w-9 object-contain transition-transform group-hover:scale-110 group-hover:rotate-6"
               priority
             />
             <div className="flex flex-col">
-              <span className="font-heading text-xl font-bold tracking-tight leading-none text-foreground">
-                Vandan Artwork
+              <span className="font-heading text-xl font-bold tracking-tight leading-none text-foreground flex items-center gap-1.5">
+                Vandan Art & Plants
               </span>
               <span className="text-[9px] font-medium tracking-wide text-muted-foreground uppercase hidden sm:block">
-                Art That Tells a Story
+                Where Art Meets Living Nature
               </span>
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-6 lg:gap-8 md:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-terracotta",
-                  pathname.startsWith(link.href)
-                    ? "text-terracotta"
+                  "text-sm font-medium transition-all hover:text-terracotta hover:scale-105",
+                  pathname === link.href || (link.href !== "/shop" && pathname.startsWith(link.href))
+                    ? "text-terracotta font-semibold"
                     : "text-muted-foreground"
                 )}
               >
@@ -147,7 +175,7 @@ export function Header() {
             <input
               name="search"
               type="search"
-              placeholder="Search paintings, journals, mugs..."
+              placeholder="Search indoor plants, paintings, hand-painted planters, mugs..."
               className="w-full rounded-full border border-border bg-background/80 px-5 py-2.5 text-sm text-foreground outline-none focus:ring-2 focus:ring-terracotta/30"
             />
           </form>

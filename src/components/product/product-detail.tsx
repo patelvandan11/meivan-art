@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { Heart, Minus, Plus, ShoppingBag, Star, Truck, ChevronLeft, ChevronRight, Play, Pause, Sparkles, Layers, ExternalLink } from "lucide-react";
+import { Heart, Minus, Plus, ShoppingBag, Star, Truck, ChevronLeft, ChevronRight, Play, Pause, Sparkles, Layers, ExternalLink, Leaf, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product/product-card";
 import { useCartStore } from "@/store/cart-store";
@@ -403,6 +403,64 @@ export function ProductPageClient({ slug }: ProductPageClientProps) {
                     />
                   </Button>
                 </div>
+
+                {/* Botanical Plant Care Guide Specs */}
+                {product.plantCare && (
+                  <div className="mt-8 rounded-2xl border border-emerald-500/30 bg-emerald-50/60 dark:bg-emerald-950/20 p-5 shadow-xs">
+                    <div className="flex items-center gap-2 font-semibold text-emerald-800 dark:text-emerald-300">
+                      <Leaf className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                      <span>Botanical Plant Care Specs</span>
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-3 text-xs sm:text-sm">
+                      <div className="rounded-xl bg-card p-3 border border-border/50">
+                        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">☀️ Sunlight</p>
+                        <p className="font-semibold text-foreground mt-0.5">{product.plantCare.light || "Bright Indirect"}</p>
+                      </div>
+                      <div className="rounded-xl bg-card p-3 border border-border/50">
+                        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">💧 Watering</p>
+                        <p className="font-semibold text-foreground mt-0.5">{product.plantCare.water || "Weekly"}</p>
+                      </div>
+                      <div className="rounded-xl bg-card p-3 border border-border/50">
+                        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">🪴 Maintenance</p>
+                        <p className="font-semibold text-foreground mt-0.5">{product.plantCare.difficulty || "Beginner Friendly"}</p>
+                      </div>
+                      <div className="rounded-xl bg-card p-3 border border-border/50">
+                        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">✨ Air Filtration</p>
+                        <p className="font-semibold text-foreground mt-0.5">
+                          {product.plantCare.airPurifying ? "Certified Air Purifier" : "Oxygen Producer"}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="mt-3 text-[11px] sm:text-xs text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5">
+                      <span>📦</span>
+                      <span>Ships rooted in nutrient-rich organic soil in an artisan pot. 100% Alive on Arrival Guarantee.</span>
+                    </p>
+                  </div>
+                )}
+
+                {/* Original Painting Fine Art Specs */}
+                {!product.plantCare && (product.categorySlug === "paintings" || product.productType === "art") && (
+                  <div className="mt-8 rounded-2xl border border-amber-500/30 bg-amber-50/60 dark:bg-amber-950/20 p-5 shadow-xs">
+                    <div className="flex items-center gap-2 font-semibold text-amber-800 dark:text-amber-300">
+                      <Palette className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                      <span>Original Artwork Specifications</span>
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-3 text-xs sm:text-sm">
+                      <div className="rounded-xl bg-card p-3 border border-border/50">
+                        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">🎨 Medium</p>
+                        <p className="font-semibold text-foreground mt-0.5">Original Acrylic & Oil on Canvas</p>
+                      </div>
+                      <div className="rounded-xl bg-card p-3 border border-border/50">
+                        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">🖼️ Presentation</p>
+                        <p className="font-semibold text-foreground mt-0.5">Gallery-Wrapped, Ready to Hang</p>
+                      </div>
+                    </div>
+                    <p className="mt-3 text-[11px] sm:text-xs text-amber-800 dark:text-amber-400 flex items-center gap-1.5">
+                      <span>✨</span>
+                      <span>Includes Hand-Signed Certificate of Authenticity & corner-protected shockproof shipping.</span>
+                    </p>
+                  </div>
+                )}
               </>
             );
           })()}

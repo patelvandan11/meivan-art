@@ -4,20 +4,23 @@ import { Instagram, Youtube } from "lucide-react";
 
 const footerLinks = {
   shop: [
-    { label: "Paintings", href: "/shop?category=paintings" },
-    { label: "Calendars", href: "/shop?category=calendars" },
-    { label: "Stickers", href: "/shop?category=stickers" },
-    { label: "Mugs", href: "/shop?category=mugs" },
+    { label: "🌿 Live Indoor Plants", href: "/plants" },
+    { label: "🎨 Original Paintings", href: "/art" },
+    { label: "🏺 Hand-Painted Planters", href: "/planters" },
+    { label: "🎁 Art & Plant Bundles", href: "/bundles" },
+    { label: "🛍️ Complete Shop", href: "/shop" },
   ],
   company: [
-    { label: "About Us", href: "/shop" },
-    { label: "Gallery", href: "/gallery" },
-    { label: "AI Tools", href: "/ai" },
+    { label: "About Us & Story", href: "/shop" },
+    { label: "Community Gallery", href: "/gallery" },
+    { label: "AI Room Decor Visualizer", href: "/ai/room-decor" },
+    { label: "AI Gift Finder", href: "/ai/gift-finder" },
     { label: "Site Map & Directory", href: "/site-map" },
   ],
   support: [
-    { label: "Track Order", href: "/checkout/success" },
-    { label: "Shipping Policy", href: "/shop" },
+    { label: "Track Your Order", href: "/checkout/success" },
+    { label: "Plant Care & Guarantee", href: "/#faq" },
+    { label: "Safe Eco-Packaging", href: "/#why-art-plants" },
     { label: "Contact: vandanartwork@gmail.com", href: "mailto:vandanartwork@gmail.com" },
     { label: "XML Sitemap", href: "/sitemap.xml" },
   ],
@@ -38,18 +41,18 @@ export function Footer() {
             <Link href="/" className="inline-flex items-center gap-3 group mb-2">
               <Image
                 src="/logo.png"
-                alt="Vandan Artwork Logo"
+                alt="Vandan Art & Plants Logo"
                 width={40}
                 height={40}
                 className="h-10 w-10 object-contain transition-transform group-hover:scale-105"
               />
-              <h3 className="font-heading text-2xl font-bold tracking-tight">Vandan Artwork</h3>
+              <h3 className="font-heading text-2xl font-bold tracking-tight">Vandan Art & Plants</h3>
             </Link>
             <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-terracotta">
-              Art That Tells a Story.
+              Art That Tells a Story • Plants That Breathe Life
             </p>
             <p className="mt-3 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              A digital art store where customers can discover and purchase handmade paintings and original artwork, with a focus on nature, sunsets, astronomy, emotions, and creative visual storytelling.
+              A botanical and fine art studio where creativity grows alongside living nature. We hand-paint original canvas artworks, nurture healthy air-purifying houseplants, and paint unique terracotta planters delivered safely across India.
             </p>
             <div className="mt-6 flex gap-4">
               {socialLinks.map((social) => (

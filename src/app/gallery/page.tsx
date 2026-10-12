@@ -21,13 +21,13 @@ export default function GalleryPage() {
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="text-center">
         <p className="font-accent text-lg italic text-terracotta">
-          Visual Storytelling & Room Decor Inspiration
+          🌿 Botanical Greens & Fine Art Room Decor
         </p>
         <h1 className="mt-2 font-heading text-4xl font-semibold md:text-5xl">
-          Vandan Artwork Gallery
+          Vandan Art & Plants Gallery
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-          Discover how art lovers style their spaces with original handmade paintings, sunset canvas art, and astronomy decor from Vandan Artwork.
+          Discover how plant lovers and art collectors style their homes with living indoor plants, hand-painted planters, and original canvas paintings from Vandan Art & Plants.
         </p>
       </div>
 

@@ -116,16 +116,47 @@ export function ShopContent() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center"
       >
-        <h1 className="font-heading text-4xl font-semibold md:text-5xl">Shop</h1>
-        <p className="mt-3 text-muted-foreground">
-          Explore our curated collection of handcrafted artistic products
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-secondary/80 px-3.5 py-1 text-xs font-semibold text-terracotta mb-2">
+          <span>🌿 Living Greens & Original Art</span>
+        </div>
+        <h1 className="font-heading text-4xl font-semibold md:text-5xl">Shop Art & Plants</h1>
+        <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+          Explore healthy indoor houseplants, original canvas paintings, artisan hand-painted pots, and mindful gift bundles.
         </p>
       </motion.div>
 
-      <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Quick Filter Bar */}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+        {[
+          { slug: "", label: "✨ All Items" },
+          { slug: "indoor-plants", label: "🌿 Live Plants" },
+          { slug: "paintings", label: "🎨 Paintings" },
+          { slug: "planters", label: "🏺 Planters" },
+          { slug: "plant-art-bundles", label: "🎁 Art & Plant Bundles" },
+          { slug: "succulents", label: "🌵 Succulents" },
+          { slug: "botanical-art", label: "🍃 Botanical Art" },
+        ].map((pill) => (
+          <button
+            key={pill.slug}
+            onClick={() => {
+              setCategory(pill.slug);
+              setVisibleCount(ITEMS_PER_PAGE);
+            }}
+            className={`rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium transition-all ${
+              category === pill.slug
+                ? "bg-terracotta text-white shadow-xs scale-105"
+                : "bg-card border border-border/70 text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {pill.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-1 gap-3">
           <Input
-            placeholder="Search products..."
+            placeholder="Search indoor plants, paintings, pots..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -161,7 +192,7 @@ export function ShopContent() {
           className={`${showFilters ? "block" : "hidden"} w-full shrink-0 sm:block sm:w-56`}
         >
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            Categories
+            Collections
           </h3>
           <ul className="mt-4 space-y-2">
             <li>
@@ -170,11 +201,14 @@ export function ShopContent() {
                   setCategory("");
                   setVisibleCount(ITEMS_PER_PAGE);
                 }}
-                className={`text-sm transition-colors ${
-                  !category ? "font-medium text-terracotta" : "text-muted-foreground hover:text-foreground"
+                className={`text-sm transition-colors flex items-center justify-between w-full ${
+                  !category ? "font-semibold text-terracotta" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                All Products
+                <span>✨ All Products</span>
+                <span className="text-xs rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
+                  {allProducts.length}
+                </span>
               </button>
             </li>
             {categories.map((cat) => {
@@ -188,6 +222,8 @@ export function ShopContent() {
                 );
               }).length;
 
+              const displayCount = count > 0 ? count : cat.productCount;
+
               return (
                 <li key={cat.slug}>
                   <button
@@ -197,14 +233,17 @@ export function ShopContent() {
                     }}
                     className={`text-sm transition-colors flex items-center justify-between w-full ${
                       category === cat.slug
-                        ? "font-medium text-terracotta"
+                        ? "font-semibold text-terracotta"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    <span>{cat.name}</span>
-                    {count > 0 && (
+                    <span className="flex items-center gap-1.5">
+                      <span>{cat.icon || "•"}</span>
+                      <span className="truncate">{cat.name}</span>
+                    </span>
+                    {displayCount > 0 && (
                       <span className="text-xs rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
-                        {count}
+                        {displayCount}
                       </span>
                     )}
                   </button>

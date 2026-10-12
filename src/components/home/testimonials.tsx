@@ -8,10 +8,10 @@ export function TestimonialsSection() {
       <div className="mx-auto max-w-7xl">
         <div className="text-center">
           <p className="font-accent text-lg italic text-muted-foreground">
-            Loved by Creatives
+            Loved by Plant Parents & Art Lovers
           </p>
           <h2 className="mt-2 font-heading text-4xl font-semibold md:text-5xl">
-            What Our Customers Say
+            What Our Community Says
           </h2>
         </div>
 
@@ -19,7 +19,7 @@ export function TestimonialsSection() {
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="rounded-card bg-card p-6 shadow-soft"
+              className="rounded-3xl bg-card border border-border/50 p-6 shadow-soft hover:-translate-y-1.5 hover:shadow-soft-lg transition-all duration-300"
             >
               <div className="flex gap-0.5">
                 {Array.from({ length: testimonial.rating }).map((_, j) => (

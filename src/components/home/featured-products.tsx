@@ -5,26 +5,28 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product/product-card";
 import { Button } from "@/components/ui/button";
+import { products as initialProducts } from "@/lib/data/products";
 import type { Product } from "@/types";
 
 export function FeaturedProductsSection() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const initialFeatured = initialProducts.filter((p) => p.featured);
+  const [products, setProducts] = useState<Product[]>(
+    initialFeatured.length > 0 ? initialFeatured : initialProducts.slice(0, 4)
+  );
 
   useEffect(() => {
     fetch("/api/products")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.products) {
+        if (data.success && data.products && data.products.length > 0) {
           const featured = data.products.filter((p: Product) => p.featured);
           setProducts(featured.length > 0 ? featured : data.products.slice(0, 4));
         }
       })
-      .catch((err) => console.error("Error loading featured products:", err))
-      .finally(() => setLoading(false));
+      .catch((err) => console.error("Error loading featured products:", err));
   }, []);
 
-  if (!loading && products.length === 0) {
+  if (products.length === 0) {
     return null;
   }
 
@@ -48,17 +50,11 @@ export function FeaturedProductsSection() {
           </Link>
         </div>
 
-        {loading ? (
-          <div className="mt-12 text-center text-muted-foreground py-12">
-            Loading collection...
-          </div>
-        ) : (
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       </div>
     </section>
   );

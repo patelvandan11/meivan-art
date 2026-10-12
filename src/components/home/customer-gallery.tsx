@@ -9,11 +9,14 @@ export function CustomerGallerySection() {
       <div className="mx-auto max-w-7xl">
         <div className="text-center">
           <p className="font-accent text-lg italic text-muted-foreground">
-            Community Inspiration
+            🌿 Art & Plants in Real Living Spaces
           </p>
           <h2 className="mt-2 font-heading text-4xl font-semibold md:text-5xl">
             Styled by Our Community
           </h2>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Tag <span className="text-terracotta font-medium">@vandanartwork</span> on Instagram to have your space featured!
+          </p>
         </div>
 
         <div className="masonry-grid mt-16">

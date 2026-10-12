@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!product) {
     return {
-      title: "Handmade Artwork | Vandan Artwork",
-      description: "Original handmade painting and fine artwork from Vandan Artwork.",
+      title: "Art & Botanical Products | Vandan Art & Plants",
+      description: "Original handmade paintings and healthy indoor plants from Vandan Art & Plants.",
     };
   }
 
@@ -30,31 +30,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? product.images
       : ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80"];
 
+  let titleSuffix = "Original Painting & Canvas Art";
+  if (product.productType === "plant") {
+    titleSuffix = "Healthy Indoor Plant & Hand-Painted Pot";
+  } else if (product.productType === "bundle") {
+    titleSuffix = "Curated Art & Living Plant Bundle";
+  } else if (product.productType === "planter") {
+    titleSuffix = "Artisan Hand-Painted Planter Pot";
+  }
+
   return {
-    title: `${product.name} — Original Painting & Canvas Art`,
-    description: `${product.description} Buy "${product.name}" online at Vandan Artwork. Art That Tells a Story.`,
+    title: `${product.name} — ${titleSuffix}`,
+    description: `${product.description} Buy "${product.name}" online at Vandan Art & Plants. Safe eco-friendly plant delivery & authentic art across India.`,
     keywords: [
       product.name,
       product.category,
-      "handmade painting",
-      "original artwork",
-      "Vandan Artwork",
-      "buy art online",
+      "Vandan Art & Plants",
+      "buy online India",
+      ...(product.productType === "plant" ? ["indoor plant", "air purifying", "houseplant", "potted plant"] : []),
+      ...(product.productType === "art" ? ["handmade painting", "canvas art", "original artwork"] : []),
       ...(product.tags || []),
     ],
     openGraph: {
-      title: `${product.name} | Vandan Artwork`,
+      title: `${product.name} | Vandan Art & Plants`,
       description: product.description,
       url: `${appUrl}/product/${product.slug}`,
-      siteName: "Vandan Artwork",
+      siteName: "Vandan Art & Plants",
       images: images.map((img) => ({
         url: img,
-        alt: `${product.name} — Vandan Artwork`,
+        alt: `${product.name} — Vandan Art & Plants`,
       })),
     },
     twitter: {
       card: "summary_large_image",
-      title: `${product.name} | Vandan Artwork`,
+      title: `${product.name} | Vandan Art & Plants`,
       description: product.description,
       images: [images[0]],
     },
@@ -77,9 +86,10 @@ export default async function ProductPage({ params }: Props) {
         image: product.images,
         description: product.description,
         sku: product.id,
+        category: product.category,
         brand: {
           "@type": "Brand",
-          name: "Vandan Artwork",
+          name: "Vandan Art & Plants",
         },
         offers: {
           "@type": "Offer",
@@ -92,7 +102,7 @@ export default async function ProductPage({ params }: Props) {
               : "https://schema.org/OutOfStock",
           seller: {
             "@type": "Organization",
-            name: "Vandan Artwork",
+            name: "Vandan Art & Plants",
           },
         },
       }

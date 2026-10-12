@@ -6,7 +6,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ProductCard } from "@/components/product/product-card";
 import { Button } from "@/components/ui/button";
-import { categories } from "@/lib/data/products";
+import { categories, products as initialProducts } from "@/lib/data/products";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/types";
 
@@ -15,21 +15,22 @@ export function BestSellersSection() {
     { loop: true, align: "start", dragFree: true },
     [Autoplay({ delay: 4000, stopOnInteraction: true })]
   );
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const initialBest = initialProducts.filter((p) => p.bestSeller);
+  const [allProducts, setAllProducts] = useState<Product[]>(
+    initialBest.length > 0 ? initialBest : initialProducts
+  );
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/products")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.products) {
+        if (data.success && data.products && data.products.length > 0) {
           const best = data.products.filter((p: Product) => p.bestSeller);
           setAllProducts(best.length > 0 ? best : data.products);
         }
       })
-      .catch((err) => console.error("Error loading best sellers:", err))
-      .finally(() => setLoading(false));
+      .catch((err) => console.error("Error loading best sellers:", err));
   }, []);
 
   const products = activeCategory
@@ -43,7 +44,7 @@ export function BestSellersSection() {
     emblaApi?.reInit();
   }, [activeCategory, emblaApi, products]);
 
-  if (!loading && allProducts.length === 0) {
+  if (allProducts.length === 0) {
     return null;
   }
 
@@ -99,21 +100,15 @@ export function BestSellersSection() {
           ))}
         </div>
 
-        {loading ? (
-          <div className="mt-12 text-center text-muted-foreground py-12">
-            Loading best sellers...
+        <div className="mt-8 overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-6">
+            {products.map((product) => (
+              <div key={product.id} className="min-w-0 flex-[0_0_280px] sm:flex-[0_0_300px]">
+                <ProductCard product={product} />
+              </div>
+            ))}
           </div>
-        ) : (
-          <div className="mt-8 overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-6">
-              {products.map((product) => (
-                <div key={product.id} className="min-w-0 flex-[0_0_280px] sm:flex-[0_0_300px]">
-                  <ProductCard product={product} />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     </section>
   );

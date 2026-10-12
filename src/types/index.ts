@@ -1,3 +1,12 @@
+export interface PlantCare {
+  light?: string;
+  water?: string;
+  difficulty?: string;
+  petFriendly?: boolean;
+  airPurifying?: boolean;
+  potIncluded?: boolean;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -20,6 +29,8 @@ export interface Product {
   isDigital?: boolean;
   storagePath?: string;
   storage_path?: string;
+  plantCare?: PlantCare;
+  productType?: "art" | "plant" | "planter" | "bundle" | "merch";
   createdAt?: string;
   updatedAt?: string;
 }
@@ -31,6 +42,8 @@ export interface Category {
   description: string;
   image: string;
   productCount: number;
+  icon?: string;
+  type?: "art" | "plant" | "both";
 }
 
 export interface Artist {

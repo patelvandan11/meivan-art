@@ -16,10 +16,22 @@ export async function getAllProductsFromStore(): Promise<Product[]> {
         .sort({ createdAt: -1 })
         .toArray()) as unknown as Product[];
 
-      if (dbProducts) {
-        dynamicProducts = dbProducts.filter(
+      if (dbProducts && dbProducts.length > 0) {
+        const activeDb = dbProducts.filter(
           (p) => !deletedProductIds.has(p.id) && !deletedProductIds.has(p.slug)
         );
+        // Combine DB products with initial products (avoiding duplicates)
+        const combined = [...activeDb];
+        for (const init of initialProducts) {
+          if (
+            !deletedProductIds.has(init.id) &&
+            !deletedProductIds.has(init.slug) &&
+            !combined.some((p) => p.id === init.id || p.slug === init.slug)
+          ) {
+            combined.push(init);
+          }
+        }
+        dynamicProducts = combined;
         return dynamicProducts;
       }
     } catch (err) {
@@ -27,16 +39,21 @@ export async function getAllProductsFromStore(): Promise<Product[]> {
     }
   }
 
+  // Fallback to dynamicProducts or initialProducts
   dynamicProducts = dynamicProducts.filter(
     (p) => !deletedProductIds.has(p.id) && !deletedProductIds.has(p.slug)
   );
+  if (dynamicProducts.length === 0) {
+    dynamicProducts = [...initialProducts];
+  }
   return dynamicProducts;
 }
 
 export function getMemoryProducts(): Product[] {
-  return dynamicProducts.filter(
+  const prods = dynamicProducts.filter(
     (p) => !deletedProductIds.has(p.id) && !deletedProductIds.has(p.slug)
   );
+  return prods.length > 0 ? prods : initialProducts;
 }
 
 export async function getProductBySlugFromStore(slug: string): Promise<Product | undefined> {
@@ -78,6 +95,15 @@ export async function getProductBySlugFromStore(slug: string): Promise<Product |
       console.error("[Products DB] Error querying product by slug from MongoDB:", err);
     }
   }
+
+  // 3. Check initialProducts fallback
+  const initMatch = initialProducts.find(
+    (p) =>
+      !deletedProductIds.has(p.id) &&
+      !deletedProductIds.has(p.slug) &&
+      (p.slug.toLowerCase() === normalizedSlug || p.id.toLowerCase() === normalizedSlug)
+  );
+  if (initMatch) return initMatch;
 
   return undefined;
 }

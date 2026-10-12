@@ -15,15 +15,17 @@ import {
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vandanartwork.vercel.app";
 
 export const metadata: Metadata = {
-  title: "Sitemap & Art Directory — Vandan Artwork",
+  title: "Sitemap & Art/Plant Directory — Vandan Art & Plants",
   description:
-    "Explore the complete website directory for Vandan Artwork. Discover handmade canvas paintings, artisan ceramic mugs, custom stickers, aesthetic home decor, handbound journals, digital art, and AI room visualizer.",
+    "Explore the complete website directory for Vandan Art & Plants. Discover handmade canvas paintings, healthy indoor houseplants, hand-painted terracotta planters, botanical prints, art bundles, and AI room visualizers.",
   keywords: [
-    "Vandan Artwork sitemap",
+    "Vandan Art & Plants sitemap",
+    "indoor plants directory",
+    "buy plants online category list",
     "handmade paintings directory",
-    "buy art online category list",
-    "artisan ceramic mugs",
-    "custom stickers store",
+    "hand-painted planters",
+    "monstera deliciosa live plant",
+    "snake plant",
     "canvas wall art directory",
     "sunset paintings",
     "astronomy canvas art",
@@ -33,8 +35,8 @@ export const metadata: Metadata = {
     canonical: `${appUrl}/site-map`,
   },
   openGraph: {
-    title: "Sitemap & Art Directory — Vandan Artwork",
-    description: "Complete navigation index of Vandan Artwork store collections, artists, products, and AI visualizer tools.",
+    title: "Sitemap & Art/Plant Directory — Vandan Art & Plants",
+    description: "Complete navigation index of Vandan Art & Plants store collections, houseplants, original paintings, and AI visualizer tools.",
     url: `${appUrl}/site-map`,
   },
 };
@@ -76,10 +78,10 @@ export default async function SiteMapPage() {
               SEO Website Navigation & Directory
             </p>
             <h1 className="mt-1 font-heading text-3xl font-bold tracking-tight md:text-5xl">
-              Vandan Artwork Sitemap
+              Vandan Art & Plants Sitemap
             </h1>
             <p className="mt-3 max-w-3xl text-base text-muted-foreground leading-relaxed">
-              Welcome to the complete index of <span className="font-medium text-foreground">Vandan Artwork</span>. Browse our curated collections of original handmade paintings, artisan ceramics, custom sticker packs, handbound journals, canvas tote bags, digital art, and AI room visualizers.
+              Welcome to the complete index of <span className="font-medium text-foreground">Vandan Art & Plants</span>. Browse our curated collections of healthy living houseplants, original handmade paintings, hand-painted terracotta planters, botanical prints, and AI room visualizers.
             </p>
           </div>
           <a
@@ -107,27 +109,45 @@ export default async function SiteMapPage() {
           <ul className="mt-4 space-y-3 text-sm">
             <li>
               <Link href="/" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                🎨 Home Page — Handmade Art & Storytelling
+                🏠 Home — Where Art Meets Living Nature
               </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Discover featured canvas artworks, artisan bestsellers, and customer stories.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Dual studio celebrating original paintings & healthy indoor plants.</p>
+            </li>
+            <li>
+              <Link href="/plants" className="font-medium text-foreground hover:text-terracotta transition-colors">
+                🌿 Live Indoor Plants — Air Purifying Greenery
+              </Link>
+              <p className="text-xs text-muted-foreground mt-0.5">Monstera, Snake Plants, Peace Lilies, potted in artisan planters.</p>
+            </li>
+            <li>
+              <Link href="/art" className="font-medium text-foreground hover:text-terracotta transition-colors">
+                🎨 Original Art & Paintings — Storytelling Canvases
+              </Link>
+              <p className="text-xs text-muted-foreground mt-0.5">Sunsets, astronomy, cosmic nebulae, and botanical nature works.</p>
+            </li>
+            <li>
+              <Link href="/planters" className="font-medium text-foreground hover:text-terracotta transition-colors">
+                🏺 Hand-Painted Planters — Terracotta & Ceramics
+              </Link>
+              <p className="text-xs text-muted-foreground mt-0.5">Artisan painted pots with proper drainage holes for plant health.</p>
+            </li>
+            <li>
+              <Link href="/bundles" className="font-medium text-foreground hover:text-terracotta transition-colors">
+                🎁 Art & Plant Bundles — Sanctuary Sets
+              </Link>
+              <p className="text-xs text-muted-foreground mt-0.5">Curated pairings of original paintings + live potted plants.</p>
             </li>
             <li>
               <Link href="/shop" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                🛍️ Online Shop — Fine Art & Artisanal Goods
+                🛍️ Complete Shop — All Art, Plants & Ceramics
               </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Filter by price, category, art style, ratings, and newest releases.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Full filterable catalog with ratings, price, and category sorting.</p>
             </li>
             <li>
               <Link href="/gallery" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                🖼️ Art Gallery — Room Styling & Inspiration
+                🖼️ Community Gallery — Room Styling Inspiration
               </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Explore wall art mockups, aesthetic home setups, and sunset canvas gallery.</p>
-            </li>
-            <li>
-              <Link href="/artists" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                👩‍🎨 Artists Showcase — Meet the Creators
-              </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Read painter bios, artist portfolios, and visual storytelling process.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Real customer homes styled with our plants and paintings.</p>
             </li>
           </ul>
         </section>
