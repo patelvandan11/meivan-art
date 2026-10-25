@@ -30,35 +30,28 @@ const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vandanartwork.vercel.
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
   title: {
-    default: "🎨🌿 Vandan Art & Plants — Original Handmade Paintings, Living Plants & Hand-Painted Pots",
-    template: "%s | Vandan Art & Plants",
+    default: "🎨 Vandan Artwork — Art That Tells a Story | Original Handmade Paintings",
+    template: "%s | Vandan Artwork",
   },
   description:
-    "Discover original handmade paintings, healthy indoor plants, hand-painted ceramic planters, botanical artwork, and curated art & plant gift bundles at Vandan Art & Plants. Where art meets nature. Safe eco-friendly plant delivery across India.",
+    "Discover original handmade paintings, textured canvases, sunset horizons, celestial astronomy artwork, fine art prints, and handbound sketchbooks at Vandan Artwork. Book orders easily via WhatsApp message with free insured delivery across India.",
   keywords: [
-    "Vandan Art & Plants",
     "Vandan Artwork",
-    "buy indoor plants online",
     "handmade paintings India",
-    "hand-painted planters",
-    "air purifying plants",
-    "monstera deliciosa buy online",
-    "variegated snake plant",
-    "peace lily indoor plant",
-    "jade bonsai plant",
     "original canvas paintings",
+    "buy paintings online",
     "sunset paintings",
     "astronomy galaxy wall art",
     "botanical leaf artwork",
-    "art and plant gift bundles",
-    "hand-painted terracotta pots",
-    "nature home decor",
-    "buy paintings online",
-    "botanical studio",
+    "fine art prints",
+    "handbound art journals",
+    "custom art commissions",
+    "book order via whatsapp",
+    "Indian artist canvas",
   ],
-  authors: [{ name: "Vandan Art & Plants", url: appUrl }],
-  creator: "Vandan Art & Plants",
-  publisher: "Vandan Art & Plants",
+  authors: [{ name: "Vandan Artwork", url: appUrl }],
+  creator: "Vandan Artwork",
+  publisher: "Vandan Artwork",
   robots: {
     index: true,
     follow: true,
@@ -74,25 +67,25 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: appUrl,
-    siteName: "Vandan Art & Plants",
-    title: "Vandan Art & Plants — Art That Tells a Story, Plants That Breathe Life",
+    siteName: "Vandan Artwork",
+    title: "Vandan Artwork — Art That Tells a Story | Original Handmade Paintings",
     description:
-      "Original handmade paintings, lush indoor houseplants, artisan hand-painted pots, and curated nature bundles. Delivered safely to your doorstep.",
+      "Original handmade acrylic & oil paintings, textured canvases, and fine art prints. Book orders directly via WhatsApp message.",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=1200&q=80",
+        url: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80",
         width: 1200,
         height: 630,
-        alt: "Vandan Art & Plants — Original Handmade Paintings & Indoor Living Plants",
+        alt: "Vandan Artwork — Original Handmade Canvas Paintings",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vandan Art & Plants — Where Art Meets Nature",
+    title: "Vandan Artwork — Original Handmade Paintings",
     description:
-      "Original handmade paintings, lush indoor houseplants, artisan hand-painted pots, and mindful art & plant bundles.",
-    images: ["https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=1200&q=80"],
+      "Original handmade paintings, textured canvases, fine art prints, and handbound sketchbooks.",
+    images: ["https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80"],
   },
   icons: {
     icon: [
@@ -116,12 +109,12 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${appUrl}/#organization`,
-      name: "Vandan Art & Plants",
+      name: "Vandan Artwork",
       url: appUrl,
       logo: `${appUrl}/logo.png`,
       description:
-        "A boutique art and botanical studio crafting handmade original paintings, propagating healthy indoor plants, and hand-painting terracotta planters for mindful, nature-inspired living.",
-      slogan: "Art That Tells a Story • Plants That Breathe Life",
+        "A boutique independent fine art studio crafting handmade original paintings, textured cotton canvases, fine art prints, and handbound sketchbooks.",
+      slogan: "Art That Tells a Story",
       email: "vandanartwork@gmail.com",
       sameAs: [
         "https://www.instagram.com/vandanartwork",
@@ -133,8 +126,8 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": `${appUrl}/#website`,
       url: appUrl,
-      name: "Vandan Art & Plants",
-      description: "Original Handmade Paintings, Indoor Plants & Hand-Painted Pots.",
+      name: "Vandan Artwork",
+      description: "Original Handmade Paintings, Fine Art Prints & Handbound Sketchbooks.",
       publisher: { "@id": `${appUrl}/#organization` },
       potentialAction: {
         "@type": "SearchAction",
@@ -145,31 +138,35 @@ const jsonLd = {
     {
       "@type": "OnlineStore",
       "@id": `${appUrl}/#store`,
-      name: "Vandan Art & Plants",
+      name: "Vandan Artwork",
       url: appUrl,
       description:
-        "Digital art and plant store offering original paintings, live indoor house plants, hand-painted ceramic and terracotta pots, and botanical gifts.",
+        "Fine art studio offering original handmade acrylic and oil paintings, fine art prints, and handcrafted sketchbooks. Book orders directly via WhatsApp message.",
       priceRange: "₹₹",
-      image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=1200&q=80",
+      image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80",
       hasOfferCatalog: {
         "@type": "OfferCatalog",
-        name: "Art & Plants Collections",
+        name: "Fine Art Collections",
         itemListElement: [
           {
             "@type": "OfferCatalog",
-            name: "Original Paintings & Canvas Art",
+            name: "Original Canvas Paintings",
           },
           {
             "@type": "OfferCatalog",
-            name: "Indoor & Air-Purifying Plants",
+            name: "Botanical & Nature Art",
           },
           {
             "@type": "OfferCatalog",
-            name: "Hand-Painted Planters & Pots",
+            name: "Sunset & Celestial Horizons",
           },
           {
             "@type": "OfferCatalog",
-            name: "Art & Plant Bundles",
+            name: "Fine Art Prints & Sketches",
+          },
+          {
+            "@type": "OfferCatalog",
+            name: "Art Journals & Sketchbooks",
           },
         ],
       },

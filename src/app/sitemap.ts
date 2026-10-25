@@ -15,28 +15,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/plants`,
-      lastModified: now,
-      changeFrequency: "daily",
-      priority: 0.95,
-    },
-    {
       url: `${baseUrl}/art`,
       lastModified: now,
       changeFrequency: "daily",
       priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/planters`,
-      lastModified: now,
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/bundles`,
-      lastModified: now,
-      changeFrequency: "daily",
-      priority: 0.9,
     },
     {
       url: `${baseUrl}/shop`,
@@ -102,14 +84,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let productRoutes: MetadataRoute.Sitemap = [];
   try {
     const products = await getAllProductsFromStore();
-    productRoutes = products.map((product) => ({
-      url: `${baseUrl}/product/${product.slug}`,
-      lastModified: product.updatedAt ? new Date(product.updatedAt) : now,
-      changeFrequency: "weekly",
-      priority: 0.8,
+    productRoutes = (products || []).map((p) => ({
+      url: `${baseUrl}/product/${p.slug}`,
+      lastModified: p.updatedAt ? new Date(p.updatedAt) : now,
+      changeFrequency: "daily",
+      priority: 0.85,
     }));
   } catch (err) {
-    console.error("[Sitemap Error]: Failed to fetch products for sitemap", err);
+    console.error("[Sitemap Generation] Error fetching products:", err);
   }
 
   return [...staticRoutes, ...categoryRoutes, ...artistRoutes, ...productRoutes];

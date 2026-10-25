@@ -3,13 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Minus, Plus, ShoppingBag, Trash2, Tag } from "lucide-react";
+import { Minus, Plus, ShoppingBag, Trash2, Tag, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCartStore } from "@/store/cart-store";
 import { useStoreHydrated } from "@/hooks/use-store-hydrated";
 import { applyCoupon, calculateShipping } from "@/actions/checkout";
 import { formatPrice } from "@/lib/utils";
+import { getWhatsAppUrl, buildCartOrderWhatsAppMessage } from "@/lib/whatsapp";
 import { useState } from "react";
 
 export default function CartPage() {
@@ -22,7 +23,7 @@ export default function CartPage() {
   const [shipping, setShipping] = useState(0);
 
   const subtotal = getTotal();
-  const total = subtotal - discount + shipping;
+  const total = Math.max(0, subtotal - discount + shipping);
 
   async function handleApplyCoupon() {
     const result = await applyCoupon(couponCode);
@@ -46,6 +47,26 @@ export default function CartPage() {
     }
   }
 
+  function handleWhatsAppCartOrder() {
+    const message = buildCartOrderWhatsAppMessage({
+      items: items.map((i) => ({
+        product: {
+          name: i.product.name,
+          price: i.product.price,
+          slug: i.product.slug,
+        },
+        quantity: i.quantity,
+      })),
+      total,
+      subtotal,
+      discount,
+      shipping,
+      customerAddress: pincode ? { pincode } : undefined,
+    });
+    const url = getWhatsAppUrl(message);
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
   if (!hydrated) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
@@ -58,12 +79,12 @@ export default function CartPage() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
         <ShoppingBag className="mx-auto h-16 w-16 text-muted-foreground/30" />
-        <h1 className="mt-6 font-heading text-3xl font-semibold">Your cart is empty</h1>
+        <h1 className="mt-6 font-heading text-3xl font-semibold">Your art cart is empty</h1>
         <p className="mt-3 text-muted-foreground">
-          Discover beautiful handcrafted products in our shop.
+          Explore our collection of original handmade paintings and fine art.
         </p>
         <Link href="/shop" className="mt-8 inline-block">
-          <Button>Continue Shopping</Button>
+          <Button>Browse Artworks 🎨</Button>
         </Link>
       </div>
     );
@@ -71,7 +92,7 @@ export default function CartPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="font-heading text-4xl font-semibold">Shopping Cart</h1>
+      <h1 className="font-heading text-4xl font-semibold">Your Art Collection Cart</h1>
 
       <div className="mt-10 grid gap-12 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-4">
@@ -81,7 +102,7 @@ export default function CartPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="flex gap-4 rounded-card bg-card p-4 shadow-soft"
+              className="flex gap-4 rounded-card bg-card p-4 shadow-soft border border-border/60"
             >
               <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg">
                 <Image
@@ -114,7 +135,7 @@ export default function CartPage() {
                   </button>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center rounded-full border border-border w-fit">
+                  <div className="flex items-center rounded-full border border-border w-fit bg-secondary/30">
                     <button
                       onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
                       className="px-2 py-1 hover:bg-secondary rounded-l-full transition-colors"
@@ -144,7 +165,7 @@ export default function CartPage() {
                   </div>
                   {item.quantity >= (item.product.stock ?? 99) && (
                     <span className="text-[11px] font-medium text-amber-600 dark:text-amber-400">
-                      Max stock ({item.product.stock ?? 1})
+                      Studio limit ({item.product.stock ?? 1})
                     </span>
                   )}
                 </div>
@@ -153,7 +174,7 @@ export default function CartPage() {
           ))}
         </div>
 
-        <div className="rounded-card bg-secondary/40 p-6 h-fit">
+        <div className="rounded-card bg-secondary/40 p-6 h-fit border border-border/60">
           <h2 className="font-heading text-xl font-semibold">Order Summary</h2>
 
           <div className="mt-4 flex gap-2">
@@ -172,13 +193,13 @@ export default function CartPage() {
 
           <div className="mt-4 flex gap-2">
             <Input
-              placeholder="Pincode"
+              placeholder="Pincode (for shipping estimate)"
               value={pincode}
               onChange={(e) => setPincode(e.target.value)}
               maxLength={6}
             />
             <Button variant="outline" onClick={handleCalculateShipping}>
-              Ship
+              Check
             </Button>
           </div>
 
@@ -194,18 +215,34 @@ export default function CartPage() {
               </div>
             )}
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Shipping</span>
-              <span>{shipping === 0 && pincode ? "Free" : formatPrice(shipping)}</span>
+              <span className="text-muted-foreground">Insured Art Transit</span>
+              <span>{shipping === 0 ? "Free (₹0)" : formatPrice(shipping)}</span>
             </div>
             <div className="flex justify-between border-t border-border pt-2 text-base font-semibold">
-              <span>Total</span>
+              <span>Total Payable</span>
               <span>{formatPrice(total)}</span>
             </div>
           </div>
 
-          <Link href="/checkout" className="mt-6 block">
-            <Button className="w-full">Proceed to Checkout</Button>
+          {/* 💬 Primary CTA: Book Order via WhatsApp Message */}
+          <Button
+            className="mt-6 w-full gap-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold py-6 text-base shadow-md transition-all hover:shadow-lg active:scale-[0.99] cursor-pointer"
+            onClick={handleWhatsAppCartOrder}
+          >
+            <MessageCircle className="h-5 w-5 fill-current" />
+            Book Order via WhatsApp Message
+          </Button>
+
+          {/* Secondary CTA: Online Checkout */}
+          <Link href="/checkout" className="mt-2.5 block">
+            <Button variant="outline" className="w-full border-border/80 hover:bg-secondary">
+              Proceed to Online Payment (Card / UPI)
+            </Button>
           </Link>
+
+          <p className="mt-3 text-center text-[11px] text-muted-foreground leading-relaxed">
+            💬 WhatsApp orders get live video confirmation of your artwork before dispatch, free transit insurance, & direct artist support.
+          </p>
         </div>
       </div>
     </div>

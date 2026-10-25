@@ -36,10 +36,10 @@ export function FeaturedProductsSection() {
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <p className="font-accent text-lg italic text-muted-foreground">
-              Handpicked for You
+              Studio Masterpieces
             </p>
             <h2 className="mt-2 font-heading text-4xl font-semibold md:text-5xl">
-              Featured Products
+              Featured Artworks
             </h2>
           </div>
           <Link href="/shop">

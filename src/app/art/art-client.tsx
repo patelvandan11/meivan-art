@@ -4,7 +4,8 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Palette, Sparkles, ShieldCheck, CheckCircle2, ArrowRight } from "lucide-react";
+import { Palette, Sparkles, ShieldCheck, CheckCircle2, ArrowRight, MessageCircle } from "lucide-react";
+import { getWhatsAppUrl, buildGeneralInquiryWhatsAppMessage } from "@/lib/whatsapp";
 import { ProductCard } from "@/components/product/product-card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -230,12 +231,16 @@ export function ArtClient() {
                 &ldquo;Every painting begins with an emotion — the tranquil stillness of a twilight sunset, the wonder of gazing into deep cosmic constellations, or the mindful rhythm of lush jungle leaves. Art should bring grounded peace and warmth to the spaces where you live and dream.&rdquo;
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/shop?category=plant-art-bundles">
-                  <Button size="lg" className="gap-2 bg-terracotta hover:bg-terracotta/90 text-white font-semibold">
-                    View Art & Plant Combos 🎁
-                    <ArrowRight className="h-4 w-4" />
+                <a
+                  href={getWhatsAppUrl(buildGeneralInquiryWhatsAppMessage("Custom Canvas Painting Commission"))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button size="lg" className="gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold">
+                    <MessageCircle className="h-4 w-4 fill-current" />
+                    Book Commission via WhatsApp
                   </Button>
-                </Link>
+                </a>
                 <Link href="/gallery">
                   <Button size="lg" variant="outline" className="gap-2">
                     Browse Community Gallery 🖼️

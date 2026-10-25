@@ -3,20 +3,19 @@ import type { Metadata } from "next";
 import { ShopContent } from "./shop-content";
 
 export const metadata: Metadata = {
-  title: "Shop Original Paintings, Indoor Plants & Hand-Painted Pots",
+  title: "Shop Original Handmade Paintings & Fine Art Collections",
   description:
-    "Explore Vandan Art & Plants full collection of original handmade paintings, healthy indoor house plants, artisan hand-painted pots, and curated art & plant gift bundles. Safe plant delivery across India.",
+    "Explore Vandan Artwork's full collection of original handmade canvas paintings, sunset landscapes, celestial astronomy art, fine art prints, and handbound journals. Handcrafted in India with free insured shipping.",
   keywords: [
-    "buy indoor plants online India",
-    "handmade canvas paintings",
-    "hand-painted planters",
-    "monstera deliciosa live plant",
-    "variegated snake plant",
-    "art and plant gift bundles",
+    "original canvas paintings",
+    "buy paintings online India",
+    "handmade artwork",
     "sunset paintings",
-    "astronomy canvas art",
+    "astronomy galaxy canvas",
     "botanical wall art",
-    "desk plants and pots",
+    "fine art prints",
+    "handbound art journals",
+    "Vandan Artwork shop",
   ],
   alternates: {
     canonical: "/shop",

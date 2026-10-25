@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 import { HeroSection } from "@/components/home/hero-section";
 import { CategoriesSection } from "@/components/home/categories-section";
 import { FeaturedProductsSection } from "@/components/home/featured-products";
-import { PlantArtMatchmaker } from "@/components/home/plant-art-matchmaker";
-import { WhyArtAndPlantsSection } from "@/components/home/why-art-and-plants";
+import { ArtMatchmaker } from "@/components/home/art-matchmaker";
+import { WhyOriginalArtSection } from "@/components/home/why-original-art";
 import { FaqSection } from "@/components/home/faq-section";
 import { SectionSkeleton } from "@/components/ui/section-skeleton";
 
@@ -52,9 +52,9 @@ export default function HomePage() {
     <>
       <HeroSection />
       <CategoriesSection />
-      <PlantArtMatchmaker />
+      <ArtMatchmaker />
       <FeaturedProductsSection />
-      <WhyArtAndPlantsSection />
+      <WhyOriginalArtSection />
       <ArtistStorySection />
       <BestSellersSection />
       <CustomerGallerySection />

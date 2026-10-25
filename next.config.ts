@@ -10,6 +10,25 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "img.clerk.com" },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/plants",
+        destination: "/shop?category=botanical-art",
+        permanent: false,
+      },
+      {
+        source: "/planters",
+        destination: "/shop",
+        permanent: false,
+      },
+      {
+        source: "/bundles",
+        destination: "/shop",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

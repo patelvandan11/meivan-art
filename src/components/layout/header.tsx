@@ -10,6 +10,8 @@ import {
   Search,
   Menu,
   X,
+  LayoutDashboard,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -18,13 +20,12 @@ import { useWishlistStore } from "@/store/wishlist-store";
 import { useStoreHydrated } from "@/hooks/use-store-hydrated";
 import { useAuthStore } from "@/store/auth-store";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, User } from "lucide-react";
 
 const navLinks = [
-  { href: "/plants", label: "🌿 Plants" },
-  { href: "/art", label: "🎨 Art" },
-  { href: "/planters", label: "🏺 Planters" },
-  { href: "/bundles", label: "🎁 Bundles" },
+  { href: "/shop?category=paintings", label: "🎨 Paintings" },
+  { href: "/shop?category=botanical-art", label: "🍃 Botanical Art" },
+  { href: "/shop?category=sunsets-celestial", label: "🌅 Sunsets & Skies" },
+  { href: "/shop?category=journals", label: "📖 Art Journals" },
   { href: "/shop", label: "Shop All" },
   { href: "/gallery", label: "Gallery" },
 ];
@@ -46,28 +47,24 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Animated Fun Announcement Bar */}
-      <div className="bg-gradient-to-r from-terracotta via-amber-700/90 to-sage text-white text-[11px] sm:text-xs font-medium py-1.5 px-4 overflow-hidden shadow-inner flex items-center justify-center">
+      {/* Announcement Marquee Bar */}
+      <div className="bg-gradient-to-r from-terracotta via-amber-700/90 to-amber-900 text-white text-[11px] sm:text-xs font-medium py-1.5 px-4 overflow-hidden shadow-inner flex items-center justify-center">
         <div className="animate-marquee whitespace-nowrap flex items-center gap-8">
-          <span>🌿 Fresh Indoor Plants & Original Paintings</span>
+          <span>🎨 100% Original Handmade Canvases</span>
           <span className="opacity-60">•</span>
-          <span>🚚 Safe Eco-Friendly Plant Delivery Across India</span>
+          <span>💬 Book Orders Easily via WhatsApp Message</span>
+          <span className="opacity-60">•</span>
+          <span>🚚 Free Insured Shipping Across India</span>
+          <span className="opacity-60">•</span>
+          <span>✨ Art That Tells a Story</span>
           <span className="opacity-60">•</span>
           <span>🎨 100% Original Handmade Canvases</span>
           <span className="opacity-60">•</span>
-          <span>🏺 Hand-Painted Terracotta & Ceramic Pots</span>
+          <span>💬 Book Orders Easily via WhatsApp Message</span>
           <span className="opacity-60">•</span>
-          <span>✨ Art That Tells a Story • Plants That Breathe Life</span>
+          <span>🚚 Free Insured Shipping Across India</span>
           <span className="opacity-60">•</span>
-          <span>🌿 Fresh Indoor Plants & Original Paintings</span>
-          <span className="opacity-60">•</span>
-          <span>🚚 Safe Eco-Friendly Plant Delivery Across India</span>
-          <span className="opacity-60">•</span>
-          <span>🎨 100% Original Handmade Canvases</span>
-          <span className="opacity-60">•</span>
-          <span>🏺 Hand-Painted Terracotta & Ceramic Pots</span>
-          <span className="opacity-60">•</span>
-          <span>✨ Art That Tells a Story • Plants That Breathe Life</span>
+          <span>✨ Art That Tells a Story</span>
         </div>
       </div>
 
@@ -76,7 +73,7 @@ export function Header() {
           <Link href="/" className="flex items-center gap-3 group">
             <Image
               src="/logo.png"
-              alt="Vandan Art & Plants Logo"
+              alt="Vandan Artwork Logo"
               width={38}
               height={38}
               className="h-9 w-9 object-contain transition-transform group-hover:scale-110 group-hover:rotate-6"
@@ -84,10 +81,10 @@ export function Header() {
             />
             <div className="flex flex-col">
               <span className="font-heading text-xl font-bold tracking-tight leading-none text-foreground flex items-center gap-1.5">
-                Vandan Art & Plants
+                Vandan Artwork
               </span>
               <span className="text-[9px] font-medium tracking-wide text-muted-foreground uppercase hidden sm:block">
-                Where Art Meets Living Nature
+                Art That Tells a Story
               </span>
             </div>
           </Link>
@@ -175,7 +172,7 @@ export function Header() {
             <input
               name="search"
               type="search"
-              placeholder="Search indoor plants, paintings, hand-painted planters, mugs..."
+              placeholder="Search original paintings, canvas art, botanical prints..."
               className="w-full rounded-full border border-border bg-background/80 px-5 py-2.5 text-sm text-foreground outline-none focus:ring-2 focus:ring-terracotta/30"
             />
           </form>

@@ -19,7 +19,7 @@ const sortOptions: { value: SortOption; label: string }[] = [
   { value: "newest", label: "Newest" },
 ];
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 9;
 
 export function ShopContent() {
   const searchParams = useSearchParams();
@@ -54,7 +54,7 @@ export function ShopContent() {
 
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 400);
+    const timer = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timer);
   }, [category, search, sort]);
 
@@ -117,24 +117,24 @@ export function ShopContent() {
         className="text-center"
       >
         <div className="inline-flex items-center gap-1.5 rounded-full bg-secondary/80 px-3.5 py-1 text-xs font-semibold text-terracotta mb-2">
-          <span>🌿 Living Greens & Original Art</span>
+          <span>🎨 Original Studio Art Gallery</span>
         </div>
-        <h1 className="font-heading text-4xl font-semibold md:text-5xl">Shop Art & Plants</h1>
+        <h1 className="font-heading text-4xl font-semibold md:text-5xl">Art Gallery & Studio Shop</h1>
         <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-          Explore healthy indoor houseplants, original canvas paintings, artisan hand-painted pots, and mindful gift bundles.
+          Explore 100% original canvas paintings, textured landscapes, celestial skies, and fine art journals. Direct WhatsApp order booking available for all artworks.
         </p>
       </motion.div>
 
       {/* Quick Filter Bar */}
       <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
         {[
-          { slug: "", label: "✨ All Items" },
-          { slug: "indoor-plants", label: "🌿 Live Plants" },
-          { slug: "paintings", label: "🎨 Paintings" },
-          { slug: "planters", label: "🏺 Planters" },
-          { slug: "plant-art-bundles", label: "🎁 Art & Plant Bundles" },
-          { slug: "succulents", label: "🌵 Succulents" },
+          { slug: "", label: "✨ All Artworks" },
+          { slug: "paintings", label: "🎨 Original Paintings" },
           { slug: "botanical-art", label: "🍃 Botanical Art" },
+          { slug: "sunsets-celestial", label: "🌅 Sunsets & Celestial" },
+          { slug: "prints-sketches", label: "🖼️ Prints & Sketches" },
+          { slug: "journals", label: "📖 Art Journals" },
+          { slug: "digital", label: "⚡ Digital Downloads" },
         ].map((pill) => (
           <button
             key={pill.slug}
@@ -145,7 +145,7 @@ export function ShopContent() {
             className={`rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium transition-all ${
               category === pill.slug
                 ? "bg-terracotta text-white shadow-xs scale-105"
-                : "bg-card border border-border/70 text-muted-foreground hover:text-foreground"
+                : "bg-card border border-border/70 text-muted-foreground hover:text-foreground hover:bg-secondary/40"
             }`}
           >
             {pill.label}
@@ -156,7 +156,7 @@ export function ShopContent() {
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-1 gap-3">
           <Input
-            placeholder="Search indoor plants, paintings, pots..."
+            placeholder="Search paintings, canvas art, botanical prints..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -192,7 +192,7 @@ export function ShopContent() {
           className={`${showFilters ? "block" : "hidden"} w-full shrink-0 sm:block sm:w-56`}
         >
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            Collections
+            Art Collections
           </h3>
           <ul className="mt-4 space-y-2">
             <li>
@@ -205,7 +205,7 @@ export function ShopContent() {
                   !category ? "font-semibold text-terracotta" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <span>✨ All Products</span>
+                <span>✨ All Artworks</span>
                 <span className="text-xs rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
                   {allProducts.length}
                 </span>
@@ -255,18 +255,18 @@ export function ShopContent() {
 
         <div className="flex-1">
           <p className="mb-6 text-sm text-muted-foreground">
-            {allProducts.length} products found
+            {allProducts.length} original artworks found
           </p>
 
           {loading ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="aspect-[4/5]" />
+                <Skeleton key={i} className="aspect-[4/5] rounded-2xl" />
               ))}
             </div>
           ) : visibleProducts.length === 0 ? (
             <div className="py-20 text-center">
-              <p className="text-lg text-muted-foreground">No products found</p>
+              <p className="text-lg text-muted-foreground">No artworks found</p>
             </div>
           ) : (
             <>
@@ -286,7 +286,7 @@ export function ShopContent() {
               {hasMore && (
                 <div className="mt-12 text-center">
                   <Button variant="outline" onClick={loadMore}>
-                    Load More
+                    Load More Artworks
                   </Button>
                 </div>
               )}

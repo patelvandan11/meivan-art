@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { ChevronDown, HelpCircle, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getWhatsAppUrl, buildGeneralInquiryWhatsAppMessage } from "@/lib/whatsapp";
 
 interface FAQItem {
   question: string;
@@ -11,34 +12,40 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question: "How do you package and ship live plants safely across India?",
+    question: "How do I book an order via WhatsApp message?",
     answer:
-      "We use specialized ventilated plant pods that secure the pot and root ball firmly in place. The soil is sealed with moisture retention wrapping to prevent spillage, and foliage is cushioned. In the rare event that a plant arrives unhealthy, we offer a 100% free replacement within 48 hours.",
+      "Simply click the green 'Book Order via WhatsApp' button on any artwork page or in your shopping cart! A pre-filled WhatsApp message with the artwork title, pricing, and link will open in your WhatsApp app or browser. You can confirm delivery details, ask questions, or pay directly via UPI / Bank Transfer.",
   },
   {
     question: "Are the paintings 100% original handmade artworks?",
     answer:
-      "Yes! Every painting is handcrafted by artist Vandan on premium stretched canvas using high-grade acrylics and oils. Each artwork is a unique original piece accompanied by an authenticity certificate and arrives ready to hang.",
+      "Yes! Every painting is handcrafted by artist Vandan on premium stretched canvas using high-grade acrylics and oils. Each artwork is a unique original piece accompanied by a hand-signed Certificate of Authenticity and arrives ready to hang.",
   },
   {
-    question: "Do live plants come with the hand-painted pots shown?",
+    question: "How is the artwork packaged for safe transit across India?",
     answer:
-      "Yes! Unless explicitly specified as a nursery starter, our plants arrive potted in breathable hand-painted terracotta or glazed ceramic planters with organic nutrient-rich soil and drainage holes.",
+      "We use rigid shockproof corner bumpers, moisture-sealed barrier wraps, and heavy-duty reinforced wooden/corrugated art boxes. Every shipment includes 100% free transit insurance, guaranteeing your painting arrives in pristine gallery condition.",
   },
   {
-    question: "I have never cared for plants before. Which plant is best for beginners?",
+    question: "Can I commission a custom painting or personalized size?",
     answer:
-      "Our Variegated Snake Plant (Sansevieria) and Golden Pothos are perfect for first-time plant parents. They tolerate varying light levels, require watering only once every 1–2 weeks, and vigorously purify indoor air. Every plant comes with an easy care card.",
+      "Yes! Custom art commissions are our specialty. You can message artist Vandan directly on WhatsApp with your wall dimensions, desired color palette (e.g., sunset, celestial, or botanical), or inspiration images to collaborate on a bespoke canvas.",
   },
   {
-    question: "Can I commission a custom painting or personalized hand-painted planter?",
+    question: "What payment methods can I use?",
     answer:
-      "Yes! We love creating bespoke pieces. Whether you want a customized sunset palette, a celestial constellation canvas, or a tailored planter motif, reach out to us at vandanartwork@gmail.com or via Instagram @vandanartwork.",
+      "For WhatsApp orders, we accept instant UPI (Google Pay, PhonePe, Paytm), IMPS/NEFT bank transfers, or payment links. You can also use our website's online checkout if you prefer paying directly with credit/debit cards.",
+  },
+  {
+    question: "Do the paintings arrive ready to hang?",
+    answer:
+      "Yes! All stretched canvas artworks come with pre-installed heavy-duty hanging hardware and neatly painted finished edges, so you can hang them immediately upon unpacking without needing an external frame.",
   },
 ];
 
 export function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const whatsappUrl = getWhatsAppUrl(buildGeneralInquiryWhatsAppMessage());
 
   const toggle = (idx: number) => {
     setOpenIndex(openIndex === idx ? null : idx);
@@ -72,7 +79,7 @@ export function FaqSection() {
             Everything You Need to Know
           </h2>
           <p className="mt-3 text-muted-foreground text-sm sm:text-base">
-            Answers to common questions about plant transit, canvas art care, and shipping guarantees.
+            Answers to common questions about ordering via WhatsApp, original canvas authenticity, and safe transit.
           </p>
         </div>
 
@@ -102,10 +109,9 @@ export function FaqSection() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
+                      transition={{ duration: 0.25 }}
                     >
-                      <div className="border-t border-border/40 p-5 pt-3 text-sm sm:text-base leading-relaxed text-muted-foreground">
+                      <div className="border-t border-border/40 px-5 pb-5 pt-3 text-sm sm:text-base leading-relaxed text-muted-foreground">
                         {faq.answer}
                       </div>
                     </motion.div>
@@ -114,6 +120,26 @@ export function FaqSection() {
               </div>
             );
           })}
+        </div>
+
+        <div className="mt-12 rounded-2xl bg-secondary/40 border border-border/60 p-6 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-left">
+            <h4 className="font-heading text-base font-semibold text-foreground">
+              Have a specific artwork question or custom commission in mind?
+            </h4>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Talk directly with artist Vandan on WhatsApp for personalized advice.
+            </p>
+          </div>
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white px-5 py-2.5 text-xs sm:text-sm font-semibold shadow-xs transition-colors shrink-0"
+          >
+            <MessageCircle className="h-4 w-4 fill-current" />
+            Chat on WhatsApp
+          </a>
         </div>
       </div>
     </section>

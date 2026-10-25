@@ -9,40 +9,41 @@ import {
   Heart, 
   Compass, 
   Layers,
-  User 
+  User,
+  MessageCircle
 } from "lucide-react";
+import { getWhatsAppUrl, buildGeneralInquiryWhatsAppMessage } from "@/lib/whatsapp";
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vandanartwork.vercel.app";
 
 export const metadata: Metadata = {
-  title: "Sitemap & Art/Plant Directory — Vandan Art & Plants",
+  title: "Sitemap & Art Directory — Vandan Artwork",
   description:
-    "Explore the complete website directory for Vandan Art & Plants. Discover handmade canvas paintings, healthy indoor houseplants, hand-painted terracotta planters, botanical prints, art bundles, and AI room visualizers.",
+    "Explore the complete website directory for Vandan Artwork. Discover original handmade acrylic and oil paintings, celestial canvases, fine art prints, handbound journals, and AI room visualizers.",
   keywords: [
-    "Vandan Art & Plants sitemap",
-    "indoor plants directory",
-    "buy plants online category list",
+    "Vandan Artwork sitemap",
     "handmade paintings directory",
-    "hand-painted planters",
-    "monstera deliciosa live plant",
-    "snake plant",
-    "canvas wall art directory",
+    "original canvas paintings",
     "sunset paintings",
-    "astronomy canvas art",
-    "AI room decor generator",
+    "astronomy galaxy art",
+    "botanical wall art",
+    "fine art prints",
+    "handbound art journals",
+    "WhatsApp art ordering",
   ],
   alternates: {
     canonical: `${appUrl}/site-map`,
   },
   openGraph: {
-    title: "Sitemap & Art/Plant Directory — Vandan Art & Plants",
-    description: "Complete navigation index of Vandan Art & Plants store collections, houseplants, original paintings, and AI visualizer tools.",
+    title: "Sitemap & Art Directory — Vandan Artwork",
+    description: "Complete navigation index of Vandan Artwork fine art store collections, original paintings, and AI visualizer tools.",
     url: `${appUrl}/site-map`,
   },
 };
 
 export default async function SiteMapPage() {
   const products = await getAllProductsFromStore();
+  const whatsappUrl = getWhatsAppUrl(buildGeneralInquiryWhatsAppMessage());
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -75,13 +76,13 @@ export default async function SiteMapPage() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="font-accent text-sm font-semibold tracking-wider text-terracotta uppercase">
-              SEO Website Navigation & Directory
+              Website Navigation & Directory
             </p>
             <h1 className="mt-1 font-heading text-3xl font-bold tracking-tight md:text-5xl">
-              Vandan Art & Plants Sitemap
+              Vandan Artwork Sitemap
             </h1>
             <p className="mt-3 max-w-3xl text-base text-muted-foreground leading-relaxed">
-              Welcome to the complete index of <span className="font-medium text-foreground">Vandan Art & Plants</span>. Browse our curated collections of healthy living houseplants, original handmade paintings, hand-painted terracotta planters, botanical prints, and AI room visualizers.
+              Welcome to the complete index of <span className="font-medium text-foreground">Vandan Artwork</span>. Browse our original handmade paintings, textured canvases, fine art prints, handbound sketchbooks, and ordering options.
             </p>
           </div>
           <a
@@ -109,37 +110,31 @@ export default async function SiteMapPage() {
           <ul className="mt-4 space-y-3 text-sm">
             <li>
               <Link href="/" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                🏠 Home — Where Art Meets Living Nature
+                🏠 Home — Original Handmade Paintings
               </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Dual studio celebrating original paintings & healthy indoor plants.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Fine art studio celebrating storytelling canvases & heartfelt brushwork.</p>
             </li>
             <li>
-              <Link href="/plants" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                🌿 Live Indoor Plants — Air Purifying Greenery
+              <Link href="/shop?category=paintings" className="font-medium text-foreground hover:text-terracotta transition-colors">
+                🎨 Original Paintings — Stretched Canvas Art
               </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Monstera, Snake Plants, Peace Lilies, potted in artisan planters.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Sunsets, celestial galaxies, cosmic nebulae, and landscape works.</p>
             </li>
             <li>
-              <Link href="/art" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                🎨 Original Art & Paintings — Storytelling Canvases
+              <Link href="/shop?category=botanical-art" className="font-medium text-foreground hover:text-terracotta transition-colors">
+                🍃 Botanical & Nature Art — Foliage Canvases
               </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Sunsets, astronomy, cosmic nebulae, and botanical nature works.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Hand-painted monstera leaves, eucalyptus watercolors, and sunflower radiance.</p>
             </li>
             <li>
-              <Link href="/planters" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                🏺 Hand-Painted Planters — Terracotta & Ceramics
+              <Link href="/shop?category=journals" className="font-medium text-foreground hover:text-terracotta transition-colors">
+                📖 Art Journals & Sketchbooks — Handbound Books
               </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Artisan painted pots with proper drainage holes for plant health.</p>
-            </li>
-            <li>
-              <Link href="/bundles" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                🎁 Art & Plant Bundles — Sanctuary Sets
-              </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Curated pairings of original paintings + live potted plants.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Heavy cotton deckle paper journals bound in raw linen and leather.</p>
             </li>
             <li>
               <Link href="/shop" className="font-medium text-foreground hover:text-terracotta transition-colors">
-                🛍️ Complete Shop — All Art, Plants & Ceramics
+                🛍️ Complete Art Shop — All Original Works
               </Link>
               <p className="text-xs text-muted-foreground mt-0.5">Full filterable catalog with ratings, price, and category sorting.</p>
             </li>
@@ -147,7 +142,19 @@ export default async function SiteMapPage() {
               <Link href="/gallery" className="font-medium text-foreground hover:text-terracotta transition-colors">
                 🖼️ Community Gallery — Room Styling Inspiration
               </Link>
-              <p className="text-xs text-muted-foreground mt-0.5">Real customer homes styled with our plants and paintings.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Real collector homes styled with our original canvas paintings.</p>
+            </li>
+            <li>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-[#25D366] hover:underline flex items-center gap-1.5"
+              >
+                <MessageCircle className="h-4 w-4" />
+                <span>💬 WhatsApp Direct Order Booking & Inquiries</span>
+              </a>
+              <p className="text-xs text-muted-foreground mt-0.5">Book any painting directly on WhatsApp with personal artist confirmation.</p>
             </li>
           </ul>
         </section>
@@ -158,7 +165,7 @@ export default async function SiteMapPage() {
             <div className="rounded-lg bg-terracotta/10 p-2 text-terracotta">
               <Layers className="h-5 w-5" />
             </div>
-            <h2 className="font-heading text-xl font-bold">Product Categories</h2>
+            <h2 className="font-heading text-xl font-bold">Art Categories</h2>
           </div>
           <ul className="mt-4 space-y-3 text-sm">
             {categories.map((cat) => (
@@ -211,7 +218,7 @@ export default async function SiteMapPage() {
             <div className="rounded-lg bg-terracotta/10 p-2 text-terracotta">
               <ShoppingBag className="h-5 w-5" />
             </div>
-            <h2 className="font-heading text-xl font-bold">Product Catalog</h2>
+            <h2 className="font-heading text-xl font-bold">Artwork Catalog</h2>
           </div>
           {products.length > 0 ? (
             <ul className="mt-4 space-y-2.5 text-sm max-h-80 overflow-y-auto pr-2 scrollbar-thin">
@@ -221,8 +228,8 @@ export default async function SiteMapPage() {
                     href={`/product/${prod.slug}`}
                     className="font-medium text-foreground hover:text-terracotta transition-colors flex items-center justify-between"
                   >
-                    <span>{prod.name}</span>
-                    <span className="text-xs text-terracotta font-semibold">₹{prod.price}</span>
+                    <span className="truncate pr-2">{prod.name}</span>
+                    <span className="text-xs text-terracotta font-semibold shrink-0">₹{prod.price}</span>
                   </Link>
                 </li>
               ))}
@@ -232,13 +239,13 @@ export default async function SiteMapPage() {
           )}
         </section>
 
-        {/* 5. Featured Artists */}
+        {/* 5. Featured Artist */}
         <section className="rounded-card border border-border/80 bg-card p-6 shadow-xs transition-shadow hover:shadow-md">
           <div className="flex items-center gap-3 border-b border-border/50 pb-4">
             <div className="rounded-lg bg-terracotta/10 p-2 text-terracotta">
               <User className="h-5 w-5" />
             </div>
-            <h2 className="font-heading text-xl font-bold">Featured Artists</h2>
+            <h2 className="font-heading text-xl font-bold">Artist Spotlight</h2>
           </div>
           {artists.length > 0 ? (
             <ul className="mt-4 space-y-3 text-sm">
@@ -256,9 +263,9 @@ export default async function SiteMapPage() {
             </ul>
           ) : (
             <div className="mt-4 space-y-2 text-sm text-muted-foreground">
-              <p>Explore original works created by independent fine artists, painters, and illustrator partners.</p>
+              <p>Explore original works created by artist Vandan Patel.</p>
               <Link href="/artists" className="inline-block font-medium text-terracotta hover:underline">
-                View All Artist Profiles →
+                View Artist Profile →
               </Link>
             </div>
           )}
@@ -308,7 +315,7 @@ export default async function SiteMapPage() {
           SEO Keyword Index for Vandan Artwork
         </h3>
         <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-          Original Handmade Canvas Art • Aesthetic Sunset Paintings • Artisan Ceramic Coffee Mugs • Handbound Journals & Stationaries • Custom Stickers & Laptop Decals • Canvas Tote Bags • Digital Art Downloads • Personalised Gift Boxes • AI Interior Decor Preview Engine • Independent Artist Store
+          Original Handmade Canvas Paintings • Sunset Landscapes • Astronomy Galaxy Canvases • Botanical Wall Art • Fine Art Prints • Handbound Linen Sketchbooks • Archival Cotton Paper Journals • Digital Coloring Books • WhatsApp Art Orders India • Artist Signed Canvases
         </p>
       </div>
     </div>

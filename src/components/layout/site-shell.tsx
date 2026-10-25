@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { WhatsAppFloatingButton } from "@/components/layout/whatsapp-button";
 
 const BARE_ROUTES = ["/login", "/signup", "/dashboard"];
 
@@ -21,6 +22,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <Header />
       <main className="min-h-screen pt-16">{children}</main>
       <Footer />
+      <WhatsAppFloatingButton />
     </>
   );
 }

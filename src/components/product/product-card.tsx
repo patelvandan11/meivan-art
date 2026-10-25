@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Eye, ShoppingBag, Star, ExternalLink } from "lucide-react";
+import { Heart, Eye, ShoppingBag, Star, ExternalLink, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/store/cart-store";
 import { useWishlistStore } from "@/store/wishlist-store";
 import { useStoreHydrated } from "@/hooks/use-store-hydrated";
 import { formatPrice, cn } from "@/lib/utils";
+import { getWhatsAppUrl, buildProductOrderWhatsAppMessage } from "@/lib/whatsapp";
 import type { Product } from "@/types";
 
 interface ProductCardProps {
@@ -39,6 +40,25 @@ export function ProductCard({ product, className }: ProductCardProps) {
 
   const activeSrc = imagesList[currentImgIndex] || imagesList[0];
 
+  const handleWhatsAppQuickOrder = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const msg = buildProductOrderWhatsAppMessage({ product, quantity: 1 });
+    const url = getWhatsAppUrl(msg);
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const getBadgeLabel = () => {
+    if (isDigitalCard) return "⚡ Digital Download";
+    if (product.categorySlug === "paintings") return "🎨 Original Canvas";
+    if (product.categorySlug === "botanical-art") return "🍃 Botanical Art";
+    if (product.categorySlug === "sunsets-celestial") return "🌅 Celestial Art";
+    if (product.categorySlug === "journals") return "📖 Handbound Journal";
+    if (product.categorySlug === "prints-sketches") return "🖼️ Fine Art Print";
+    if (product.bestSeller) return "✨ Bestseller";
+    return "🎨 Original Artwork";
+  };
+
   return (
     <div
       className={cn(
@@ -53,7 +73,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
     >
       <div className="relative overflow-hidden rounded-card bg-card shadow-soft border border-border/60 transition-all duration-300 dark:border-white/10 dark:bg-[#161311] dark:shadow-none dark:hover:border-terracotta/50 dark:hover:shadow-[0_0_25px_rgba(201,124,93,0.2)]">
         <Link href={`/product/${product.slug}`}>
-          <div className="relative aspect-[4/5] overflow-hidden">
+          <div className="relative aspect-[4/5] overflow-hidden bg-secondary/20">
             <Image
               src={activeSrc}
               alt={product.name}
@@ -89,49 +109,43 @@ export function ProductCard({ product, className }: ProductCardProps) {
                 ))}
               </div>
             )}
-            {isDigitalCard && (
-              <Badge className="absolute top-3 left-3 bg-blue-600 text-white font-semibold shadow-xs">
-                ⚡ Digital Download
-              </Badge>
-            )}
-            {!isDigitalCard && product.productType === "plant" && (
-              <Badge className="absolute top-3 left-3 bg-emerald-700 text-white font-semibold shadow-xs flex items-center gap-1">
-                <span>🌿</span> Live Plant
-              </Badge>
-            )}
-            {!isDigitalCard && product.productType === "bundle" && (
-              <Badge className="absolute top-3 left-3 bg-purple-700 text-white font-semibold shadow-xs flex items-center gap-1">
-                <span>🎁</span> Art + Plant Duo
-              </Badge>
-            )}
-            {!isDigitalCard && product.productType === "planter" && (
-              <Badge className="absolute top-3 left-3 bg-amber-700 text-white font-semibold shadow-xs flex items-center gap-1">
-                <span>🏺</span> Artisan Pot
-              </Badge>
-            )}
-            {!isDigitalCard && !product.productType && product.trending && (
-              <Badge variant="trending" className="absolute top-3 left-3">
-                Trending
-              </Badge>
-            )}
+
+            {/* Art Category / Type Badge */}
+            <Badge
+              className={cn(
+                "absolute top-3 left-3 text-white font-semibold shadow-xs",
+                isDigitalCard
+                  ? "bg-blue-600"
+                  : product.categorySlug === "paintings"
+                  ? "bg-amber-700"
+                  : product.categorySlug === "botanical-art"
+                  ? "bg-emerald-700"
+                  : "bg-terracotta"
+              )}
+            >
+              {getBadgeLabel()}
+            </Badge>
+
             {product.comparePrice && (
-              <Badge className="absolute top-3 right-3 bg-terracotta">
+              <Badge className="absolute top-3 right-3 bg-red-600 text-white font-semibold">
                 Sale
               </Badge>
             )}
           </div>
         </Link>
 
+        {/* Floating Quick Action Buttons on Hover */}
         <div
           className={cn(
             "absolute top-3 right-3 z-10 flex flex-col gap-2 transition-opacity duration-200",
             hovered ? "opacity-100" : "opacity-0"
           )}
         >
+          {/* Wishlist */}
           <Button
             size="icon"
             variant="secondary"
-            className="h-9 w-9 rounded-full shadow-soft hover:scale-110 active:scale-95 transition-transform"
+            className="h-9 w-9 rounded-full shadow-soft hover:scale-110 active:scale-95 transition-transform bg-card/90 backdrop-blur-sm"
             onClick={() => toggleItem(product)}
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
           >
@@ -139,16 +153,33 @@ export function ProductCard({ product, className }: ProductCardProps) {
               className={cn("h-4 w-4 transition-colors", wishlisted && "fill-terracotta text-terracotta")}
             />
           </Button>
+
+          {/* Quick View */}
           <Link href={`/product/${product.slug}`}>
             <Button
               size="icon"
               variant="secondary"
-              className="h-9 w-9 rounded-full shadow-soft hover:scale-110 active:scale-95 transition-transform"
+              className="h-9 w-9 rounded-full shadow-soft hover:scale-110 active:scale-95 transition-transform bg-card/90 backdrop-blur-sm"
               aria-label="Quick view"
             >
               <Eye className="h-4 w-4" />
             </Button>
           </Link>
+
+          {/* WhatsApp Direct Order Button */}
+          {!isDigitalCard && (
+            <Button
+              size="icon"
+              className="h-9 w-9 rounded-full shadow-soft bg-[#25D366] hover:bg-[#20ba59] text-white hover:scale-110 active:scale-95 transition-transform cursor-pointer"
+              onClick={handleWhatsAppQuickOrder}
+              aria-label="Order via WhatsApp"
+              title="Book Order via WhatsApp"
+            >
+              <MessageCircle className="h-4 w-4 fill-current" />
+            </Button>
+          )}
+
+          {/* Add to Cart or Digital Download */}
           {isDigitalCard ? (
             <Button
               size="icon"
@@ -181,26 +212,18 @@ export function ProductCard({ product, className }: ProductCardProps) {
         </div>
 
         <div className="p-4">
-          {/* Quick Plant Care or Art Spec Pill */}
-          {product.plantCare && (
-            <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-400">
-              <span className="rounded-md bg-emerald-100/80 dark:bg-emerald-950/50 px-1.5 py-0.5">
-                ☀️ {product.plantCare.light?.split(" ")[0]} Light
-              </span>
-              {product.plantCare.airPurifying && (
-                <span className="rounded-md bg-emerald-100/80 dark:bg-emerald-950/50 px-1.5 py-0.5">
-                  ✨ Air Purifying
-                </span>
-              )}
-            </div>
-          )}
-          {!product.plantCare && product.categorySlug === "paintings" && (
-            <div className="mb-1.5 text-[11px] font-medium text-terracotta">
-              <span className="rounded-md bg-amber-100/80 dark:bg-amber-950/50 px-1.5 py-0.5">
-                🎨 Original Stretched Canvas
-              </span>
-            </div>
-          )}
+          {/* Spec Pill */}
+          <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-medium text-terracotta">
+            <span className="rounded-md bg-amber-100/80 dark:bg-amber-950/50 px-1.5 py-0.5">
+              {product.categorySlug === "journals"
+                ? "📖 200 GSM Cotton Paper"
+                : product.categorySlug === "prints-sketches"
+                ? "🖼️ Archival Cotton Rag"
+                : isDigitalCard
+                ? "⚡ Instant 300 DPI PDF"
+                : "🎨 100% Handcrafted Canvas"}
+            </span>
+          </div>
 
           <Link href={`/product/${product.slug}`}>
             <h3 className="font-heading text-base font-medium leading-tight transition-colors hover:text-terracotta line-clamp-1">

@@ -23,17 +23,17 @@ export const metadata: Metadata = {
     canonical: `${appUrl}/art`,
   },
   openGraph: {
-    title: "Original Handmade Paintings & Canvas Art | Vandan Art & Plants",
+    title: "Original Handmade Paintings & Canvas Art | Vandan Artwork",
     description:
       "Original acrylic and oil paintings celebrating sunsets, celestial astronomy, botanical wonder, and human emotion. Each canvas is 100% handcrafted and unique.",
     url: `${appUrl}/art`,
-    siteName: "Vandan Art & Plants",
+    siteName: "Vandan Artwork",
     images: [
       {
         url: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1200&q=80",
         width: 1200,
         height: 630,
-        alt: "Vandan Art & Plants — Original Handmade Canvas Paintings",
+        alt: "Vandan Artwork — Original Handmade Canvas Paintings",
       },
     ],
   },
