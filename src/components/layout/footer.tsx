@@ -21,6 +21,7 @@ const footerLinks = {
   ],
   support: [
     { label: "💬 Book Order via WhatsApp", href: getWhatsAppUrl(buildGeneralInquiryWhatsAppMessage()), external: true },
+    { label: "📞 Call / WhatsApp: +91 96647 92015", href: "tel:+919664792015" },
     { label: "Track Your Order", href: "/checkout/success" },
     { label: "Artwork Care & Hanging FAQ", href: "/#faq" },
     { label: "Insured Art Packaging", href: "/#why-original-art" },

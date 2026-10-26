@@ -618,6 +618,19 @@ export function Header() {
               </Link>
             </div>
           </div>
+
+          {/* Direct WhatsApp / Call Support */}
+          <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-600">
+            <span className="font-medium">Direct Artist Support:</span>
+            <a
+              href="https://wa.me/919664792015"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-[#00509d] hover:underline"
+            >
+              +91 96647 92015
+            </a>
+          </div>
         </div>
       )}
     </header>

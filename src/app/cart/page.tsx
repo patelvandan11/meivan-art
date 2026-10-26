@@ -233,10 +233,10 @@ export default function CartPage() {
             Book Order via WhatsApp Message
           </Button>
 
-          {/* Secondary CTA: Online Checkout */}
+          {/* Secondary CTA: Delivery Address & Checkout Form */}
           <Link href="/checkout" className="mt-2.5 block">
             <Button variant="outline" className="w-full border-border/80 hover:bg-secondary">
-              Proceed to Online Payment (Card / UPI)
+              Enter Delivery Address & Book via WhatsApp
             </Button>
           </Link>
 

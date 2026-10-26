@@ -175,7 +175,7 @@ export interface Order {
   total: number;
   cost: number;
   profit: number;
-  paymentMethod?: "payu" | "stripe" | "cod" | "test";
+  paymentMethod?: "whatsapp" | "payu" | "stripe" | "cod" | "test";
   paymentStatus?: "pending" | "paid" | "failed";
   paymentId?: string;
   payuTxnId?: string;

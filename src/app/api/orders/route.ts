@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       shippingFee: number;
       discount: number;
       total: number;
-      paymentMethod?: "payu" | "stripe" | "cod" | "test";
+      paymentMethod?: "whatsapp" | "payu" | "stripe" | "cod" | "test";
     };
 
     if (!items || items.length === 0) {

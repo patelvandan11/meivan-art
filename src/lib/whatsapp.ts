@@ -1,4 +1,4 @@
-export const DEFAULT_WHATSAPP_NUMBER = "919876543210";
+export const DEFAULT_WHATSAPP_NUMBER = "919664792015";
 
 export function cleanWhatsAppNumber(phone?: string): string {
   const raw = phone || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || DEFAULT_WHATSAPP_NUMBER;
@@ -134,5 +134,71 @@ export function buildGeneralInquiryWhatsAppMessage(topic?: string): string {
     msg += `I am interested in your original handmade paintings and custom art commissions. Could you please share more information?\n\n`;
   }
   msg += `Looking forward to your reply. Thank you!`;
+  return msg;
+}
+
+export interface FullOrderWhatsAppParams {
+  orderId?: string;
+  customer: {
+    name: string;
+    phone: string;
+    email: string;
+    street: string;
+    city: string;
+    state: string;
+    pincode: string;
+    notes?: string;
+  };
+  items: {
+    name: string;
+    quantity: number;
+    price: number;
+  }[];
+  subtotal: number;
+  discount?: number;
+  couponCode?: string;
+  shippingFee?: number;
+  total: number;
+}
+
+export function buildFullOrderWhatsAppMessage(params: FullOrderWhatsAppParams): string {
+  let msg = `🎨 *NEW ART ORDER BOOKING — Vandan Artwork*\n`;
+  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+  if (params.orderId) {
+    msg += `🔖 *Order ID:* #${params.orderId}\n\n`;
+  }
+
+  msg += `👤 *Customer Details:*\n`;
+  msg += `• Name: ${params.customer.name}\n`;
+  msg += `• Phone: ${params.customer.phone}\n`;
+  msg += `• Email: ${params.customer.email}\n\n`;
+
+  msg += `📍 *Delivery Address:*\n`;
+  msg += `• Street: ${params.customer.street}\n`;
+  msg += `• City: ${params.customer.city}\n`;
+  msg += `• State: ${params.customer.state}\n`;
+  msg += `• Pincode: ${params.customer.pincode}\n`;
+  if (params.customer.notes) {
+    msg += `• Landmark/Notes: ${params.customer.notes}\n`;
+  }
+  msg += `\n`;
+
+  msg += `📦 *Order Items:*\n`;
+  params.items.forEach((item, idx) => {
+    const itemTotal = item.price * item.quantity;
+    msg += `${idx + 1}. *${item.name}*\n`;
+    msg += `   Qty: ${item.quantity} × ₹${item.price.toLocaleString("en-IN")} = ₹${itemTotal.toLocaleString("en-IN")}\n`;
+  });
+
+  msg += `\n💰 *Price Breakdown:*\n`;
+  msg += `• Subtotal: ₹${params.subtotal.toLocaleString("en-IN")}\n`;
+  if (params.discount && params.discount > 0) {
+    msg += `• Discount: -₹${params.discount.toLocaleString("en-IN")}${params.couponCode ? ` (${params.couponCode})` : ""}\n`;
+  }
+  msg += `• Shipping: ${!params.shippingFee || params.shippingFee === 0 ? "FREE (Insured Transit Across India)" : `₹${params.shippingFee.toLocaleString("en-IN")}`}\n`;
+  msg += `• *Total Amount Payable:* ₹${params.total.toLocaleString("en-IN")}\n`;
+  msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+  msg += `Hello Artist! I would like to confirm this order. Please share your UPI / Bank Transfer QR code to complete payment & dispatch. Thank you!`;
+
   return msg;
 }

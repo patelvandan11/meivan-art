@@ -28,7 +28,7 @@ export async function createOrder(data: {
   total: number;
   cost?: number;
   profit?: number;
-  paymentMethod?: "payu" | "stripe" | "cod" | "test";
+  paymentMethod?: "whatsapp" | "payu" | "stripe" | "cod" | "test";
   paymentStatus?: "pending" | "paid" | "failed";
   paymentId?: string;
   payuTxnId?: string;
@@ -54,7 +54,7 @@ export async function createOrder(data: {
     total: data.total,
     cost,
     profit,
-    paymentMethod: data.paymentMethod || "payu",
+    paymentMethod: data.paymentMethod || "whatsapp",
     paymentStatus: data.paymentStatus || "pending",
     paymentId: data.paymentId,
     payuTxnId: data.payuTxnId,
