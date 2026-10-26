@@ -1,226 +1,275 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Palette, MessageCircle, ShieldCheck, Award } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowRight,
+  Palette,
+  MessageCircle,
+  Truck,
+  Award,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getWhatsAppUrl, buildGeneralInquiryWhatsAppMessage } from "@/lib/whatsapp";
 
-const floatingCards = [
+const bannerSlides = [
   {
-    src: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&q=80",
-    alt: "Sunset Serenade Original Canvas Painting",
-    caption: "Sunset Serenade Canvas",
-    badge: "🎨 100% Original",
+    id: "original-canvases",
+    title: "Original Handmade Paintings",
+    subtitle: "100% original textured acrylic & oil canvases celebrating vibrant sunsets, cosmic skies & botanical tranquility.",
+    tag: "100% Original Canvas 🎨",
+    ctaPrimary: { label: "Explore Paintings", href: "/shop?category=paintings" },
+    ctaSecondary: { label: "Book Custom Art", href: getWhatsAppUrl(buildGeneralInquiryWhatsAppMessage("Custom Painting Commission")) },
+    image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1600&q=80",
+    quote: "“Art that tells a soulful story” — Signed by the artist and ready to hang.",
+    accentColor: "#fac218",
   },
   {
-    src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80",
-    alt: "Celestial Dreams Astronomy Nebula Canvas",
-    caption: "Celestial Dreams Galaxy",
-    badge: "🌌 Textured Impasto",
+    id: "sunset-skies",
+    title: "Sunsets & Celestial Horizons",
+    subtitle: "Warm twilight horizons, golden dusk atmospheres, and starry cosmic nebula canvas collections.",
+    tag: "Studio Bestseller 🌅",
+    ctaPrimary: { label: "View Sunset Horizons", href: "/shop?category=sunsets-celestial" },
+    ctaSecondary: { label: "Botanical Series", href: "/shop?category=botanical-art" },
+    image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&q=80",
+    quote: "Atmospheric depth and vibrant strokes to bring serenity to your living room.",
+    accentColor: "#00509d",
   },
   {
-    src: "https://images.unsplash.com/photo-1582561424760-0321d75e81fa?w=400&q=80",
-    alt: "Emerald Whispers Botanical Foliage Canvas",
-    caption: "Emerald Whispers Art",
-    badge: "🍃 Botanical Canvas",
+    id: "postcards-journals",
+    title: "Fine Art Prints & Postcards",
+    subtitle: "Museum-grade archival cotton art prints, collectible postcards, and handbound linen sketchbooks.",
+    tag: "Special 10% Off 💌",
+    ctaPrimary: { label: "Claim 10% Discount", href: "/shop?category=prints-sketches" },
+    ctaSecondary: { label: "Art Journals", href: "/shop?category=journals" },
+    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=1600&q=80",
+    quote: "Tactile, collectible art treasures crafted with passion and love.",
+    accentColor: "#009688",
+  },
+];
+
+const trustFeatures = [
+  {
+    icon: Truck,
+    title: "Free Insured Shipping",
+    subtitle: "Safe delivery across India",
+    color: "text-amber-600",
   },
   {
-    src: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=80",
-    alt: "Golden Hour Reflections Oil on Canvas",
-    caption: "Golden Hour Horizon",
-    badge: "✨ Artist Signed",
+    icon: Palette,
+    title: "100% Handcrafted Art",
+    subtitle: "Authentic original creations",
+    color: "text-[#00509d]",
+  },
+  {
+    icon: Award,
+    title: "Artist Signed & Certified",
+    subtitle: "Certificate of Authenticity",
+    color: "text-teal-600",
+  },
+  {
+    icon: MessageCircle,
+    title: "Instant WhatsApp Booking",
+    subtitle: "Direct personal assistance",
+    color: "text-[#25D366]",
   },
 ];
 
 export function HeroSection() {
-  const whatsappUrl = getWhatsAppUrl(buildGeneralInquiryWhatsAppMessage("Original Paintings & Custom Commissions"));
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slide = bannerSlides[currentSlide];
+
+  // Auto-slide every 6 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % bannerSlides.length);
+    }, 6500);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handlePrev = () => {
+    setCurrentSlide((prev) => (prev - 1 + bannerSlides.length) % bannerSlides.length);
+  };
+
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % bannerSlides.length);
+  };
 
   return (
-    <section className="relative min-h-[92vh] overflow-hidden flex items-center justify-center pt-24 pb-16">
-      {/* ☀️ Day Mode Background Image */}
-      <div className="absolute inset-0 block dark:hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&q=80"
-          alt="Sunlit fine art studio canvas background"
-          fill
-          className="object-cover object-center scale-105"
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/65 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-100/50 via-terracotta/10 to-transparent" />
-      </div>
-
-      {/* 🌙 Night Mode Background Image */}
-      <div className="absolute inset-0 hidden dark:block">
-        <Image
-          src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&q=80"
-          alt="Midnight starry fine art canvas"
-          fill
-          className="object-cover object-center brightness-75 contrast-125"
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/80 to-background" />
-        <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-terracotta/20 blur-[130px] pointer-events-none animate-pulse-soft" />
-        <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-amber-600/25 blur-[140px] pointer-events-none" />
-      </div>
-
-      {/* Floating Badges */}
-      <div className="absolute top-28 left-8 hidden lg:flex items-center gap-2 rounded-full bg-card/85 border border-border/80 px-3.5 py-1.5 backdrop-blur-md animate-sway shadow-sm z-10">
-        <Palette className="h-4 w-4 text-terracotta" />
-        <span className="text-xs font-semibold text-foreground">
-          100% Original Canvas Art
-        </span>
-      </div>
-
-      <div className="absolute bottom-28 left-12 hidden lg:flex items-center gap-2 rounded-full bg-card/85 border border-border/80 px-3.5 py-1.5 backdrop-blur-md animate-bounce-soft shadow-sm z-10">
-        <MessageCircle className="h-4 w-4 text-[#25D366]" />
-        <span className="text-xs font-semibold text-foreground">
-          Direct WhatsApp Order Booking
-        </span>
-      </div>
-
-      <div className="absolute top-32 right-12 hidden lg:flex items-center gap-2 rounded-full bg-card/85 border border-border/80 px-3.5 py-1.5 backdrop-blur-md animate-float shadow-sm z-10">
-        <Sparkles className="h-4 w-4 text-amber-500" />
-        <span className="text-xs font-semibold text-foreground">
-          Handcrafted by Artist Vandan
-        </span>
-      </div>
-
-      {/* Floating Art Cards */}
-      {floatingCards.map((item, i) => (
-        <motion.div
-          key={item.caption}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: i * 0.15 }}
-          className="absolute hidden animate-float lg:block z-10"
-          style={{
-            top: `${16 + i * 18}%`,
-            left: i % 2 === 0 ? `${3.5 + i * 3.5}%` : "auto",
-            right: i % 2 !== 0 ? `${3.5 + i * 2.5}%` : "auto",
-            animationDelay: `${i * 0.7}s`,
-            animationDuration: `${5.5 + i}s`,
-          }}
-        >
-          <div className="group relative h-40 w-40 rotate-1 rounded-3xl p-1.5 transition-all duration-500 hover:scale-110 hover:rotate-0
-            bg-white/90 shadow-[0_12px_32px_rgba(61,48,40,0.12)] ring-1 ring-white/80 backdrop-blur-md
-            dark:bg-[#161311]/90 dark:ring-1 dark:ring-white/20 dark:shadow-[0_0_30px_rgba(201,124,93,0.3)] dark:border dark:border-white/10"
+    <section className="relative w-full bg-white dark:bg-[#151311] overflow-hidden">
+      {/* MAIN HERO BANNER - Edge to edge, flush with nav */}
+      <div className="relative w-full min-h-[460px] sm:min-h-[520px] md:min-h-[580px] lg:min-h-[620px] flex items-center">
+        {/* Background Image Carousel with Smooth Fade */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={slide.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            className="absolute inset-0 z-0"
           >
-            <div className="relative h-full w-full overflow-hidden rounded-2xl">
-              <Image
-                src={item.src}
-                alt={item.alt}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-                sizes="160px"
-                loading="lazy"
-              />
-              <div className="absolute top-2 left-2 z-10">
-                <span className="rounded-full bg-black/60 backdrop-blur-xs px-2 py-0.5 text-[10px] font-medium text-white shadow-xs">
-                  {item.badge}
-                </span>
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-90 transition-opacity duration-300 flex items-end p-2.5">
-                <span className="text-[11px] font-semibold text-white/95 leading-tight">
-                  {item.caption}
-                </span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      ))}
+            <Image
+              src={slide.image}
+              alt={slide.title}
+              fill
+              className="object-cover object-center"
+              priority
+              sizes="100vw"
+            />
+            {/* Subtle clean gradient overlay for readability without dark muddiness */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/20 dark:from-black/90 dark:via-black/75 dark:to-black/30" />
+          </motion.div>
+        </AnimatePresence>
 
-      {/* Hero Center Content */}
-      <div className="relative z-20 mx-auto max-w-3xl px-4 text-center flex flex-col items-center justify-center">
-        {/* Studio Badge */}
-        <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider mb-6 bg-amber-100/90 text-amber-900 border border-amber-300/80 shadow-xs dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-700/40">
-          <Palette className="h-3.5 w-3.5 text-terracotta" />
-          <span>Independent Fine Art Studio</span>
+        {/* Content Container */}
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-20 w-full">
+          <div className="max-w-xl md:max-w-2xl">
+            {/* Tag / Badge */}
+            <motion.div
+              key={`tag-${slide.id}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="inline-flex items-center gap-2 rounded-full bg-[#fac218] text-[#1f2421] px-3.5 py-1 text-xs font-bold shadow-xs mb-4"
+            >
+              <span>{slide.tag}</span>
+            </motion.div>
+
+            {/* Title */}
+            <motion.h1
+              key={`title-${slide.id}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 dark:text-white leading-[1.15]"
+            >
+              {slide.title}
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p
+              key={`sub-${slide.id}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="mt-4 text-base sm:text-lg text-gray-700 dark:text-gray-200 leading-relaxed max-w-lg font-medium"
+            >
+              {slide.subtitle}
+            </motion.p>
+
+            {/* Quote Pill */}
+            <motion.div
+              key={`quote-${slide.id}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.25 }}
+              className="mt-3 text-xs sm:text-sm italic text-gray-600 dark:text-gray-300 flex items-center gap-1.5"
+            >
+              <span>{slide.quote}</span>
+            </motion.div>
+
+            {/* Action Buttons */}
+            <motion.div
+              key={`cta-${slide.id}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className="mt-8 flex flex-wrap items-center gap-3.5"
+            >
+              <Link href={slide.ctaPrimary.href}>
+                <Button
+                  size="lg"
+                  className="bg-[#00509d] hover:bg-[#003870] text-white font-bold px-7 py-6 text-base rounded-full shadow-md gap-2 transition-all hover:scale-105"
+                >
+                  <span>{slide.ctaPrimary.label}</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+
+              <Link
+                href={slide.ctaSecondary.href}
+                target={slide.ctaSecondary.href.startsWith("http") ? "_blank" : undefined}
+                rel={slide.ctaSecondary.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              >
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white/90 dark:bg-black/60 hover:bg-white text-gray-900 dark:text-white font-semibold px-6 py-6 text-base rounded-full border border-gray-300 dark:border-gray-700 shadow-xs backdrop-blur-xs transition-all hover:scale-105"
+                >
+                  {slide.ctaSecondary.href.startsWith("http") && (
+                    <MessageCircle className="h-4 w-4 text-[#25D366] mr-1.5" />
+                  )}
+                  <span>{slide.ctaSecondary.label}</span>
+                </Button>
+              </Link>
+            </motion.div>
+          </div>
         </div>
 
-        {/* Hero Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-[1.15]"
+        {/* Carousel Navigation Arrows */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-3 sm:left-6 z-20 h-10 w-10 rounded-full bg-white/80 dark:bg-black/60 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-800 dark:text-white hover:bg-white shadow-sm transition-transform hover:scale-110 focus:outline-none"
+          aria-label="Previous slide"
         >
-          Original Paintings That Tell A{" "}
-          <span className="relative inline-block text-terracotta">
-            Soulful Story.
-            <span className="absolute -bottom-1 left-0 right-0 h-1 rounded-full bg-terracotta/40" />
-          </span>
-        </motion.h1>
+          <ChevronLeft className="h-5 w-5" />
+        </button>
 
-        {/* Hero Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-6 text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl"
+        <button
+          onClick={handleNext}
+          className="absolute right-3 sm:right-6 z-20 h-10 w-10 rounded-full bg-white/80 dark:bg-black/60 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-800 dark:text-white hover:bg-white shadow-sm transition-transform hover:scale-110 focus:outline-none"
+          aria-label="Next slide"
         >
-          Handcrafted canvas paintings celebrating vibrant sunsets, cosmic skies, and botanical serenity.
-          Each artwork is 100% handmade on gallery-wrapped canvas, signed, and ready to hang.
-        </motion.p>
+          <ChevronRight className="h-5 w-5" />
+        </button>
 
-        {/* Hero CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-8 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto"
-        >
-          <Link href="/shop" className="w-full sm:w-auto">
-            <Button size="lg" className="w-full gap-2 px-8 py-6 text-base font-semibold shadow-md">
-              Explore Artworks 🎨
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
+        {/* Carousel Dots */}
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+          {bannerSlides.map((s, idx) => (
+            <button
+              key={s.id}
+              onClick={() => setCurrentSlide(idx)}
+              className={`h-2.5 rounded-full transition-all duration-300 focus:outline-none ${
+                currentSlide === idx
+                  ? "w-8 bg-[#00509d]"
+                  : "w-2.5 bg-gray-400/60 hover:bg-gray-600"
+              }`}
+              aria-label={`Slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      </div>
 
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto"
-          >
-            <Button
-              size="lg"
-              className="w-full gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold px-8 py-6 text-base shadow-md transition-all hover:shadow-lg active:scale-98"
-            >
-              <MessageCircle className="h-5 w-5 fill-current" />
-              Book Order via WhatsApp
-            </Button>
-          </a>
-        </motion.div>
-
-        {/* Value Highlights */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-muted-foreground pt-6 border-t border-border/50 w-full"
-        >
-          <div className="flex items-center justify-center gap-1.5 font-medium">
-            <Palette className="h-4 w-4 text-terracotta" />
-            <span>100% Handcrafted</span>
-          </div>
-          <div className="flex items-center justify-center gap-1.5 font-medium">
-            <MessageCircle className="h-4 w-4 text-[#25D366]" />
-            <span>WhatsApp Order Booking</span>
-          </div>
-          <div className="flex items-center justify-center gap-1.5 font-medium">
-            <ShieldCheck className="h-4 w-4 text-amber-500" />
-            <span>Free Insured Transit</span>
-          </div>
-          <div className="flex items-center justify-center gap-1.5 font-medium">
-            <Award className="h-4 w-4 text-purple-500" />
-            <span>Signed Certificate</span>
-          </div>
-        </motion.div>
+      {/* VALUE & TRUST STRIP - Clean, understated e-commerce features */}
+      <div className="border-y border-[#cae0eb] dark:border-border/70 bg-[#fbfdfe] dark:bg-[#181513] py-4 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          {trustFeatures.map((feat) => {
+            const Icon = feat.icon;
+            return (
+              <div
+                key={feat.title}
+                className="flex items-center gap-3 px-2 py-1 justify-center sm:justify-start"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white dark:bg-gray-800 border border-[#cae0eb] dark:border-border shadow-2xs">
+                  <Icon className={`h-4 w-4 ${feat.color}`} />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight">
+                    {feat.title}
+                  </p>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight mt-0.5 hidden sm:block">
+                    {feat.subtitle}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
